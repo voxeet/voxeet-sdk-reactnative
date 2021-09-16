@@ -8,7 +8,7 @@ import org.greenrobot.eventbus.EventBus;
 /**
  * VoxeetSDKAppCompatActivity manages the call state for the in call notification
  * <p>
- * Note : this class will be changed in future native versions of the SDK
+ * Note : this class will be changed in future as per native versions of the SDK
  * <p>
  * so that it will be shipped by default, next react native versions will just need to be :
  * - deprecated
