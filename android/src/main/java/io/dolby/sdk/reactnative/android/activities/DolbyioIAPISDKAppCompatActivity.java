@@ -7,18 +7,14 @@ import org.greenrobot.eventbus.EventBus;
 
 /**
  * VoxeetSDKAppCompatActivity manages the call state for the in call notification
- * <p>
+ *
  * Note : this class will be changed in future native versions of the SDK
- * <p>
+ *
  * so that it will be shipped by default, next react native versions will just need to be :
  * - deprecated
  * - state in the documentation that the MainActivity should override the new class from the SDK
  */
 public class DolbyioIAPISDKAppCompatActivity extends ReactActivity {
-
-    public DolbyioIAPISDKAppCompatActivity() {
-        super();
-    }
 
     @Override
     protected void onResume() {

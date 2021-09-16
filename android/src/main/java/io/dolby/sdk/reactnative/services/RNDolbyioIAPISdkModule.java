@@ -47,6 +47,7 @@ public class RNDolbyioIAPISdkModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void initialize(String consumerKey, String consumerSecret, Promise promise) {
         VoxeetSDK.initialize(consumerKey, consumerSecret);
+        VoxeetSDK.instance().register(this);
 
         promise.resolve(true);
     }
@@ -73,6 +74,8 @@ public class RNDolbyioIAPISdkModule extends ReactContextBaseJavaModule {
                     Lock.unlock(lockAwaitingToken);
                     postRefreshAccessToken();
                 });
+
+        VoxeetSDK.instance().register(this);
 
         promise.resolve(true);
     }
