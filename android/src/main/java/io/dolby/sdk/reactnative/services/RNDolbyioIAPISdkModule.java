@@ -33,7 +33,7 @@ public class RNDolbyioIAPISdkModule extends ReactContextBaseJavaModule {
 
     @Override
     public String getName() {
-        return "DolbyioIAPISdk";
+        return "DolbyIoIAPIModule";
     }
 
     /**
