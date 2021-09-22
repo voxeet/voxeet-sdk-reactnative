@@ -12,6 +12,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
@@ -35,12 +36,18 @@ public class RNDolbyioIAPISdkModuleTest {
 
     @Mock
     private ReactApplicationContext mockedReactContext;
+    @Mock
+    private VoxeetSDK mockedVoxeetSDK;
 
     private RNDolbyioIAPISdkModule module;
 
     @Before
     public void setUp() {
+        MockitoAnnotations.initMocks(this);
+
         module = new RNDolbyioIAPISdkModule(mockedReactContext);
+
+        PowerMockito.mockStatic(VoxeetSDK.class);
     }
 
     @After
@@ -52,8 +59,6 @@ public class RNDolbyioIAPISdkModuleTest {
     public void initialize_true() {
         // given
         Promise mockedPromise = mock(Promise.class);
-        VoxeetSDK mockedVoxeetSDK = mock(VoxeetSDK.class);
-        PowerMockito.mockStatic(VoxeetSDK.class);
 
         given(VoxeetSDK.instance()).willReturn(mockedVoxeetSDK);
 
@@ -68,8 +73,6 @@ public class RNDolbyioIAPISdkModuleTest {
     public void initializeToken_true() {
         // given
         Promise mockedPromise = mock(Promise.class);
-        VoxeetSDK mockedVoxeetSDK = mock(VoxeetSDK.class);
-        PowerMockito.mockStatic(VoxeetSDK.class);
 
         given(VoxeetSDK.instance()).willReturn(mockedVoxeetSDK);
 
@@ -85,8 +88,6 @@ public class RNDolbyioIAPISdkModuleTest {
         // given
         Promise mockedPromise = mock(Promise.class);
         TokenCallback mockedTokenCallback = mock(TokenCallback.class);
-        VoxeetSDK mockedVoxeetSDK = mock(VoxeetSDK.class);
-        PowerMockito.mockStatic(VoxeetSDK.class);
 
         String accessToken = "IamAccessToken";
 
@@ -106,8 +107,6 @@ public class RNDolbyioIAPISdkModuleTest {
         // given
         Promise mockedPromise = mock(Promise.class);
         TokenCallback mockedTokenCallback = mock(TokenCallback.class);
-        VoxeetSDK mockedVoxeetSDK = mock(VoxeetSDK.class);
-        PowerMockito.mockStatic(VoxeetSDK.class);
 
         given(VoxeetSDK.instance()).willReturn(mockedVoxeetSDK);
         module.mAwaitingTokenCallback.add(mockedTokenCallback);
