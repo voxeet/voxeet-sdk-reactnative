@@ -19,7 +19,7 @@ export class RecordingService {
   }
 
   /**
-   * Starts recording a conference. For more information, see the Recording mechanisms article or the Recording document.
+   * Starts recording a conference.
    */
   public start(): Promise<void> {
     return DolbyIoIAPIRecordingServiceModule.start();

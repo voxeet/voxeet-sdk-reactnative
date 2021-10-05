@@ -17,18 +17,24 @@ jest.mock('react-native', () => {
 const { DolbyIoIAPIRecordingServiceModule } = NativeModules;
 
 describe('RecordingService', () => {
-  it('invokes start method', () => {
-    RecordingService.start();
-    expect(DolbyIoIAPIRecordingServiceModule.start).toHaveBeenCalled();
+  describe('start()', () => {
+    it('calls exported start method', () => {
+      RecordingService.start();
+      expect(DolbyIoIAPIRecordingServiceModule.start).toHaveBeenCalled();
+    });
   });
 
-  it('invokes stop method', () => {
-    RecordingService.stop();
-    expect(DolbyIoIAPIRecordingServiceModule.stop).toHaveBeenCalled();
+  describe('stop()', () => {
+    it('calls exported stop method', () => {
+      RecordingService.stop();
+      expect(DolbyIoIAPIRecordingServiceModule.stop).toHaveBeenCalled();
+    });
   });
 
-  it('invokes current method', () => {
-    RecordingService.current();
-    expect(DolbyIoIAPIRecordingServiceModule.current).toHaveBeenCalled();
+  describe('current()', () => {
+    it('calls exported current method', () => {
+      RecordingService.current();
+      expect(DolbyIoIAPIRecordingServiceModule.current).toHaveBeenCalled();
+    });
   });
 });
