@@ -67,13 +67,13 @@ public class ConferenceJoinOptionsMapper {
     }
 
     @Nullable
-    private String toConferenceAccessToken(@NotNull ReadableMap joinOptions) {
-        return rnCollectionExtractor.getString(joinOptions, CONFERENCE_JOIN_OPTIONS_ACCESS_TOKEN);
+    private String toConferenceAccessToken(@NotNull ReadableMap options) {
+        return rnCollectionExtractor.getString(options, CONFERENCE_JOIN_OPTIONS_ACCESS_TOKEN);
     }
 
     @Nullable
-    private Constraints toConstraints(@NotNull ReadableMap joinOptions) {
-        ReadableMap constraints = rnCollectionExtractor.getMap(joinOptions, CONFERENCE_JOIN_OPTIONS_CONSTRAINTS);
+    private Constraints toConstraints(@NotNull ReadableMap options) {
+        ReadableMap constraints = rnCollectionExtractor.getMap(options, CONFERENCE_JOIN_OPTIONS_CONSTRAINTS);
         if (constraints == null) {
             return null;
         }
@@ -83,7 +83,7 @@ public class ConferenceJoinOptionsMapper {
     }
 
     @Nullable
-    private Integer toMaxVideoForwarding(@NotNull ReadableMap joinOptions) {
-        return rnCollectionExtractor.getInteger(joinOptions, CONFERENCE_JOIN_OPTIONS_MAX_VIDEO_FORWARDING);
+    private Integer toMaxVideoForwarding(@NotNull ReadableMap options) {
+        return rnCollectionExtractor.getInteger(options, CONFERENCE_JOIN_OPTIONS_MAX_VIDEO_FORWARDING);
     }
 }
