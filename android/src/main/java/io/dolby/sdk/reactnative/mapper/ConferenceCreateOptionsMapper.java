@@ -54,12 +54,12 @@ public class ConferenceCreateOptionsMapper {
     }
 
     @Nullable
-    public String toConferenceAlias(@NotNull ReadableMap options) {
+    private String toConferenceAlias(@NotNull ReadableMap options) {
         return rnCollectionExtractor.getString(options, CONFERENCE_CREATE_OPTIONS_ALIAS);
     }
 
     @NotNull
-    public ParamsHolder toConferenceParamsHolder(@Nullable ReadableMap options) {
+    private ParamsHolder toConferenceParamsHolder(@Nullable ReadableMap options) {
         ParamsHolder paramsHolder = new ParamsHolder();
         if (options == null) {
             return paramsHolder;
