@@ -38,6 +38,7 @@ public class ConferenceJoinOptionsMapper {
      * @param options options to set (access token, constraints, max video forwarding)
      * @return {@link ConferenceJoinOptions}
      */
+    @NotNull
     public ConferenceJoinOptions toConferenceJoinOptions(
             @NotNull Conference conference,
             @Nullable ReadableMap options

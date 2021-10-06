@@ -39,6 +39,7 @@ public class ConferenceCreateOptionsMapper {
      * @param options options to set (conference alias, params)
      * @return {@link ConferenceCreateOptions}
      */
+    @NotNull
     public ConferenceCreateOptions toConferenceCreateOptions(@Nullable ReadableMap options) {
         MetadataHolder metadataHolder = new MetadataHolder();
         ParamsHolder paramsHolder = toConferenceParamsHolder(options);
