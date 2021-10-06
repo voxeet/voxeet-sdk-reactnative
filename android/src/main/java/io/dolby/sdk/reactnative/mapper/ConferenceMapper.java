@@ -18,6 +18,12 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import io.dolby.sdk.reactnative.utils.RNCollectionExtractor;
 
+import static io.dolby.sdk.reactnative.mapper.ConferenceCommonConstants.CONFERENCE_PARAMS_DOLBY_VOICE;
+import static io.dolby.sdk.reactnative.mapper.ConferenceCommonConstants.CONFERENCE_PARAMS_LIVE_RECORDING;
+import static io.dolby.sdk.reactnative.mapper.ConferenceCommonConstants.CONFERENCE_PARAMS_RTCP_MODE;
+import static io.dolby.sdk.reactnative.mapper.ConferenceCommonConstants.CONFERENCE_PARAMS_TTL;
+import static io.dolby.sdk.reactnative.mapper.ConferenceCommonConstants.CONFERENCE_PARAMS_VIDEO_CODEC;
+
 /**
  * Provides methods that map:
  * <p>- {@link Conference} and {@link Conference}-related models to React Native models</p>
@@ -25,19 +31,13 @@ import io.dolby.sdk.reactnative.utils.RNCollectionExtractor;
  */
 public class ConferenceMapper {
 
-    public static String CONFERENCE_ID = "id";
-    public static String CONFERENCE_ALIAS = "alias";
-    public static String CONFERENCE_IS_NEW = "isNew";
-    public static String CONFERENCE_STATUS = "status";
-    public static String CONFERENCE_PARAMS = "params";
-    public static String CONFERENCE_PERMISSIONS = "permissions";
-    public static String CONFERENCE_PARTICIPANTS = "participants";
-
-    public static String CONFERENCE_PARAMS_VIDEO_CODEC = "videoCodec";
-    public static String CONFERENCE_PARAMS_TTL = "ttl";
-    public static String CONFERENCE_PARAMS_RTCP_MODE = "rtcpMode";
-    public static String CONFERENCE_PARAMS_LIVE_RECORDING = "liveRecording";
-    public static String CONFERENCE_PARAMS_DOLBY_VOICE = "dolbyVoice";
+    public static final String CONFERENCE_ID = "id";
+    public static final String CONFERENCE_ALIAS = "alias";
+    public static final String CONFERENCE_IS_NEW = "isNew";
+    public static final String CONFERENCE_STATUS = "status";
+    public static final String CONFERENCE_PARAMS = "params";
+    public static final String CONFERENCE_PERMISSIONS = "permissions";
+    public static final String CONFERENCE_PARTICIPANTS = "participants";
 
     @NotNull
     private final ParticipantMapper participantMapper;

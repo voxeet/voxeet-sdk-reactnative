@@ -15,11 +15,11 @@ import io.dolby.sdk.reactnative.utils.RNCollectionExtractor;
  */
 public class ConferenceJoinOptionsMapper {
 
-    public static String CONFERENCE_JOIN_OPTIONS_ACCESS_TOKEN = "conferenceAccessToken";
-    public static String CONFERENCE_JOIN_OPTIONS_MAX_VIDEO_FORWARDING = "maxVideoForwarding";
-    public static String CONFERENCE_JOIN_OPTIONS_CONSTRAINTS = "constraints";
-    public static String CONFERENCE_JOIN_OPTIONS_CONSTRAINTS_AUDIO = "audio";
-    public static String CONFERENCE_JOIN_OPTIONS_CONSTRAINTS_VIDEO = "video";
+    public static final String CONFERENCE_JOIN_OPTIONS_ACCESS_TOKEN = "conferenceAccessToken";
+    public static final String CONFERENCE_JOIN_OPTIONS_MAX_VIDEO_FORWARDING = "maxVideoForwarding";
+    public static final String CONFERENCE_JOIN_OPTIONS_CONSTRAINTS = "constraints";
+    public static final String CONFERENCE_JOIN_OPTIONS_CONSTRAINTS_AUDIO = "audio";
+    public static final String CONFERENCE_JOIN_OPTIONS_CONSTRAINTS_VIDEO = "video";
 
     @NotNull
     private final RNCollectionExtractor rnCollectionExtractor;
@@ -77,9 +77,9 @@ public class ConferenceJoinOptionsMapper {
         if (constraints == null) {
             return null;
         }
-        boolean audio = rnCollectionExtractor.getBoolean(constraints, CONFERENCE_JOIN_OPTIONS_CONSTRAINTS_AUDIO);
-        boolean video = rnCollectionExtractor.getBoolean(constraints, CONFERENCE_JOIN_OPTIONS_CONSTRAINTS_VIDEO);
-        return new Constraints(audio, video);
+        boolean hasAudio = rnCollectionExtractor.getBoolean(constraints, CONFERENCE_JOIN_OPTIONS_CONSTRAINTS_AUDIO);
+        boolean hasVideo = rnCollectionExtractor.getBoolean(constraints, CONFERENCE_JOIN_OPTIONS_CONSTRAINTS_VIDEO);
+        return new Constraints(hasAudio, hasVideo);
     }
 
     @Nullable

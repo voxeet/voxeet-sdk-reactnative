@@ -10,18 +10,19 @@ import org.jetbrains.annotations.Nullable;
 
 import io.dolby.sdk.reactnative.utils.RNCollectionExtractor;
 
+import static io.dolby.sdk.reactnative.mapper.ConferenceCommonConstants.CONFERENCE_PARAMS_DOLBY_VOICE;
+import static io.dolby.sdk.reactnative.mapper.ConferenceCommonConstants.CONFERENCE_PARAMS_LIVE_RECORDING;
+import static io.dolby.sdk.reactnative.mapper.ConferenceCommonConstants.CONFERENCE_PARAMS_RTCP_MODE;
+import static io.dolby.sdk.reactnative.mapper.ConferenceCommonConstants.CONFERENCE_PARAMS_TTL;
+import static io.dolby.sdk.reactnative.mapper.ConferenceCommonConstants.CONFERENCE_PARAMS_VIDEO_CODEC;
+
 /**
  * Provides a method that maps React Native model to {@link ConferenceCreateOptions} model.
  */
 public class ConferenceCreateOptionsMapper {
 
-    public static String CONFERENCE_CREATE_OPTIONS_ALIAS = "alias";
-    public static String CONFERENCE_CREATE_OPTIONS_PARAMS = "params";
-    public static String CONFERENCE_CREATE_OPTIONS_PARAMS_VIDEO_CODEC = "videoCodec";
-    public static String CONFERENCE_CREATE_OPTIONS_PARAMS_TTL = "ttl";
-    public static String CONFERENCE_CREATE_OPTIONS_PARAMS_RTCP_MODE = "rtcpMode";
-    public static String CONFERENCE_CREATE_OPTIONS_PARAMS_LIVE_RECORDING = "liveRecording";
-    public static String CONFERENCE_CREATE_OPTIONS_PARAMS_DOLBY_VOICE = "dolbyVoice";
+    public static final String CONFERENCE_CREATE_OPTIONS_ALIAS = "alias";
+    public static final String CONFERENCE_CREATE_OPTIONS_PARAMS = "params";
 
     @NotNull
     private final RNCollectionExtractor rnCollectionExtractor;
@@ -69,37 +70,37 @@ public class ConferenceCreateOptionsMapper {
             return paramsHolder;
         }
 
-        if (rnCollectionExtractor.hasKey(params, CONFERENCE_CREATE_OPTIONS_PARAMS_VIDEO_CODEC)) {
-            String videoCodec = rnCollectionExtractor.getString(params, CONFERENCE_CREATE_OPTIONS_PARAMS_VIDEO_CODEC);
+        if (rnCollectionExtractor.hasKey(params, CONFERENCE_PARAMS_VIDEO_CODEC)) {
+            String videoCodec = rnCollectionExtractor.getString(params, CONFERENCE_PARAMS_VIDEO_CODEC);
             if (videoCodec != null) {
                 paramsHolder.setVideoCodec(videoCodec);
             }
         }
 
-        if (rnCollectionExtractor.hasKey(params, CONFERENCE_CREATE_OPTIONS_PARAMS_TTL)) {
+        if (rnCollectionExtractor.hasKey(params, CONFERENCE_PARAMS_TTL)) {
             paramsHolder.putValue(
-                    CONFERENCE_CREATE_OPTIONS_PARAMS_TTL,
-                    rnCollectionExtractor.getInteger(params, CONFERENCE_CREATE_OPTIONS_PARAMS_TTL)
+                    CONFERENCE_PARAMS_TTL,
+                    rnCollectionExtractor.getInteger(params, CONFERENCE_PARAMS_TTL)
             );
         }
 
-        if (rnCollectionExtractor.hasKey(params, CONFERENCE_CREATE_OPTIONS_PARAMS_RTCP_MODE)) {
+        if (rnCollectionExtractor.hasKey(params, CONFERENCE_PARAMS_RTCP_MODE)) {
             paramsHolder.putValue(
-                    CONFERENCE_CREATE_OPTIONS_PARAMS_RTCP_MODE,
-                    rnCollectionExtractor.getString(params, CONFERENCE_CREATE_OPTIONS_PARAMS_RTCP_MODE)
+                    CONFERENCE_PARAMS_RTCP_MODE,
+                    rnCollectionExtractor.getString(params, CONFERENCE_PARAMS_RTCP_MODE)
             );
         }
 
-        if (rnCollectionExtractor.hasKey(params, CONFERENCE_CREATE_OPTIONS_PARAMS_LIVE_RECORDING)) {
+        if (rnCollectionExtractor.hasKey(params, CONFERENCE_PARAMS_LIVE_RECORDING)) {
             paramsHolder.putValue(
-                    CONFERENCE_CREATE_OPTIONS_PARAMS_LIVE_RECORDING,
-                    rnCollectionExtractor.getBoolean(params, CONFERENCE_CREATE_OPTIONS_PARAMS_LIVE_RECORDING)
+                    CONFERENCE_PARAMS_LIVE_RECORDING,
+                    rnCollectionExtractor.getBoolean(params, CONFERENCE_PARAMS_LIVE_RECORDING)
             );
         }
 
-        if (rnCollectionExtractor.hasKey(params, CONFERENCE_CREATE_OPTIONS_PARAMS_DOLBY_VOICE)) {
+        if (rnCollectionExtractor.hasKey(params, CONFERENCE_PARAMS_DOLBY_VOICE)) {
             paramsHolder.setDolbyVoice(
-                    rnCollectionExtractor.getBoolean(params, CONFERENCE_CREATE_OPTIONS_PARAMS_DOLBY_VOICE)
+                    rnCollectionExtractor.getBoolean(params, CONFERENCE_PARAMS_DOLBY_VOICE)
             );
         }
         return paramsHolder;
