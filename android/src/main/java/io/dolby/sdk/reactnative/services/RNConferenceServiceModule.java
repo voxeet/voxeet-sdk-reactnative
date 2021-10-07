@@ -1,6 +1,8 @@
 
 package io.dolby.sdk.reactnative.services;
 
+import android.util.Log;
+
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
@@ -21,6 +23,8 @@ import io.dolby.sdk.reactnative.mapper.ConferenceMapper;
 import io.dolby.sdk.reactnative.mapper.ParticipantMapper;
 
 public class RNConferenceServiceModule extends ReactContextBaseJavaModule {
+
+    private static final String TAG = RNConferenceServiceModule.class.getSimpleName();
 
     @NotNull
     private final ConferenceService conferenceService;
@@ -78,12 +82,12 @@ public class RNConferenceServiceModule extends ReactContextBaseJavaModule {
      * it also contains that data (if not, {@link Conference#getMetadata()} returns null).
      * </p>
      *
-     * @param options information holder where the ID, parameters, and metadata can be passed
-     * @param promise returns a created conference
+     * @param optionsMap information holder where the ID, parameters, and metadata can be passed
+     * @param promise    returns a created conference
      */
     @ReactMethod
-    public void create(@Nullable ReadableMap options, @NotNull final Promise promise) {
-        ConferenceCreateOptions createOptions = conferenceCreateOptionsMapper.toConferenceCreateOptions(options);
+    public void create(@Nullable ReadableMap optionsMap, @NotNull final Promise promise) {
+        ConferenceCreateOptions createOptions = conferenceCreateOptionsMapper.toConferenceCreateOptions(optionsMap);
 
         conferenceService.create(createOptions)
                 .then(conference -> {
@@ -134,21 +138,25 @@ public class RNConferenceServiceModule extends ReactContextBaseJavaModule {
      * </ul>
      * </p>
      *
-     * @param conference a conference to join
-     * @param options    the holder of the options to join
-     * @param promise    returns a joined conference
+     * @param conferenceMap a conference to join
+     * @param optionsMap    the holder of the options to join
+     * @param promise       returns a joined conference
      */
     @ReactMethod
-    public void join(@NotNull ReadableMap conference, @Nullable ReadableMap options, Promise promise) {
+    public void join(
+            @NotNull ReadableMap conferenceMap,
+            @Nullable ReadableMap optionsMap,
+            Promise promise
+    ) {
         try {
-            ConferenceJoinOptions joinOptions = toConferenceJoinOptions(conference, options);
+            ConferenceJoinOptions joinOptions = toConferenceJoinOptions(conferenceMap, optionsMap);
 
             conferenceService.join(joinOptions)
                     .then(resultConference -> {
                         promise.resolve(conferenceMapper.toMap(resultConference));
                     }).error(promise::reject);
         } catch (Throwable throwable) {
-            throwable.printStackTrace();
+            Log.w(TAG, "Can't get conference join options", throwable);
             promise.reject(throwable);
         }
     }
@@ -158,13 +166,13 @@ public class RNConferenceServiceModule extends ReactContextBaseJavaModule {
      * participant from the conference by revoking the conference access token. The kicked
      * participant cannot join the conference again.
      *
-     * @param participant the participant who needs to be kicked from the conference
-     * @param promise     returns null
+     * @param participantMap the participant who needs to be kicked from the conference
+     * @param promise        returns null
      */
     @ReactMethod
-    public void kick(@NotNull ReadableMap participant, Promise promise) {
+    public void kick(@NotNull ReadableMap participantMap, Promise promise) {
         try {
-            Participant foundParticipant = toParticipant(participant);
+            Participant foundParticipant = toParticipant(participantMap);
 
             conferenceService.kick(foundParticipant)
                     .then(result -> {
@@ -172,7 +180,7 @@ public class RNConferenceServiceModule extends ReactContextBaseJavaModule {
                     })
                     .error(promise::reject);
         } catch (Throwable throwable) {
-            throwable.printStackTrace();
+            Log.w(TAG, "Can't get participant", throwable);
             promise.reject(throwable);
         }
     }
@@ -194,34 +202,34 @@ public class RNConferenceServiceModule extends ReactContextBaseJavaModule {
      * Creates a {@link ConferenceJoinOptions} based on provided {@code options} for a given
      * {@code conference}. Throws {@link IllegalArgumentException} if conference id is invalid.
      *
-     * @param conference a conference to join
-     * @param options    the holder of the options to join
+     * @param conferenceMap a conference to join
+     * @param optionsMap    the holder of the options to join
      * @return {@link ConferenceJoinOptions}
      */
     @NotNull
     private ConferenceJoinOptions toConferenceJoinOptions(
-            @NotNull ReadableMap conference,
-            @Nullable ReadableMap options
+            @NotNull ReadableMap conferenceMap,
+            @Nullable ReadableMap optionsMap
     ) {
-        String conferenceId = conferenceMapper.toConferenceId(conference);
+        String conferenceId = conferenceMapper.toConferenceId(conferenceMap);
         if (conferenceId == null) {
             throw new IllegalArgumentException("Conference should contain conferenceId");
         }
 
         Conference foundConference = conferenceService.getConference(conferenceId);
-        return conferenceJoinOptionsMapper.toConferenceJoinOptions(foundConference, options);
+        return conferenceJoinOptionsMapper.toConferenceJoinOptions(foundConference, optionsMap);
     }
 
     /**
      * Gets {@link Participant} based on a React Native participant model. Throws
      * {@link IllegalArgumentException} if participant id is invalid.
      *
-     * @param participant a React Native participant model
+     * @param participantMap a React Native participant model
      * @return {@link Participant}
      */
     @NotNull
-    private Participant toParticipant(@NotNull ReadableMap participant) throws Throwable {
-        String participantId = participantMapper.toParticipantId(participant);
+    private Participant toParticipant(@NotNull ReadableMap participantMap) throws Throwable {
+        String participantId = participantMapper.toParticipantId(participantMap);
         if (participantId == null) {
             throw new IllegalArgumentException("Conference should contain participantId");
         }
