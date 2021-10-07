@@ -7,6 +7,7 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
 import com.voxeet.sdk.models.Conference;
+import com.voxeet.sdk.models.Participant;
 import com.voxeet.sdk.services.ConferenceService;
 import com.voxeet.sdk.services.builders.ConferenceCreateOptions;
 import com.voxeet.sdk.services.builders.ConferenceJoinOptions;
@@ -17,6 +18,7 @@ import org.jetbrains.annotations.Nullable;
 import io.dolby.sdk.reactnative.mapper.ConferenceCreateOptionsMapper;
 import io.dolby.sdk.reactnative.mapper.ConferenceJoinOptionsMapper;
 import io.dolby.sdk.reactnative.mapper.ConferenceMapper;
+import io.dolby.sdk.reactnative.mapper.ParticipantMapper;
 
 public class RNConferenceServiceModule extends ReactContextBaseJavaModule {
 
@@ -28,6 +30,8 @@ public class RNConferenceServiceModule extends ReactContextBaseJavaModule {
     private final ConferenceCreateOptionsMapper conferenceCreateOptionsMapper;
     @NotNull
     private final ConferenceJoinOptionsMapper conferenceJoinOptionsMapper;
+    @NotNull
+    private final ParticipantMapper participantMapper;
 
     /**
      * Creates a bridge wrapper for {@link ConferenceService}.
@@ -43,7 +47,8 @@ public class RNConferenceServiceModule extends ReactContextBaseJavaModule {
             @NotNull ReactApplicationContext reactContext,
             @NotNull ConferenceMapper conferenceMapper,
             @NotNull ConferenceCreateOptionsMapper conferenceCreateOptionsMapper,
-            @NotNull ConferenceJoinOptionsMapper conferenceJoinOptionsMapper
+            @NotNull ConferenceJoinOptionsMapper conferenceJoinOptionsMapper,
+            @NotNull ParticipantMapper participantMapper
     ) {
         super(reactContext);
 
@@ -51,6 +56,7 @@ public class RNConferenceServiceModule extends ReactContextBaseJavaModule {
         this.conferenceMapper = conferenceMapper;
         this.conferenceCreateOptionsMapper = conferenceCreateOptionsMapper;
         this.conferenceJoinOptionsMapper = conferenceJoinOptionsMapper;
+        this.participantMapper = participantMapper;
     }
 
     @NotNull
@@ -148,6 +154,43 @@ public class RNConferenceServiceModule extends ReactContextBaseJavaModule {
     }
 
     /**
+     * Allows the conference owner, or a participant with adequate permissions, to kick another
+     * participant from the conference by revoking the conference access token. The kicked
+     * participant cannot join the conference again.
+     *
+     * @param participant the participant who needs to be kicked from the conference
+     * @param promise     returns null
+     */
+    @ReactMethod
+    public void kick(@NotNull ReadableMap participant, Promise promise) {
+        try {
+            Participant foundParticipant = toParticipant(participant);
+
+            conferenceService.kick(foundParticipant)
+                    .then(result -> {
+                        promise.resolve(null);
+                    })
+                    .error(promise::reject);
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+            promise.reject(throwable);
+        }
+    }
+
+    /**
+     * Leaves the current conference.
+     *
+     * @param promise returns null
+     */
+    @ReactMethod
+    public void leave(Promise promise) {
+        conferenceService.leave()
+                .then(result -> {
+                    promise.resolve(null);
+                }).error(promise::reject);
+    }
+
+    /**
      * Creates a {@link ConferenceJoinOptions} based on provided {@code options} for a given
      * {@code conference}. Throws {@link IllegalArgumentException} if conference id is invalid.
      *
@@ -155,6 +198,7 @@ public class RNConferenceServiceModule extends ReactContextBaseJavaModule {
      * @param options    the holder of the options to join
      * @return {@link ConferenceJoinOptions}
      */
+    @NotNull
     private ConferenceJoinOptions toConferenceJoinOptions(
             @NotNull ReadableMap conference,
             @Nullable ReadableMap options
@@ -166,5 +210,26 @@ public class RNConferenceServiceModule extends ReactContextBaseJavaModule {
 
         Conference foundConference = conferenceService.getConference(conferenceId);
         return conferenceJoinOptionsMapper.toConferenceJoinOptions(foundConference, options);
+    }
+
+    /**
+     * Gets {@link Participant} based on a React Native participant model. Throws
+     * {@link IllegalArgumentException} if participant id is invalid.
+     *
+     * @param participant a React Native participant model
+     * @return {@link Participant}
+     */
+    @NotNull
+    private Participant toParticipant(@NotNull ReadableMap participant) throws Throwable {
+        String participantId = participantMapper.toParticipantId(participant);
+        if (participantId == null) {
+            throw new IllegalArgumentException("Conference should contain participantId");
+        }
+
+        Participant foundParticipant = conferenceService.findParticipantById(participantId);
+        if (foundParticipant == null) {
+            throw new Throwable("Couldn't find the participant");
+        }
+        return foundParticipant;
     }
 }
