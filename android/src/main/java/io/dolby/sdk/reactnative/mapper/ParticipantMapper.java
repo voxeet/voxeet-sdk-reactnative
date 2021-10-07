@@ -52,17 +52,17 @@ public class ParticipantMapper {
     }
 
     @NotNull
-    public ParticipantInfo toParticipantInfo(@NotNull ReadableMap map) {
+    public ParticipantInfo toParticipantInfo(@NotNull ReadableMap participantInfoMap) {
         return new ParticipantInfo(
-                rnCollectionExtractor.getString(map, PARTICIPANT_INFO_NAME),
-                rnCollectionExtractor.getString(map, PARTICIPANT_INFO_EXTERNAL_ID),
-                rnCollectionExtractor.getString(map, PARTICIPANT_INFO_AVATAR_URL)
+                rnCollectionExtractor.getString(participantInfoMap, PARTICIPANT_INFO_NAME),
+                rnCollectionExtractor.getString(participantInfoMap, PARTICIPANT_INFO_EXTERNAL_ID),
+                rnCollectionExtractor.getString(participantInfoMap, PARTICIPANT_INFO_AVATAR_URL)
         );
     }
 
     @Nullable
-    public String toParticipantId(@NotNull ReadableMap participant) {
-        return rnCollectionExtractor.getString(participant, PARTICIPANT_ID);
+    public String toParticipantId(@NotNull ReadableMap participantMap) {
+        return rnCollectionExtractor.getString(participantMap, PARTICIPANT_ID);
     }
 
     @NotNull
