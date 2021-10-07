@@ -1,6 +1,7 @@
 package io.dolby.sdk.reactnative.mapper;
 
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.WritableNativeArray;
 import com.facebook.react.bridge.WritableNativeMap;
@@ -60,6 +61,7 @@ public class ConferenceMapper {
     @NotNull
     public WritableMap toMap(@NotNull Conference conference) {
         WritableMap map = new WritableNativeMap();
+        WritableArray participantsArray = participantMapper.toParticipantsArray(conference.getParticipants());
 
         map.putString(CONFERENCE_ID, conference.getId());
         map.putString(CONFERENCE_ALIAS, conference.getAlias());
@@ -67,13 +69,13 @@ public class ConferenceMapper {
         map.putString(CONFERENCE_STATUS, toString(conference.getState()));
         map.putMap(CONFERENCE_PARAMS, toParamsMap(conference));
         map.putArray(CONFERENCE_PERMISSIONS, toPermissionsArray(conference.getPermissions()));
-        map.putArray(CONFERENCE_PARTICIPANTS, toParticipantsArray(conference.getParticipants()));
+        map.putArray(CONFERENCE_PARTICIPANTS, participantsArray);
 
         return map;
     }
 
     @NotNull
-    private String toString(@NotNull ConferenceStatus status) {
+    public String toString(@NotNull ConferenceStatus status) {
         switch (status) {
             case CREATED:
                 return "CREATED";

@@ -13,9 +13,12 @@ import com.voxeet.sdk.models.Participant;
 import com.voxeet.sdk.services.ConferenceService;
 import com.voxeet.sdk.services.builders.ConferenceCreateOptions;
 import com.voxeet.sdk.services.builders.ConferenceJoinOptions;
+import com.voxeet.sdk.services.conference.information.ConferenceStatus;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 import io.dolby.sdk.reactnative.mapper.ConferenceCreateOptionsMapper;
 import io.dolby.sdk.reactnative.mapper.ConferenceJoinOptionsMapper;
@@ -199,6 +202,133 @@ public class RNConferenceServiceModule extends ReactContextBaseJavaModule {
     }
 
     /**
+     * <p>
+     * Gets the participant's audio level. The audio level value ranges from 0.0 to 1.0.
+     * </p>
+     * <p>
+     * Note: When the local participant is muted, the audioLevel value is set to a non-zero value,
+     * and isSpeaking is set to true if the audioLevel is greater than 0.05. This implementation
+     * allows adding a warning message to notify the local participant that their audio is not sent
+     * to a conference.
+     * </p>
+     *
+     * @param participantMap this method gets audioLevel of a participant provided here
+     * @param promise        returns the value between 0 and 1
+     */
+    @ReactMethod
+    public void getAudioLevel(@NotNull ReadableMap participantMap, Promise promise) {
+        try {
+            Participant foundParticipant = toParticipant(participantMap);
+            double audioLevel = conferenceService.audioLevel(foundParticipant);
+            promise.resolve(audioLevel);
+        } catch (Throwable throwable) {
+            Log.w(TAG, "Can't get participant", throwable);
+            promise.reject(throwable);
+        }
+    }
+
+    /**
+     * Provides the maximum number of video streams that may be transmitted to the local participant.
+     *
+     * @param promise returns the max video forwarded value for the current conference
+     */
+    @ReactMethod
+    public void getMaxVideoForwarding(Promise promise) {
+        Integer maxVideoForwarding = conferenceService.getMaxVideoForwarding();
+        if (maxVideoForwarding != null) {
+            promise.resolve(maxVideoForwarding);
+        } else {
+            promise.reject(new Throwable("Max video forwarding value is not available"));
+        }
+    }
+
+    /**
+     * Provides the instance of the desired participant.
+     *
+     * @param participantId participant id
+     * @param promise       returns the instance of the participant. The null value informs that the
+     *                      conference or the participant does not exist in the current time session.
+     */
+    @ReactMethod
+    public void getParticipant(@NotNull String participantId, Promise promise) {
+        Participant participant = conferenceService.findParticipantById(participantId);
+        if (participant != null) {
+            promise.resolve(participant);
+        } else {
+            promise.reject(new Throwable("Couldn't find the participant"));
+        }
+    }
+
+    /**
+     * Gets information about conference participants.
+     *
+     * @param conferenceMap this method gets participants from a conference provided here
+     * @param promise       returns the direct reference to the array of participants
+     */
+    @ReactMethod
+    public void getParticipants(@NotNull ReadableMap conferenceMap, Promise promise) {
+        try {
+            List<Participant> participants = toConference(conferenceMap).getParticipants();
+            promise.resolve(participantMapper.toParticipantsArray(participants));
+        } catch (Throwable throwable) {
+            Log.w(TAG, "Can't get conference", throwable);
+            promise.reject(throwable);
+        }
+    }
+
+    /**
+     * Provides the current conference status.
+     *
+     * @param conferenceMap this method gets status of a conference provided here
+     * @param promise       returns the valid {@link ConferenceStatus} for a manipulation
+     */
+    @ReactMethod
+    public void getStatus(@NotNull ReadableMap conferenceMap, Promise promise) {
+        try {
+            String conferenceId = toConferenceId(conferenceMap);
+            ConferenceStatus status = conferenceService.getConference(conferenceId).getState();
+            promise.resolve(conferenceMapper.toString(status));
+        } catch (Throwable throwable) {
+            Log.w(TAG, "Can't get conferenceId", throwable);
+            promise.reject(throwable);
+        }
+    }
+
+    /**
+     * <p>
+     * Informs whether the local participant is muted.
+     * </p>
+     * <p>Note: This API is no longer supported for remote participants.
+     * </p>
+     *
+     * @param promise returns boolean - information if the local participant is muted. Returns
+     *                false if the participant is not muted or is not present at the conference.
+     *                Returns true if the participant is muted.
+     */
+    @ReactMethod
+    public void isMuted(Promise promise) {
+        promise.resolve(conferenceService.isMuted());
+    }
+
+    /**
+     * Indicates whether the current participant is speaking.
+     *
+     * @param participantMap this method gets speaking status of a participant provided here
+     * @param promise        returns a boolean indicating whether the current participant is speaking.
+     */
+    @ReactMethod
+    public void isSpeaking(@NotNull ReadableMap participantMap, Promise promise) {
+        try {
+            Participant foundParticipant = toParticipant(participantMap);
+            boolean isSpeaking = conferenceService.isSpeaking(foundParticipant);
+            promise.resolve(isSpeaking);
+        } catch (Throwable throwable) {
+            Log.w(TAG, "Can't get participant", throwable);
+            promise.reject(throwable);
+        }
+    }
+
+    /**
      * Creates a {@link ConferenceJoinOptions} based on provided {@code options} for a given
      * {@code conference}. Throws {@link IllegalArgumentException} if conference id is invalid.
      *
@@ -211,11 +341,7 @@ public class RNConferenceServiceModule extends ReactContextBaseJavaModule {
             @NotNull ReadableMap conferenceMap,
             @Nullable ReadableMap optionsMap
     ) {
-        String conferenceId = conferenceMapper.toConferenceId(conferenceMap);
-        if (conferenceId == null) {
-            throw new IllegalArgumentException("Conference should contain conferenceId");
-        }
-
+        String conferenceId = toConferenceId(conferenceMap);
         Conference foundConference = conferenceService.getConference(conferenceId);
         return conferenceJoinOptionsMapper.toConferenceJoinOptions(foundConference, optionsMap);
     }
@@ -239,5 +365,34 @@ public class RNConferenceServiceModule extends ReactContextBaseJavaModule {
             throw new Throwable("Couldn't find the participant");
         }
         return foundParticipant;
+    }
+
+    /**
+     * Gets {@link Conference} based on a React Native conference model. Throws
+     * {@link IllegalArgumentException} if conference id is invalid.
+     *
+     * @param conferenceMap a React Native conference model
+     * @return {@link Conference}
+     */
+    @NotNull
+    private Conference toConference(@NotNull ReadableMap conferenceMap) {
+        String conferenceId = toConferenceId(conferenceMap);
+        return conferenceService.getConference(conferenceId);
+    }
+
+    /**
+     * Gets conference id based on a React Native conference model. Throws
+     * {@link IllegalArgumentException} if conference id is invalid.
+     *
+     * @param conferenceMap a React Native conference model
+     * @return conference id
+     */
+    @NotNull
+    private String toConferenceId(@NotNull ReadableMap conferenceMap) {
+        String conferenceId = conferenceMapper.toConferenceId(conferenceMap);
+        if (conferenceId == null) {
+            throw new IllegalArgumentException("Conference should contain conferenceId");
+        }
+        return conferenceId;
     }
 }
