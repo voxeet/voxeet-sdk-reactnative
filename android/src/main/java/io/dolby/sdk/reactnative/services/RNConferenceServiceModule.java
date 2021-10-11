@@ -223,7 +223,7 @@ public class RNConferenceServiceModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void kick(@NotNull ReadableMap participantMap, @NotNull Promise promise) {
-        invokeOntoParticipant(participantMap, promise, conferenceService::kick);
+        invokeVoxeetPromiseOntoParticipant(participantMap, promise, conferenceService::kick);
     }
 
     /**
@@ -270,8 +270,7 @@ public class RNConferenceServiceModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void getAudioLevel(@NotNull ReadableMap participantMap, @NotNull Promise promise) {
-        //invokeOntoParticipantOnUiThread(participantMap, promise, conferenceService::audioLevel);
-        getLocalStats(promise);
+        invokeVoxeetPromiseOntoParticipantOnUiThread(participantMap, promise, conferenceService::audioLevel);
     }
 
     /**
@@ -356,7 +355,7 @@ public class RNConferenceServiceModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void isSpeaking(@NotNull ReadableMap participantMap, @NotNull Promise promise) {
-        invokeOntoParticipantOnUiThread(participantMap, promise, conferenceService::isSpeaking);
+        invokeVoxeetPromiseOntoParticipantOnUiThread(participantMap, promise, conferenceService::isSpeaking);
     }
 
     /**
@@ -426,18 +425,17 @@ public class RNConferenceServiceModule extends ReactContextBaseJavaModule {
     }
 
     /**
-     * Resolves the promise with the result of the given {@code function} and provides the
+     * Resolves the {@code promise} with the result of the given {@code function} and provides the
      * {@link Conference} object.
      *
      * @param conferenceMap a React Native conference model
      * @param promise       returns a {@code function}'s result
      * @param function      called with a {@link Conference}
-     * @param <Out>         return type of a {@code function}
      */
-    private <Out> void invokeOntoConference(
+    private void invokeOntoConference(
             @NotNull ReadableMap conferenceMap,
             @NotNull Promise promise,
-            @NotNull Function1<Conference, Out> function
+            @NotNull Function1<Conference, Object> function
     ) {
         try {
             Conference conference = toConference(conferenceMap);
@@ -449,22 +447,25 @@ public class RNConferenceServiceModule extends ReactContextBaseJavaModule {
     }
 
     /**
-     * Resolves the promise with the result of the given {@code function} and provides the
-     * {@link Participant} object.
+     * Resolves the {@code promise} with the result of the given {@code function} that provides the
+     * {@link Participant} object and returns {@link com.voxeet.promise.Promise}.
      *
      * @param participantMap a React Native conference model
      * @param promise        returns a {@code function}'s result
-     * @param function       called with a {@link Participant}
+     * @param function       called with a {@link Participant}, returns {@link com.voxeet.promise.Promise}
      * @param <Out>          return type of a {@code function}
      */
-    private <Out> void invokeOntoParticipant(
+    private <Out> void invokeVoxeetPromiseOntoParticipant(
             @NotNull ReadableMap participantMap,
             @NotNull Promise promise,
-            @NotNull Function1<Participant, Out> function
+            @NotNull Function1<Participant, com.voxeet.promise.Promise<Out>> function
     ) {
         try {
             Participant participant = toParticipant(participantMap);
-            promise.resolve(function.invoke(participant));
+
+            function.invoke(participant)
+                    .then(promise::resolve)
+                    .error(promise::reject);
         } catch (Throwable throwable) {
             Log.w(TAG, "Can't get participant", throwable);
             promise.reject(throwable);
@@ -472,8 +473,9 @@ public class RNConferenceServiceModule extends ReactContextBaseJavaModule {
     }
 
     /**
-     * It does the same as {@link #invokeOntoParticipant(ReadableMap, Promise, Function1)}, but
-     * can be used for methods that need to be called on the UI thread (like
+     * It wraps {@code function} with {@link com.voxeet.promise.Promise} and calls
+     * {@link #invokeVoxeetPromiseOntoParticipant(ReadableMap, Promise, Function1)} under the hood.
+     * It can be used by methods that need to be called on the UI thread (like
      * {@link #getAudioLevel(ReadableMap, Promise)}).
      *
      * @param participantMap a React Native conference model
@@ -481,23 +483,14 @@ public class RNConferenceServiceModule extends ReactContextBaseJavaModule {
      * @param function       called with a {@link Participant}
      * @param <Out>          return type of a {@code function}
      */
-    private <Out> void invokeOntoParticipantOnUiThread(
+    private <Out> void invokeVoxeetPromiseOntoParticipantOnUiThread(
             @NotNull ReadableMap participantMap,
             @NotNull Promise promise,
             @NotNull Function1<Participant, Out> function
     ) {
-        try {
-            Participant foundParticipant = toParticipant(participantMap);
-            com.voxeet.promise.Promise<Out> voxeetPromise = new com.voxeet.promise.Promise<>(solver ->
-                    solver.resolve(function.invoke(foundParticipant))
-            );
-
-            voxeetPromise
-                    .then(promise::resolve)
-                    .error(promise::reject);
-        } catch (Throwable throwable) {
-            Log.w(TAG, "Can't get participant", throwable);
-            promise.reject(throwable);
-        }
+        invokeVoxeetPromiseOntoParticipant(participantMap, promise,
+                participant -> new com.voxeet.promise.Promise<>(solver ->
+                        solver.resolve(function.invoke(participant)))
+        );
     }
 }
