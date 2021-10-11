@@ -7,7 +7,6 @@ import com.facebook.react.bridge.WritableNativeArray;
 import com.facebook.react.bridge.WritableNativeMap;
 import com.voxeet.sdk.json.ConferencePermission;
 import com.voxeet.sdk.models.Conference;
-import com.voxeet.sdk.models.Participant;
 import com.voxeet.sdk.services.conference.information.ConferenceStatus;
 
 import org.jetbrains.annotations.NotNull;
@@ -15,7 +14,6 @@ import org.jetbrains.annotations.Nullable;
 import org.json.JSONArray;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;

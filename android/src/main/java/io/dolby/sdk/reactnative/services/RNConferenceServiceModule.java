@@ -8,10 +8,6 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
-import com.facebook.react.bridge.WritableArray;
-import com.facebook.react.bridge.WritableMap;
-import com.facebook.react.bridge.WritableNativeArray;
-import com.facebook.react.bridge.WritableNativeMap;
 import com.voxeet.sdk.models.Conference;
 import com.voxeet.sdk.models.Participant;
 import com.voxeet.sdk.services.ConferenceService;
@@ -67,7 +63,7 @@ import kotlin.jvm.functions.Function1;
  * <li>Get information about conference participants, such as the participant instance
  * ({@link #getParticipant(String, Promise)}), audio level of a participant ({@link #getAudioLevel(ReadableMap, Promise)})
  * and list of participants ({@link #getParticipants(ReadableMap, Promise)}).</li>
- * <li>Check the standard WebRTC statistics for the application.</li> TODO DEXA-92 link to getLocalStats
+ * <li>Check the standard WebRTC statistics for the application ({@link #getLocalStats(Promise)}).</li>
  * <li>{@link #kick(ReadableMap, Promise)} a participant from a conference.</li>
  * <li>Update the participant's permissions.</li> TODO DEXA-39 link to update permissions
  * </ul>
