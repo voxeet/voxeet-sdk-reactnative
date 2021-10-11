@@ -12,9 +12,12 @@ import com.voxeet.sdk.services.conference.information.ConferenceStatus;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.json.JSONArray;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import io.dolby.sdk.reactnative.utils.RNCollectionExtractor;
@@ -101,6 +104,15 @@ public class ConferenceMapper {
     }
 
     @NotNull
+    public ReadableMap toMap(@NotNull Map<String, JSONArray> localStats) {
+        WritableMap map = new WritableNativeMap();
+        for (Entry<String, JSONArray> entry : localStats.entrySet()) {
+            map.putString(entry.getKey(), entry.getValue().toString());
+        }
+        return map;
+    }
+
+    @NotNull
     private ReadableMap toParamsMap(@NotNull Conference conference) {
         HashMap<String, Object> metadata = conference.getMetadata();
 
@@ -169,16 +181,5 @@ public class ConferenceMapper {
             default:
                 return "UNKNOWN";
         }
-    }
-
-    @NotNull
-    private WritableNativeArray toParticipantsArray(@NotNull List<Participant> participants) {
-        WritableNativeArray participantsArray = new WritableNativeArray();
-        for (Participant participant : participants) {
-            if (participant != null) {
-                participantsArray.pushMap(participantMapper.toMap(participant));
-            }
-        }
-        return participantsArray;
     }
 }

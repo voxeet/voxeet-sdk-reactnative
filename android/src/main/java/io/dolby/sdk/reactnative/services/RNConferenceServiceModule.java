@@ -8,6 +8,10 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.WritableArray;
+import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.bridge.WritableNativeArray;
+import com.facebook.react.bridge.WritableNativeMap;
 import com.voxeet.sdk.models.Conference;
 import com.voxeet.sdk.models.Participant;
 import com.voxeet.sdk.services.ConferenceService;
@@ -17,6 +21,9 @@ import com.voxeet.sdk.services.conference.information.ConferenceStatus;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.json.JSONArray;
+
+import java.util.Map;
 
 import io.dolby.sdk.reactnative.mapper.ConferenceCreateOptionsMapper;
 import io.dolby.sdk.reactnative.mapper.ConferenceJoinOptionsMapper;
@@ -267,7 +274,8 @@ public class RNConferenceServiceModule extends ReactContextBaseJavaModule {
      */
     @ReactMethod
     public void getAudioLevel(@NotNull ReadableMap participantMap, @NotNull Promise promise) {
-        invokeOntoParticipantOnUiThread(participantMap, promise, conferenceService::audioLevel);
+        //invokeOntoParticipantOnUiThread(participantMap, promise, conferenceService::audioLevel);
+        getLocalStats(promise);
     }
 
     /**
@@ -353,6 +361,18 @@ public class RNConferenceServiceModule extends ReactContextBaseJavaModule {
     @ReactMethod
     public void isSpeaking(@NotNull ReadableMap participantMap, @NotNull Promise promise) {
         invokeOntoParticipantOnUiThread(participantMap, promise, conferenceService::isSpeaking);
+    }
+
+    /**
+     * Provides standard WebRTC statistics for the application to implement its own quality
+     * monitoring mechanisms.
+     *
+     * @param promise returns The WebRTC Stat Matrix
+     */
+    @ReactMethod
+    public void getLocalStats(@NotNull Promise promise) {
+        Map<String, JSONArray> localStats = conferenceService.localStats();
+        promise.resolve(conferenceMapper.toMap(localStats));
     }
 
     /**
