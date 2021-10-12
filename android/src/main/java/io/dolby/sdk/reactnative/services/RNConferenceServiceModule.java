@@ -165,9 +165,10 @@ public class RNConferenceServiceModule extends ReactContextBaseJavaModule {
                     if (conference != null) {
                         promise.resolve(conferenceMapper.toMap(conference));
                     } else {
-                        promise.reject(new Throwable("Couldn't find the conference"));
+                        promise.reject(new Exception("Couldn't find the conference"));
                     }
-                }).error(promise::reject);
+                })
+                .error(promise::reject);
     }
 
     // TODO Note: remember to manually grant permissions to CAMERA and MICROPHONE.
@@ -231,7 +232,8 @@ public class RNConferenceServiceModule extends ReactContextBaseJavaModule {
         conferenceService.leave()
                 .then(result -> {
                     promise.resolve(null);
-                }).error(promise::reject);
+                })
+                .error(promise::reject);
     }
 
     /**
@@ -246,9 +248,10 @@ public class RNConferenceServiceModule extends ReactContextBaseJavaModule {
                     if (conference != null) {
                         promise.resolve(conferenceMapper.toMap(conference));
                     } else {
-                        promise.reject(new Throwable("Missing current conference"));
+                        promise.reject(new Exception("Missing current conference"));
                     }
-                }).error(promise::reject);
+                })
+                .error(promise::reject);
     }
 
     /**
@@ -285,9 +288,10 @@ public class RNConferenceServiceModule extends ReactContextBaseJavaModule {
                     if (value != null) {
                         promise.resolve(value);
                     } else {
-                        promise.reject(new Throwable("Can't get max video forwarding"));
+                        promise.reject(new Exception("Can't get max video forwarding"));
                     }
-                }).error(promise::reject);
+                })
+                .error(promise::reject);
     }
 
     /**
@@ -304,9 +308,10 @@ public class RNConferenceServiceModule extends ReactContextBaseJavaModule {
                     if (participant != null) {
                         promise.resolve(participantMapper.toMap(participant));
                     } else {
-                        promise.reject(new Throwable("Couldn't get the participant"));
+                        promise.reject(new Exception("Couldn't get the participant"));
                     }
-                }).error(promise::reject);
+                })
+                .error(promise::reject);
     }
 
     /**
