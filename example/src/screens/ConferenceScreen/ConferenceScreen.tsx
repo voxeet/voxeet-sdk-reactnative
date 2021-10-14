@@ -1,9 +1,9 @@
-import { ConferencePermission } from '../../../../lib/typescript/services/conference/models';
 import type {
   Participant,
   ParticipantInvited,
   Conference,
 } from '../../../../src/services/conference/models';
+import { ConferencePermission } from '../../../../src/services/conference/models';
 import styles from './ConferenceScreen.style';
 import ParticipantAvatar from './ParticipantAvatar';
 import { DolbyIOContext } from '@components/DolbyIOProvider';
