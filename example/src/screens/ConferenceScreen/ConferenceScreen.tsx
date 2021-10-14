@@ -1,6 +1,5 @@
 import type {
   Participant,
-  ParticipantInvited,
   Conference,
 } from '../../../../src/services/conference/models';
 import { ConferencePermission } from '../../../../src/services/conference/models';
@@ -30,12 +29,16 @@ import {
   updatePermissions,
 } from '@utils/conference.tester';
 import {
+  invite,
+  decline,
+  inviteRandomParticipant,
+} from '@utils/notification.tester';
+import {
   stop,
   start,
   getThumbnail,
   setPage,
 } from '@utils/filePresentation.tester';
-import { invite, decline } from '@utils/notification.tester';
 import {
   getCurrentRecording,
   startRecording,
@@ -55,16 +58,6 @@ const ConferenceScreen: FunctionComponent = () => {
   if (!conference || !user) {
     return <LinearGradient colors={COLORS.GRADIENT} style={styles.wrapper} />;
   }
-
-  const randomInvitedParticipant = ({
-    includePermissions = false,
-  } = {}): ParticipantInvited => ({
-    info: {
-      externalId: '_' + Math.random().toString(36).substr(2, 9),
-      name: 'randomInvitedParticipantName',
-    },
-    permissions: includePermissions ? [ConferencePermission.INVITE] : [],
-  });
 
   return (
     <MenuProvider
@@ -267,21 +260,13 @@ const ConferenceScreen: FunctionComponent = () => {
                   size="small"
                   color="dark"
                   text="Invite"
-                  onPress={() =>
-                    invite(conference, [randomInvitedParticipant()])
-                  }
+                  onPress={() => invite(conference, [])}
                 />
                 <Button
                   size="small"
                   color="dark"
                   text="Invite with permissions"
-                  onPress={() =>
-                    invite(conference, [
-                      randomInvitedParticipant({
-                        includePermissions: true,
-                      }),
-                    ])
-                  }
+                  onPress={() => inviteRandomParticipant(conference)}
                 />
                 <Button
                   size="small"
