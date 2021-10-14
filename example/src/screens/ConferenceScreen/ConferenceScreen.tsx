@@ -1,4 +1,9 @@
-import type { Participant } from '../../../../src/services/conference/models';
+import { ConferencePermission } from '../../../../lib/typescript/services/conference/models';
+import type {
+  Participant,
+  ParticipantInvited,
+  Conference,
+} from '../../../../src/services/conference/models';
 import styles from './ConferenceScreen.style';
 import ParticipantAvatar from './ParticipantAvatar';
 import { DolbyIOContext } from '@components/DolbyIOProvider';
@@ -45,12 +50,21 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 const ConferenceScreen: FunctionComponent = () => {
   const bottomSheetRef = useRef<BottomSheet>(null);
   const { user, conference, leave } = useContext(DolbyIOContext);
-  // @ts-ignore
-  const { participants } = conference;
+  const { participants } = conference as Conference;
 
   if (!conference || !user) {
     return <LinearGradient colors={COLORS.GRADIENT} style={styles.wrapper} />;
   }
+
+  const randomInvitedParticipant = ({
+    includePermissions = false,
+  } = {}): ParticipantInvited => ({
+    info: {
+      externalId: '_' + Math.random().toString(36).substr(2, 9),
+      name: 'randomInvitedParticipantName',
+    },
+    permissions: includePermissions ? [ConferencePermission.INVITE] : [],
+  });
 
   return (
     <MenuProvider
@@ -157,8 +171,21 @@ const ConferenceScreen: FunctionComponent = () => {
                 <Button
                   size="small"
                   color="dark"
-                  text="Update Permissions"
+                  text="Update Permissions nodata"
                   onPress={() => updatePermissions([])}
+                />
+                <Button
+                  size="small"
+                  color="dark"
+                  text="Update Permissions random data"
+                  onPress={() =>
+                    updatePermissions([
+                      {
+                        participant: participants[0],
+                        permissions: [ConferencePermission.KICK],
+                      },
+                    ])
+                  }
                 />
               </Space>
               <Space mb="xs">
@@ -240,7 +267,21 @@ const ConferenceScreen: FunctionComponent = () => {
                   size="small"
                   color="dark"
                   text="Invite"
-                  onPress={() => invite(conference, participants)}
+                  onPress={() =>
+                    invite(conference, [randomInvitedParticipant()])
+                  }
+                />
+                <Button
+                  size="small"
+                  color="dark"
+                  text="Invite with permissions"
+                  onPress={() =>
+                    invite(conference, [
+                      randomInvitedParticipant({
+                        includePermissions: true,
+                      }),
+                    ])
+                  }
                 />
                 <Button
                   size="small"

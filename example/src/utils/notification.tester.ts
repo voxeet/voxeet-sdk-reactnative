@@ -1,13 +1,13 @@
 import type {
   Conference,
-  ParticipantInfo,
+  ParticipantInvited,
 } from '../../../src/services/conference/models';
 import DolbyIoIAPI from '@dolbyio/react-native-iapi-sdk';
 import { Alert } from 'react-native';
 
 export const invite = async (
   conference: Conference,
-  participants: ParticipantInfo[]
+  participants: ParticipantInvited[]
 ) => {
   try {
     await DolbyIoIAPI.notification.invite(conference, participants);
