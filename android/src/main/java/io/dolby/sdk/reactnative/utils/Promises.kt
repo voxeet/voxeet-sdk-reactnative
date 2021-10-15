@@ -55,7 +55,16 @@ object Promises {
                 ?: VoxeetPromise.reject(Exception(nullErrorMessage()))
     }
 
-    // fixme doc
+    /**
+     * Rejects promise if emitted value is null
+     *
+     * ```
+     * promiseThatCanEmitNull
+     *  .rejectIfNull(reactPromise)
+     * ```
+     *
+     * @param thenValue [ThenValue] mapped value provider
+     */
     fun <T> VoxeetPromise<T?>.rejectIfNull(
             promise: ReactPromise,
             nullErrorMessage: () -> String = { "Required value is null" }
@@ -121,14 +130,6 @@ object Promises {
      * @param promise          [ReactPromise] to forward
      * @param ignoreReturnType flag if [ReactPromise] returns null
      */
-    fun <T> VoxeetPromise<T>.forward(promise: ReactPromise, ignoreReturnType: Boolean = false) = then(ThenVoid { result ->
-        if (ignoreReturnType) promise.resolve(null) else promise.resolve(result)
-    }).error {
-        Log.d(TAG, "Dispatch error", it)
-        promise.reject(it)
-    }
-
-    // fixme doc
     fun <T> VoxeetPromise<T>.forward(promise: ReactPromise, ignoreReturnType: Boolean = false) =
             then(ThenVoid { result ->
                 if (ignoreReturnType) promise.resolve(null) else promise.resolve(result)
