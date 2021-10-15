@@ -115,7 +115,7 @@ class RNConferenceServiceModule(
                 ?: Promise.resolve(conferenceService.conference)
 
         conferencePromise
-                .rejectIfNull { "Can't get the conference" }
+                .rejectIfNull { "Couldn't get the conference" }
                 .thenValue(conferenceMapper::toMap)
                 .forward(promise)
 
@@ -138,7 +138,7 @@ class RNConferenceServiceModule(
      */
     @ReactMethod
     fun join(conferenceMap: ReadableMap, optionsMap: ReadableMap?, promise: ReactPromise) {
-        Promises.promise({ toConferenceJoinOptions(conferenceMap, optionsMap) }) { "Can't get the conference join options" }
+        Promises.promise({ toConferenceJoinOptions(conferenceMap, optionsMap) }) { "Couldn't get the conference join options" }
                 .thenPromise(conferenceService::join)
                 .thenValue(conferenceMapper::toMap)
                 .forward(promise)
@@ -154,7 +154,7 @@ class RNConferenceServiceModule(
      */
     @ReactMethod
     fun kick(participantMap: ReadableMap, promise: ReactPromise) {
-        Promises.promise({ toParticipant(participantMap) }) { "Can't get participant" }
+        Promises.promise({ toParticipant(participantMap) }) { "Couldn't get participant" }
                 .thenPromise(conferenceService::kick)
                 .forward(promise)
     }
@@ -194,7 +194,7 @@ class RNConferenceServiceModule(
      */
     @ReactMethod
     fun getAudioLevel(participantMap: ReadableMap, promise: ReactPromise) {
-        Promises.promise({ toParticipant(participantMap) }) { "Can't get participant" }
+        Promises.promise({ toParticipant(participantMap) }) { "Couldn't get participant" }
                 .thenValue(conferenceService::audioLevel)
                 .forward(promise)
     }
@@ -206,7 +206,7 @@ class RNConferenceServiceModule(
      */
     @ReactMethod
     fun getMaxVideoForwarding(promise: ReactPromise) {
-        Promises.promise(conferenceService.maxVideoForwarding) { "Can't get max video forwarding" }
+        Promises.promise(conferenceService.maxVideoForwarding) { "Couldn't get max video forwarding" }
                 .forward(promise)
     }
 
@@ -285,7 +285,7 @@ class RNConferenceServiceModule(
      */
     @ReactMethod
     fun getLocalStats(promise: ReactPromise) {
-        Promises.promise(conferenceService.localStats()) { "Can't get local stats" }
+        Promises.promise(conferenceService.localStats()) { "Couldn't get local stats" }
                 .thenValue(conferenceMapper::toMap)
                 .forward(promise)
     }
@@ -306,7 +306,7 @@ class RNConferenceServiceModule(
      */
     @ReactMethod
     fun mute(participantMap: ReadableMap, isMuted: Boolean, promise: ReactPromise) {
-        Promises.promise({ toParticipant(participantMap) }) { "Can't get participant" }
+        Promises.promise({ toParticipant(participantMap) }) { "Couldn't get participant" }
                 .thenValue { participant -> conferenceService.mute(participant, isMuted) }
                 .forward(promise, ignoreReturnType = true)
     }
