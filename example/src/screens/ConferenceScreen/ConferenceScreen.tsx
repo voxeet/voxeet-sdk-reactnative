@@ -45,7 +45,8 @@ import {
   stopRecording,
 } from '@utils/recording.tester';
 import React, { FunctionComponent, useContext, useRef } from 'react';
-import { View, ScrollView, TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient';
 import { MenuProvider } from 'react-native-popup-menu';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -99,7 +100,7 @@ const ConferenceScreen: FunctionComponent = () => {
             </Space>
           </View>
         </SafeAreaView>
-        <BottomSheet ref={bottomSheetRef} index={0} snapPoints={[65, 500]}>
+        <BottomSheet ref={bottomSheetRef} index={0} snapPoints={[100, 500]}>
           <ScrollView>
             <Space mh="m" mb="s">
               <Text header size="s" color={COLORS.BLACK}>
