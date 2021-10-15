@@ -1,7 +1,5 @@
 package io.dolby.sdk.reactnative.mapper;
 
-import androidx.annotation.NonNull;
-
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableArray;
@@ -20,6 +18,7 @@ import com.voxeet.sdk.models.v2.ParticipantType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.dolby.sdk.reactnative.utils.RNCollectionExtractor;
@@ -63,6 +62,15 @@ public class ParticipantMapper {
         );
     }
 
+    @NotNull
+    public List<ParticipantInfo> toParticipantInfoList(@NotNull ReadableArray participantInfoArray) {
+        ArrayList<ParticipantInfo> list = new ArrayList<>();
+        for (int i = 0; i < participantInfoArray.size(); i++) {
+            list.add(toParticipantInfo(participantInfoArray.getMap(i)));
+        }
+        return list;
+    }
+
     @Nullable
     public String toParticipantId(@NotNull ReadableMap participantMap) {
         return rnCollectionExtractor.getString(participantMap, PARTICIPANT_ID);
@@ -86,7 +94,7 @@ public class ParticipantMapper {
         return map;
     }
 
-    @NonNull
+    @NotNull
     public WritableArray toParticipantsArray(@NotNull List<Participant> participants) {
         WritableNativeArray participantsArray = new WritableNativeArray();
         for (Participant participant : participants) {

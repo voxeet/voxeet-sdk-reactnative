@@ -11,13 +11,20 @@ typealias ReactPromise = com.facebook.react.bridge.Promise
 
 /**
  * Provide extension methods that simplify:
- * <p>- creation of [VoxeetPromise] from Java callable
+ * <p>- creation of [VoxeetPromise]
  * <p>- joining [VoxeetPromise]'s and [ReactPromise]'s</p>
  */
 object Promises {
 
     private val TAG = Promises.javaClass.simpleName
 
+    /**
+     * Creates promise from Java Callable
+     * Resolves value returned by callable, rejects in case of null value
+     *
+     * @param callable         callable to execute
+     * @param nullErrorMessage error message provider in case of rejection
+     */
     @JvmStatic
     fun <T> promise(
             callable: () -> T?,
@@ -35,12 +42,20 @@ object Promises {
         }
     }
 
+    /**
+     * Creates promise from object
+     * Rejects in case of null object supplied
+     *
+     * @param value            object to return
+     * @param nullErrorMessage error message provider in case of rejection
+     */
     @JvmStatic
     fun <T> promise(value: T?, nullErrorMessage: () -> String = { "Required value is null" }): VoxeetPromise<T> {
         return value?.let { VoxeetPromise.resolve(value) }
                 ?: VoxeetPromise.reject(Exception(nullErrorMessage()))
     }
 
+    // fixme doc
     fun <T> VoxeetPromise<T?>.rejectIfNull(
             promise: ReactPromise,
             nullErrorMessage: () -> String = { "Required value is null" }
@@ -52,14 +67,68 @@ object Promises {
                 }
             })
 
+    /**
+     * Util method to simplify building promises chain mapping
+     *
+     * ```
+     * Promises.promise(Obj)
+     *  .thenValue { obj -> Obj2 }
+     * ```
+     *
+     * @param thenValue [ThenValue] mapped value provider
+     */
     fun <T, R> VoxeetPromise<T>.thenValue(thenValue: ThenValue<T, R>): PromiseInOut<T, R> = then(thenValue)
 
+    /**
+     * Util method to simplify building promises chain mapping
+     *
+     * ```
+     * Promises.promise(Obj)
+     *  .thenValue { obj -> Obj2 }
+     * ```
+     *
+     * @param thenValue [ThenValue] mapped value provider
+     */
     fun <T, R, K> PromiseInOut<T, R>.thenValue(thenValue: ThenValue<R, K>): PromiseInOut<R, K> = then(thenValue)
 
+    /**
+     * Util method to simplify building promises chain
+     *
+     * ```
+     * Promises.promise(Obj)
+     *  .thenPromise { obj -> FurtherPromise(obj) }
+     * ```
+     *
+     * @param thenPromise [ThenPromise] further promise provider
+     */
     fun <T, R> VoxeetPromise<T>.thenPromise(thenPromise: ThenPromise<T, R>): PromiseInOut<T, R> = then(thenPromise)
 
+    /**
+     * Util method to simplify building promises chain
+     *
+     * ```
+     * Promises.promise(Obj)
+     *  .thenPromise { obj -> FurtherPromise(obj) }
+     * ```
+     *
+     * @param thenPromise [ThenPromise] further promise provider
+     */
     fun <T, R, K> PromiseInOut<T, R>.thenPromise(thenPromise: ThenPromise<R, K>): PromiseInOut<R, K> = then(thenPromise)
 
+    /**
+     * Util method to simplify forwarding [VoxeetPromise] to [ReactPromise]
+     *
+     * @param promise          [ReactPromise] to forward
+     * @param ignoreReturnType flag if [ReactPromise] returns null
+     */
+    fun <T> VoxeetPromise<T>.forward(promise: ReactPromise, ignoreReturnType: Boolean = false) = then(ThenVoid { result ->
+        if (ignoreReturnType) promise.resolve(null) else promise.resolve(result)
+    }).error {
+        Log.d(TAG, "Dispatch error", it)
+        promise.reject(it)
+    }
+
+    // fixme doc
     fun <T> VoxeetPromise<T>.forward(promise: ReactPromise, ignoreReturnType: Boolean = false) =
             then(ThenVoid { result ->
                 if (ignoreReturnType) promise.resolve(null) else promise.resolve(result)
@@ -68,6 +137,12 @@ object Promises {
                 promise.reject(it)
             }
 
+    /**
+     * Util method to simplify forwarding [PromiseInOut] to [ReactPromise]
+     *
+     * @param promise          [ReactPromise] to forward
+     * @param ignoreReturnType flag if [ReactPromise] returns null
+     */
     fun <T, R> PromiseInOut<T, R>.forward(promise: ReactPromise, ignoreReturnType: Boolean = false) =
             then<Void>(ThenVoid { result ->
                 if (ignoreReturnType) promise.resolve(null) else promise.resolve(result)
@@ -76,7 +151,4 @@ object Promises {
                 promise.reject(it)
             }
 
-    fun Any?.forwardOptionalValue(promise: ReactPromise, errorMessage: () -> String) {
-        this?.let(promise::resolve) ?: promise.reject(Exception(errorMessage()))
-    }
 }
