@@ -115,9 +115,9 @@ class RNConferenceServiceModule(
                 ?: Promise.resolve(conferenceService.conference)
 
         conferencePromise
-                .rejectIfNull(promise) { "Can't get the conference" }
-                ?.thenValue(conferenceMapper::toMap)
-                ?.forward(promise)
+                .rejectIfNull { "Can't get the conference" }
+                .thenValue(conferenceMapper::toMap)
+                .forward(promise)
 
     }
     // TODO Note: remember to manually grant permissions to CAMERA and MICROPHONE.

@@ -56,25 +56,30 @@ object Promises {
     }
 
     /**
-     * Rejects promise if emitted value is null
+     * Throws [IllegalArgumentException] if emitted value is null
      *
      * ```
      * promiseThatCanEmitNull
-     *  .rejectIfNull(reactPromise)
+     *  .rejectIfNull()
      * ```
      *
-     * @param thenValue [ThenValue] mapped value provider
+     * @param nullErrorMessage error message provider in case of null value
      */
-    fun <T> VoxeetPromise<T?>.rejectIfNull(
-            promise: ReactPromise,
-            nullErrorMessage: () -> String = { "Required value is null" }
-    ): PromiseInOut<T?, T>? =
-            then(ThenValue { value ->
-                value ?: run {
-                    promise.reject(Exception(nullErrorMessage()))
-                    null
-                }
-            })
+    fun <T> VoxeetPromise<T?>.rejectIfNull(nullErrorMessage: () -> String = { "Required value is null" }): PromiseInOut<T?, T> =
+            thenValue { requireNotNull(it, nullErrorMessage) }
+
+    /**
+     * Throws [IllegalArgumentException] if emitted value is null
+     *
+     * ```
+     * Promises.promise(Obj)
+     *  .rejectIfNull()
+     * ```
+     *
+     * @param nullErrorMessage error message provider in case of null value
+     */
+    fun <T, R> PromiseInOut<T, R?>.rejectIfNull(nullErrorMessage: () -> String = { "Required value is null" }): PromiseInOut<R?, R> =
+            thenValue { requireNotNull(it, nullErrorMessage) }
 
     /**
      * Util method to simplify building promises chain mapping
