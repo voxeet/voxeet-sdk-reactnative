@@ -80,9 +80,7 @@ class RNConferenceServiceModule(
         private val participantMapper: ParticipantMapper
 ) : ReactContextBaseJavaModule(reactContext) {
 
-    override fun getName(): String {
-        return "DolbyIoIAPIConferenceService"
-    }
+    override fun getName() = "DolbyIoIAPIConferenceService"
 
     /**
      * Creates the conference based on information from the `optionsMap`.
@@ -113,7 +111,7 @@ class RNConferenceServiceModule(
     @ReactMethod
     fun fetch(conferenceId: String?, promise: ReactPromise) {
         val conferencePromise = conferenceId
-                ?.let { conferenceService.fetchConference(conferenceId) }
+                ?.let(conferenceService::fetchConference)
                 ?: Promise.resolve(conferenceService.conference)
 
         conferencePromise
@@ -139,11 +137,7 @@ class RNConferenceServiceModule(
      * @param promise       returns a joined conference
      */
     @ReactMethod
-    fun join(
-            conferenceMap: ReadableMap,
-            optionsMap: ReadableMap?,
-            promise: ReactPromise
-    ) {
+    fun join(conferenceMap: ReadableMap, optionsMap: ReadableMap?, promise: ReactPromise) {
         Promises.promise({ toConferenceJoinOptions(conferenceMap, optionsMap) }) { "Can't get the conference join options" }
                 .thenPromise(conferenceService::join)
                 .thenValue(conferenceMapper::toMap)
@@ -220,7 +214,7 @@ class RNConferenceServiceModule(
      * Provides the instance of the desired participant.
      *
      * @param participantId participant id
-     * @param promise       returns the instance of the participant. The null value informs that the
+     * @param promise       returns the instance of the participant. Reject can mean that the
      * conference or the participant does not exist in the current time session.
      */
     @ReactMethod
