@@ -10,43 +10,43 @@ import { Alert } from 'react-native';
 export const current = async () => {
   try {
     const conf = await DolbyIoIAPI.conference.current();
-    Alert.alert('Current conference', JSON.stringify(conf));
+    Alert.alert('Current conference', JSON.stringify(conf, null, 2));
   } catch (e: any) {
     console.log(e);
     Alert.alert('Error');
   }
 };
-export const replay = (conference: Conference) => {
+export const replay = async (conference: Conference) => {
   try {
-    DolbyIoIAPI.conference.replay(conference);
+    await DolbyIoIAPI.conference.replay(conference);
   } catch (e: any) {
     Alert.alert('Error');
   }
 };
-export const startVideo = (user: User) => {
+export const startVideo = async (user: User) => {
   try {
-    DolbyIoIAPI.conference.startVideo(user);
+    await DolbyIoIAPI.conference.startVideo(user);
   } catch (e: any) {
     Alert.alert('Error');
   }
 };
-export const stopVideo = (user: User) => {
+export const stopVideo = async (user: User) => {
   try {
-    DolbyIoIAPI.conference.stopVideo(user);
+    await DolbyIoIAPI.conference.stopVideo(user);
   } catch (e: any) {
     Alert.alert('Error');
   }
 };
-export const startAudio = (user: User) => {
+export const startAudio = async (user: User) => {
   try {
-    DolbyIoIAPI.conference.startAudio(user);
+    await DolbyIoIAPI.conference.startAudio(user);
   } catch (e: any) {
     Alert.alert('Error');
   }
 };
-export const stopAudio = (user: User) => {
+export const stopAudio = async (user: User) => {
   try {
-    DolbyIoIAPI.conference.stopAudio(user);
+    await DolbyIoIAPI.conference.stopAudio(user);
   } catch (e: any) {
     Alert.alert('Error');
   }

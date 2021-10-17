@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useContext } from 'react';
+import React, { FunctionComponent, useContext, useState } from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient';
@@ -7,6 +7,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { DolbyIOContext } from '@components/DolbyIOProvider';
 import COLORS from '@constants/colors.constants';
+import { RecordingDotsText } from '@screens/ConferenceScreen/RecordingDots';
 import Space from '@ui/Space';
 import Text from '@ui/Text';
 
@@ -20,6 +21,7 @@ import ParticipantAvatar from './ParticipantAvatar';
 
 const ConferenceScreen: FunctionComponent = () => {
   const { user, conference, leave } = useContext(DolbyIOContext);
+  const [isRecording, setIsRecording] = useState<boolean>(false);
   const { participants } = conference as Conference;
 
   if (!conference || !user) {
@@ -45,6 +47,9 @@ const ConferenceScreen: FunctionComponent = () => {
               <Text size="s" align="center">
                 Conference: <Text weight="bold">{conference.alias}</Text>
               </Text>
+              {isRecording ? (
+                <RecordingDotsText text="Conference is being recorded" />
+              ) : null}
             </Space>
           </View>
           <View style={styles.center} />
@@ -66,7 +71,7 @@ const ConferenceScreen: FunctionComponent = () => {
             </Space>
           </View>
         </SafeAreaView>
-        <ConferenceScreenBottomSheet />
+        <ConferenceScreenBottomSheet setIsRecording={setIsRecording} />
       </LinearGradient>
     </MenuProvider>
   );

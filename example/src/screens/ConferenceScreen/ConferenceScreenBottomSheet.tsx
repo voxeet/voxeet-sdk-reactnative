@@ -45,12 +45,17 @@ import {
   stopRecording,
 } from '@utils/recording.tester';
 import { getCurrentUser } from '@utils/session.tester';
-
-import type { Conference } from '../../../../src/services/conference/models';
 import { ConferencePermission } from '../../../../src/services/conference/models';
+import type { Conference } from '../../../../src/services/conference/models';
 import styles from './ConferenceScreen.style';
 
-const ConferenceScreenBottomSheet: FunctionComponent = () => {
+type BottomSheetProps = {
+  setIsRecording: (isRecording: boolean) => void;
+};
+
+const ConferenceScreenBottomSheet: FunctionComponent<BottomSheetProps> = ({
+  setIsRecording,
+}) => {
   const bottomSheetRef = useRef<BottomSheet>(null);
   const { user, conference } = useContext(DolbyIOContext);
   const { participants } = conference as Conference;
@@ -277,13 +282,19 @@ const ConferenceScreenBottomSheet: FunctionComponent = () => {
               size="small"
               color="dark"
               text="Start recording"
-              onPress={startRecording}
+              onPress={async () => {
+                await startRecording();
+                setIsRecording(true);
+              }}
             />
             <Button
               size="small"
               color="dark"
               text="Stop recording"
-              onPress={stopRecording}
+              onPress={async () => {
+                await stopRecording();
+                setIsRecording(false);
+              }}
             />
             <Button
               size="small"

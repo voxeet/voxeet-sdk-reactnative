@@ -1,7 +1,9 @@
 import type { Participant } from '../../../../src/services/conference/models';
-import COLORS from '@constants/colors.constants';
-import Text from '@ui/Text';
 import styles from './ConferenceScreen.style';
+import COLORS from '@constants/colors.constants';
+import Space from '@ui/Space';
+import Text from '@ui/Text';
+import { mute, kick } from '@utils/conference.tester';
 import React from 'react';
 import { View } from 'react-native';
 import {
@@ -10,8 +12,6 @@ import {
   MenuOptions,
   MenuOption,
 } from 'react-native-popup-menu';
-import { mute, kick } from '@utils/conference.tester';
-import Space from '@ui/Space';
 
 const ParticipantAvatar = (participant: Participant) => {
   const onSelect = async (optionValue: string) => {

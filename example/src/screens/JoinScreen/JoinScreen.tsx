@@ -27,8 +27,8 @@ const JoinScreen: FunctionComponent = () => {
     join(alias);
   };
 
-  const replayConference = () => {
-    replay(alias);
+  const replayLastConference = () => {
+    replay();
   };
 
   return (
@@ -59,7 +59,10 @@ const JoinScreen: FunctionComponent = () => {
             <Button text="Join existing conference" onPress={joinConference} />
           </Space>
           <Space mt="m">
-            <Button text="Replay conference" onPress={replayConference} />
+            <Button
+              text="Replay last conference"
+              onPress={replayLastConference}
+            />
           </Space>
         </Space>
       </SafeAreaView>

@@ -12,12 +12,13 @@ import type { User } from '../../../../src/services/session/models';
 export interface IDolbyIOProvider {
   user?: User;
   conference?: Conference;
+  lastConference?: Conference;
   isInitialized?: Boolean;
   initialize: () => void;
   openSession: (name: string) => void;
   createAndJoin: (alias: string) => void;
   join: (alias: string) => void;
-  replay: (alias: string) => void;
+  replay: () => void;
   leave: () => void;
 }
 
@@ -35,6 +36,9 @@ export const DolbyIOContext = React.createContext<IDolbyIOProvider>({
 const DolbyIOProvider: React.FC = ({ children }) => {
   const [isInitialized, setIsInitialized] = useState(false);
   const [conference, setConference] = useState<Conference | undefined>(
+    undefined
+  );
+  const [lastConference, setLastConference] = useState<Conference | undefined>(
     undefined
   );
   const [user, setUser] = useState<User | undefined>(undefined);
@@ -102,10 +106,6 @@ const DolbyIOProvider: React.FC = ({ children }) => {
       const createdConference = await DolbyIoIAPI.conference.create(
         conferenceOptions
       );
-      console.log(
-        JSON.stringify(createdConference, null, 2),
-        'created conference'
-      );
 
       const joinOptions = {
         constraints: {
@@ -147,14 +147,13 @@ const DolbyIOProvider: React.FC = ({ children }) => {
     }
   };
 
-  const replay = async (alias: string) => {
+  const replay = async () => {
     try {
-      const fetchedConference = await DolbyIoIAPI.conference.fetch(alias);
+      console.log(JSON.stringify(lastConference, null, 2), 'LAST CONFERENCE');
       const replayedConference = await DolbyIoIAPI.conference.replay(
-        fetchedConference
+        lastConference as Conference
       );
       console.log(JSON.stringify(replayedConference, null, 2));
-      setConference(replayedConference);
     } catch (e: any) {
       Alert.alert('Conference not replayed', e.toString());
     }
@@ -166,6 +165,7 @@ const DolbyIOProvider: React.FC = ({ children }) => {
         leaveRoom: true,
       };
 
+      setLastConference(conference);
       await DolbyIoIAPI.conference.leave(conferenceLeaveOptions);
       setConference(undefined);
       setUser(undefined);
