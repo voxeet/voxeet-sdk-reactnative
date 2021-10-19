@@ -19,7 +19,7 @@ export interface IDolbyIOProvider {
   createAndJoin: (alias: string, liveRecording: boolean) => void;
   join: (alias: string) => void;
   replay: () => void;
-  leave: () => void;
+  leave: (leaveRoom: boolean) => void;
 }
 
 export const DolbyIOContext = React.createContext<IDolbyIOProvider>({
@@ -42,7 +42,6 @@ const DolbyIOProvider: React.FC = ({ children }) => {
     undefined
   );
   const [user, setUser] = useState<User | undefined>(undefined);
-
   // useEffect(() => {
   //   if (conference) {
   //     if (onStatusChangeRemover) {
@@ -56,19 +55,13 @@ const DolbyIOProvider: React.FC = ({ children }) => {
   //       });
   //     });
   //   } else {
-  //     if (onStatusChangeRemover) {
-  //       onStatusChangeRemover();
-  //     }
+  //      if (onStatusChangeRemover) {
+  //        onStatusChangeRemover();
+  //      }
   //   }
   // }, [conference]);
 
   const initialize = async () => {
-    try {
-      if (await DolbyIoIAPI.conference.current()) {
-        await DolbyIoIAPI.conference.leave({ leaveRoom: true });
-      }
-    } catch (e) {}
-
     try {
       await DolbyIoIAPI.initialize(APP_ID, APP_SECRET);
       setIsInitialized(true);
@@ -159,16 +152,18 @@ const DolbyIOProvider: React.FC = ({ children }) => {
     }
   };
 
-  const leave = async () => {
+  const leave = async (leaveRoom: boolean) => {
     try {
       const conferenceLeaveOptions = {
-        leaveRoom: true,
+        leaveRoom,
       };
 
       setLastConference(conference);
       await DolbyIoIAPI.conference.leave(conferenceLeaveOptions);
       setConference(undefined);
-      setUser(undefined);
+      if (leaveRoom) {
+        setUser(undefined);
+      }
     } catch (e: any) {
       Alert.alert('Conference not left', e);
     }

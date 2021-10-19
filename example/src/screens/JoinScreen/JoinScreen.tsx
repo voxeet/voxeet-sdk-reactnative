@@ -1,17 +1,15 @@
-// @ts-ignore
-import Chance from 'chance';
-import React, { FunctionComponent, useState, useContext } from 'react';
-import LinearGradient from 'react-native-linear-gradient';
-import { SafeAreaView } from 'react-native-safe-area-context';
-
+import styles from './JoinScreen.style';
 import { DolbyIOContext } from '@components/DolbyIOProvider';
 import COLORS from '@constants/colors.constants';
 import Button from '@ui/Button';
 import Input from '@ui/Input';
 import Space from '@ui/Space';
 import Text from '@ui/Text';
-
-import styles from './JoinScreen.style';
+// @ts-ignore
+import Chance from 'chance';
+import React, { FunctionComponent, useState, useContext } from 'react';
+import LinearGradient from 'react-native-linear-gradient';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const chance = new Chance();
 
@@ -53,7 +51,10 @@ const JoinScreen: FunctionComponent = () => {
             <Input label="Conference alias" onChange={setAlias} value={alias} />
           </Space>
           <Space mt="m">
-            <Button text="Create a new conference" onPress={createConference} />
+            <Button
+              text="Create a new conference"
+              onPress={() => createConference()}
+            />
           </Space>
           <Space mt="m">
             <Button

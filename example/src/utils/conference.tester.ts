@@ -100,6 +100,7 @@ export const getMaxVideoForwarding = async () => {
 
 export const kick = async (participant: Participant) => {
   try {
+    console.log('KICKED PARTICIPANT', JSON.stringify(participant, null, 2));
     await DolbyIoIAPI.conference.kick(participant);
   } catch (e: any) {
     Alert.alert('Error', e.toString());

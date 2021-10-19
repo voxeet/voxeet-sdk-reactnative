@@ -23,7 +23,7 @@ export const RecordingDotsText: FunctionComponent<RecordingDotsText> = ({
   }, [dots]);
 
   return (
-    <Text color={COLORS.BLUE} size="s" align="center">
+    <Text color={COLORS.PINK} size="s" align="center">
       {text}
       {dots}
     </Text>
