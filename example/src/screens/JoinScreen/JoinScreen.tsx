@@ -19,8 +19,8 @@ const JoinScreen: FunctionComponent = () => {
   const [alias, setAlias] = useState(`${chance.country({ full: true })}`);
   const { createAndJoin, join, replay } = useContext(DolbyIOContext);
 
-  const createConference = () => {
-    createAndJoin(alias);
+  const createConference = (liveRecording: boolean = false) => {
+    createAndJoin(alias, liveRecording);
   };
 
   const joinConference = () => {
@@ -54,6 +54,12 @@ const JoinScreen: FunctionComponent = () => {
           </Space>
           <Space mt="m">
             <Button text="Create a new conference" onPress={createConference} />
+          </Space>
+          <Space mt="m">
+            <Button
+              text="Create a new conference with mixer"
+              onPress={() => createConference(true)}
+            />
           </Space>
           <Space mt="m">
             <Button text="Join existing conference" onPress={joinConference} />
