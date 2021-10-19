@@ -1,20 +1,15 @@
 package io.dolby.sdk.reactnative.services
 
-import com.facebook.react.bridge.ReactApplicationContext
-import com.facebook.react.bridge.ReactContextBaseJavaModule
-import com.facebook.react.bridge.ReactMethod
-import com.facebook.react.bridge.ReadableMap
+import com.facebook.react.bridge.*
 import com.voxeet.promise.Promise
 import com.voxeet.sdk.models.Conference
 import com.voxeet.sdk.models.Participant
+import com.voxeet.sdk.models.ParticipantPermissions
 import com.voxeet.sdk.services.ConferenceService
 import com.voxeet.sdk.services.builders.ConferenceCreateOptions
 import com.voxeet.sdk.services.builders.ConferenceJoinOptions
 import com.voxeet.sdk.services.conference.information.ConferenceStatus
-import io.dolby.sdk.reactnative.mapper.ConferenceCreateOptionsMapper
-import io.dolby.sdk.reactnative.mapper.ConferenceJoinOptionsMapper
-import io.dolby.sdk.reactnative.mapper.ConferenceMapper
-import io.dolby.sdk.reactnative.mapper.ParticipantMapper
+import io.dolby.sdk.reactnative.mapper.*
 import io.dolby.sdk.reactnative.utils.Promises
 import io.dolby.sdk.reactnative.utils.Promises.forward
 import io.dolby.sdk.reactnative.utils.Promises.rejectIfNull
@@ -56,7 +51,7 @@ import io.dolby.sdk.reactnative.utils.ReactPromise
  *      ([getParticipants]).
  *      * Check the standard WebRTC statistics for the application ([getLocalStats]).
  *      * [kick] a participant from a conference.
- *      * Update the participant's permissions. TODO DEXA-39 link to update permissions
+ *      * Update the participant's permissions ([updatePermissions]).
  *
  *  7. The application calls the [leave] method to leave a conference.
  *
@@ -70,6 +65,8 @@ import io.dolby.sdk.reactnative.utils.ReactPromise
  * @param conferenceMapper              mapper for a [Conference] and [Conference]-related models
  * @param conferenceCreateOptionsMapper mapper for a [ConferenceCreateOptions] model
  * @param conferenceJoinOptionsMapper   mapper for a [ConferenceJoinOptions] model
+ * @param participantMapper             mapper for a [Participant] and [Participant]-related models
+ * @param participantPermissionMapper   mapper for a [ParticipantPermissions] model
  */
 class RNConferenceServiceModule(
     reactContext: ReactApplicationContext,
@@ -77,7 +74,8 @@ class RNConferenceServiceModule(
     private val conferenceMapper: ConferenceMapper,
     private val conferenceCreateOptionsMapper: ConferenceCreateOptionsMapper,
     private val conferenceJoinOptionsMapper: ConferenceJoinOptionsMapper,
-    private val participantMapper: ParticipantMapper
+    private val participantMapper: ParticipantMapper,
+    private val participantPermissionMapper: ParticipantPermissionMapper
 ) : ReactContextBaseJavaModule(reactContext) {
 
   override fun getName() = "DolbyIoIAPIConferenceService"
@@ -353,6 +351,31 @@ class RNConferenceServiceModule(
   @ReactMethod
   fun setMaxVideoForwarding(max: Int, promise: ReactPromise) {
     conferenceService.videoForwarding(max, emptyList())
+        .forward(promise, ignoreReturnType = true)
+  }
+
+  /**
+   * Updates the participant's conference permissions. If a participant does not have permission to
+   * perform a specific action, this action is not available for this participant during a conference,
+   * and the participant receives InsufficientPermissionsError. If a participant started a specific
+   * action and then lost permission to perform this action, the SDK stops the blocked action.
+   * For example, if a participant started sharing a screen and received the updated permissions that
+   * do not allow him to share a screen, the SDK stops the screen sharing session and the participant
+   *
+   * @param participantPermissionsNative the updated participant's permissions
+   * @param promise returns null
+   */
+  @ReactMethod
+  fun updatePermissions(participantPermissionsNative: ReadableArray, promise: ReactPromise) {
+    Promises.promise({
+      participantPermissionMapper.fromNative(
+          permissionsNative = participantPermissionsNative,
+          findParticipant = { participantId ->
+            conferenceService.findParticipantById(participantId)
+                ?: throw Exception(("Couldn't find the participant"))
+          })
+    }) { "Couldn't get the participant permissions" }
+        .thenPromise(conferenceService::updatePermissions)
         .forward(promise, ignoreReturnType = true)
   }
 
