@@ -1,9 +1,6 @@
 import styles from './MenuOptionsButton.style';
-import COLORS from '@constants/colors.constants';
 import Space from '@ui/Space';
-import Text from '@ui/Text';
-import React, { FunctionComponent } from 'react';
-import { View } from 'react-native';
+import React, { FunctionComponent, ReactElement } from 'react';
 import {
   Menu,
   MenuTrigger,
@@ -11,32 +8,25 @@ import {
   MenuOption,
 } from 'react-native-popup-menu';
 
-type Options = Array<{
+export type Options = Array<{
   text: string;
   value: string;
+  onSelect: () => void;
 }>;
 
 type MenuOptionsButtonProps = {
   options: Options;
-  onSelect: (optionValue: string) => void;
-  buttonText: string;
+  children: ReactElement;
 };
 
 export const MenuOptionsButton: FunctionComponent<MenuOptionsButtonProps> = ({
   options,
-  onSelect,
-  buttonText,
+  children,
 }) => {
   return (
     <Space mr="xs">
-      <Menu onSelect={onSelect}>
-        <MenuTrigger triggerOnLongPress>
-          <View style={styles.buttonText}>
-            <Text size="s" color={COLORS.BLACK}>
-              {buttonText}
-            </Text>
-          </View>
-        </MenuTrigger>
+      <Menu>
+        <MenuTrigger triggerOnLongPress>{children}</MenuTrigger>
         <MenuOptions
           optionsContainerStyle={styles.optionsContainerStyle}
           customStyles={{
@@ -45,7 +35,12 @@ export const MenuOptionsButton: FunctionComponent<MenuOptionsButtonProps> = ({
           }}
         >
           {options.map((option) => (
-            <MenuOption text={option.text} value={option.value} />
+            <MenuOption
+              key={option.value}
+              text={option.text}
+              value={option.value}
+              onSelect={option.onSelect}
+            />
           ))}
         </MenuOptions>
       </Menu>

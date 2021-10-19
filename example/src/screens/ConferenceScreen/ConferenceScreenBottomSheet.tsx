@@ -1,7 +1,6 @@
-import React, { FunctionComponent, useContext, useRef } from 'react';
-import { ScrollView } from 'react-native-gesture-handler';
-import LinearGradient from 'react-native-linear-gradient';
-
+import type { Conference } from '../../../../src/services/conference/models';
+import { ConferencePermission } from '../../../../src/services/conference/models';
+import styles from './ConferenceScreen.style';
 import { DolbyIOContext } from '@components/DolbyIOProvider';
 import COLORS from '@constants/colors.constants';
 import BottomSheet from '@gorhom/bottom-sheet';
@@ -45,19 +44,14 @@ import {
   stopRecording,
 } from '@utils/recording.tester';
 import { getCurrentUser } from '@utils/session.tester';
-import { ConferencePermission } from '../../../../src/services/conference/models';
-import type { Conference } from '../../../../src/services/conference/models';
-import styles from './ConferenceScreen.style';
+import React, { useContext, useRef } from 'react';
+import { ScrollView } from 'react-native-gesture-handler';
+import LinearGradient from 'react-native-linear-gradient';
 
-type BottomSheetProps = {
-  setIsRecording: (isRecording: boolean) => void;
-};
-
-const ConferenceScreenBottomSheet: FunctionComponent<BottomSheetProps> = ({
-  setIsRecording,
-}) => {
+const ConferenceScreenBottomSheet = () => {
   const bottomSheetRef = useRef<BottomSheet>(null);
-  const { user, conference } = useContext(DolbyIOContext);
+  const { user, conference, setIsRecordingConference } =
+    useContext(DolbyIOContext);
   const { participants } = conference as Conference;
 
   if (!conference || !user) {
@@ -284,7 +278,7 @@ const ConferenceScreenBottomSheet: FunctionComponent<BottomSheetProps> = ({
               text="Start recording"
               onPress={async () => {
                 await startRecording();
-                setIsRecording(true);
+                setIsRecordingConference(true);
               }}
             />
             <Button
@@ -293,7 +287,7 @@ const ConferenceScreenBottomSheet: FunctionComponent<BottomSheetProps> = ({
               text="Stop recording"
               onPress={async () => {
                 await stopRecording();
-                setIsRecording(false);
+                setIsRecordingConference(false);
               }}
             />
             <Button

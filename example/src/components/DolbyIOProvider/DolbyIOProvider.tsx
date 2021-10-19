@@ -14,21 +14,27 @@ export interface IDolbyIOProvider {
   conference?: Conference;
   lastConference?: Conference;
   isInitialized?: Boolean;
+  isRecordingConference: Boolean;
   initialize: () => void;
   openSession: (name: string) => void;
   createAndJoin: (alias: string, liveRecording: boolean) => void;
   join: (alias: string) => void;
   replay: () => void;
   leave: (leaveRoom: boolean) => void;
+  setIsRecordingConference: (isRecording: boolean) => void;
+  updateConferenceParticipants: () => void;
 }
 
 export const DolbyIOContext = React.createContext<IDolbyIOProvider>({
+  isRecordingConference: false,
   initialize: () => {},
   openSession: () => {},
   createAndJoin: () => {},
   join: () => {},
   replay: () => {},
   leave: () => {},
+  setIsRecordingConference: () => {},
+  updateConferenceParticipants: () => {},
 });
 
 // let onStatusChangeRemover: () => void | undefined;
@@ -41,6 +47,8 @@ const DolbyIOProvider: React.FC = ({ children }) => {
   const [lastConference, setLastConference] = useState<Conference | undefined>(
     undefined
   );
+  const [isRecordingConference, setIsRecordingConference] =
+    useState<boolean>(false);
   const [user, setUser] = useState<User | undefined>(undefined);
   // useEffect(() => {
   //   if (conference) {
@@ -60,6 +68,23 @@ const DolbyIOProvider: React.FC = ({ children }) => {
   //      }
   //   }
   // }, [conference]);
+
+  // TODO remove when onParticipantsChange will be ready and change implementation
+  const updateConferenceParticipants = async () => {
+    try {
+      const updatedConference = await DolbyIoIAPI.conference.current();
+      setConference((conference) => {
+        if (!conference) return undefined;
+        return {
+          ...conference,
+          participants: updatedConference.participants,
+        };
+      });
+    } catch (e: any) {
+      setConference(undefined);
+      Alert.alert('Conference update participants failed', e.toString());
+    }
+  };
 
   const initialize = async () => {
     try {
@@ -173,12 +198,15 @@ const DolbyIOProvider: React.FC = ({ children }) => {
     user,
     conference,
     isInitialized,
+    isRecordingConference,
+    setIsRecordingConference,
     initialize,
     openSession,
     createAndJoin,
     join,
     replay,
     leave,
+    updateConferenceParticipants,
   };
 
   return (

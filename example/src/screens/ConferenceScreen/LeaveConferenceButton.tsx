@@ -1,35 +1,39 @@
+import styles from './ConferenceScreen.style';
 import { DolbyIOContext } from '@components/DolbyIOProvider';
-import MenuOptionsButton from '@components/MenuOptionsButton';
+import COLORS from '@constants/colors.constants';
+import MenuOptionsButton from '@ui/MenuOptionsButton';
+import type { Options } from '@ui/MenuOptionsButton/MenuOptionsButton';
+import Text from '@ui/Text';
 import React, { useContext } from 'react';
+import { View } from 'react-native';
 
 const LeaveConferenceButton = () => {
   const { leave } = useContext(DolbyIOContext);
-  const leaveOptions = [
-    { text: 'Leave and close session', value: 'leaveAndCloseSession' },
+  const leaveOptions: Options = [
+    {
+      text: 'Leave and close session',
+      value: 'leaveAndCloseSession',
+      onSelect: async () => {
+        await leave(true);
+      },
+    },
     {
       text: 'Leave without closing session',
       value: 'leaveWithoutClosingSession',
+      onSelect: async () => {
+        await leave(false);
+      },
     },
   ];
-  const onSelect = async (value: string) => {
-    switch (value) {
-      case 'leaveAndCloseSession':
-        await leave(true);
-        return;
-      case 'leaveWithoutClosingSession':
-        await leave(false);
-        return;
-      default:
-        return;
-    }
-  };
 
   return (
-    <MenuOptionsButton
-      options={leaveOptions}
-      onSelect={onSelect}
-      buttonText="Leave"
-    />
+    <MenuOptionsButton options={leaveOptions}>
+      <View style={styles.buttonText}>
+        <Text size="s" color={COLORS.BLACK}>
+          Leave
+        </Text>
+      </View>
+    </MenuOptionsButton>
   );
 };
 
