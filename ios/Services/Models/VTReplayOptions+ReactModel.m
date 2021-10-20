@@ -7,7 +7,10 @@ static NSString * const keyOffset = @"offset";
 
 @implementation VTReplayOptions (ReactModel)
 
-+ (instancetype _Nonnull)createWithDictionary:(NSDictionary * _Nonnull)dictionary {
++ (instancetype _Nullable)createWithDictionary:(NSDictionary * _Nullable)dictionary {
+    if(dictionary == nil) {
+        return nil;
+    }
     VTReplayOptions *replayOptions = [VTReplayOptions new];
     [replayOptions updateWithOptions:dictionary];
     return replayOptions;

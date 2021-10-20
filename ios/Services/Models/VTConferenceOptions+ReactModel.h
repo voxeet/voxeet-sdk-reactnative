@@ -9,7 +9,7 @@
 ///
 /// \param dictionary react model
 ///
-+ (instancetype)createWithDictionary:(NSDictionary * _Nonnull)dictionary;
++ (instancetype _Nullable)createWithDictionary:(NSDictionary * _Nullable)dictionary;
 ///
 /// Generates react model of the class.
 ///
