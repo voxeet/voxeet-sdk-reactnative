@@ -383,12 +383,14 @@ class RNConferenceServiceModule(
   @ReactMethod
   fun updatePermissions(participantPermissionsRN: ReadableArray, promise: ReactPromise) {
     Promises.promise({
-      participantPermissionMapper.fromRN(
-          permissionsRN = participantPermissionsRN,
-          findParticipant = { participantId ->
-            conferenceService.findParticipantById(participantId)
-                ?: throw Exception(("Couldn't find the participant"))
-          })
+      participantPermissionMapper.fromRN(participantPermissionsRN)
+          .map {
+            val (participantId, conferencePermissions) = it
+            participantPermissionMapper.toParticipantPermissions(
+                participant = participantId?.let(conferenceService::findParticipantById),
+                conferencePermissions = conferencePermissions
+            )
+          }
     }) { "Couldn't get the participant permissions" }
         .thenPromise(conferenceService::updatePermissions)
         .forward(promise, ignoreReturnType = true)
