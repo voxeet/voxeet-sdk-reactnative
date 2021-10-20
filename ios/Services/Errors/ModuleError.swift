@@ -4,6 +4,7 @@ internal enum ModuleError: Error {
 
 	case noCurrentParticipant
 	case notRecording
+	case noConferenceId
 }
 
 internal extension ModuleError {
@@ -14,6 +15,8 @@ internal extension ModuleError {
 			return "No current session user."
 		case .notRecording:
 			return "The SDK does not record a conference."
+		case .noConferenceId:
+			return "Conference should contain conferenceId."
 		}
 	}
 }
