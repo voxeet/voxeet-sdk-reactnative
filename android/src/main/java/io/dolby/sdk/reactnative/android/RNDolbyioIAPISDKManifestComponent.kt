@@ -35,13 +35,10 @@ class RNDolbyioIAPISDKManifestComponent : AbstractManifestComponentProvider() {
     VoxeetPreferences.init(context, VoxeetEnvironmentHolder(context))
   }
 
-  override fun getComponentName(): String {
-    return RNDolbyioIAPISDKManifestComponent::class.java.simpleName
-  }
+  override fun getComponentName(): String =
+    RNDolbyioIAPISDKManifestComponent::class.java.simpleName
 
-  override fun getDefaultAuthority(): String {
-    return "com.voxeet.reactnative.manifests."
-  }
+  override fun getDefaultAuthority(): String = "com.voxeet.reactnative.manifests."
 
   companion object {
     private val TAG = RNDolbyioIAPISDKManifestComponent::class.java.simpleName

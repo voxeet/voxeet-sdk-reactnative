@@ -53,7 +53,8 @@ class RNDolbyioIAPISdkPackage : ReactPackage {
     )
   }
 
-  override fun createViewManagers(reactContext: ReactApplicationContext): List<ViewManager<*, *>> {
-    return emptyList()
-  }
+  override fun createViewManagers(
+    reactContext: ReactApplicationContext
+  ): List<ViewManager<*, *>> = emptyList()
+
 }
