@@ -18,7 +18,6 @@
 - [recording](DolbyIoIAPI.md#recording)
 - [refreshAccessTokenInBackground](DolbyIoIAPI.md#refreshaccesstokeninbackground)
 - [session](DolbyIoIAPI.md#session)
-- [videoPresentation](DolbyIoIAPI.md#videopresentation)
 
 ### Methods
 
@@ -78,12 +77,6 @@ ___
 ### session
 
 • **session**: [`SessionService`](_internal_.SessionService.md)
-
-___
-
-### videoPresentation
-
-• **videoPresentation**: [`VideoPresentationService`](_internal_.VideoPresentationService.md)
 
 ## Methods
 
