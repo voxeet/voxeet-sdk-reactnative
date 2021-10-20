@@ -35,9 +35,7 @@ class RNDolbyioIAPISdkModule(
 
   private val lockAwaitingToken = ReentrantLock()
 
-  override fun getName(): String {
-    return "DolbyIoIAPIModule"
-  }
+  override fun getName(): String = "DolbyIoIAPIModule"
 
   /**
    * Initializes the Voxeet SDK. For security purposes, prefer using the
