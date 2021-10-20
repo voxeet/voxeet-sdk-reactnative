@@ -69,6 +69,8 @@ jest.mock('react-native', () => {
     seek: jest.fn(),
     start: jest.fn(),
     stop: jest.fn(),
+    current: jest.fn(),
+    state: jest.fn(),
   };
   return RN;
 });

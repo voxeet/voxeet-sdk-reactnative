@@ -1,12 +1,17 @@
+import { NativeModules } from 'react-native';
+
 import NativeEvents from '../../utils/NativeEvents';
 import type { UnsubscribeFunction } from '../conference/models';
 import type { VideoPresentationEventType } from './events';
 import { VideoPresentationEventNames } from './events';
-import { NativeModules } from 'react-native';
+import type { VideoPresentation, VideoPresentationState } from './models';
 
 const { DolbyIoIAPIVideoPresentationService } = NativeModules;
 
 class VideoPresentationService {
+  /** @internal */
+  _nativeEvents = new NativeEvents(DolbyIoIAPIVideoPresentationService);
+
   /**
    * Pauses the video presentation.
    * @param timestamp<number>
@@ -22,6 +27,14 @@ class VideoPresentationService {
    */
   public play(): void {
     return DolbyIoIAPIVideoPresentationService.play();
+  }
+
+  public current(): VideoPresentation | null {
+    return DolbyIoIAPIVideoPresentationService.current();
+  }
+
+  public state(): VideoPresentationState {
+    return DolbyIoIAPIVideoPresentationService.state();
   }
 
   /**
@@ -51,81 +64,61 @@ class VideoPresentationService {
   }
 
   /**
-   * Adds a listener for video presentation pause event
-   * @param handler {(data: VideoPresentationEventType) => void} Handling function
-   * @returns {() => void} Function that removes handler
+   * Adds a listener for video presentation started, sought, paused and played events
+   * @param handler {(data: VideoPresentationEventType,
+   * type: VideoPresentationEventNames.started | VideoPresentationEventNames.sought
+       | VideoPresentationEventNames.paused | VideoPresentationEventNames.played) => void} Handling function
+   * @returns {UnsubscribeFunction} Function that unsubscribes from listeners
    */
-  public onVideoPresentationPaused(
-    handler: (data: VideoPresentationEventType) => void
+  public onVideoPresentationChange(
+    handler: (
+      data: VideoPresentationEventType,
+      type?:
+        | VideoPresentationEventNames.started
+        | VideoPresentationEventNames.sought
+        | VideoPresentationEventNames.paused
+        | VideoPresentationEventNames.played
+    ) => void
   ): UnsubscribeFunction {
-    return NativeEvents.addListener(
-      VideoPresentationEventNames.paused,
-      (data) => {
-        handler(data);
-      }
-    );
+    const videoPresentationEventStartedEventUnsubscribe =
+      this._nativeEvents.addListener(
+        VideoPresentationEventNames.started,
+        handler
+      );
+    const videoPresentationEventPausedEventUnsubscribe =
+      this._nativeEvents.addListener(
+        VideoPresentationEventNames.paused,
+        handler
+      );
+    const videoPresentationEventPlayedEventUnsubscribe =
+      this._nativeEvents.addListener(
+        VideoPresentationEventNames.played,
+        handler
+      );
+    const videoPresentationEventSoughtEventUnsubscribe =
+      this._nativeEvents.addListener(
+        VideoPresentationEventNames.sought,
+        handler
+      );
+    return () => {
+      videoPresentationEventPlayedEventUnsubscribe();
+      videoPresentationEventSoughtEventUnsubscribe();
+      videoPresentationEventPausedEventUnsubscribe();
+      videoPresentationEventStartedEventUnsubscribe();
+    };
   }
 
   /**
-   * Adds a listener for video presentation play event
-   * @param handler {(data: VideoPresentationEventType) => void} Handling function
-   * @returns {() => void} Function that removes handler
+   * Adds a listener for video presentation stopped event
+   * @param handler {() => void} Handling function
+   * @returns {UnsubscribeFunction} Function that unsubscribes from listeners
    */
-  public onVideoPresentationPlayed(
-    handler: (data: VideoPresentationEventType) => void
-  ): UnsubscribeFunction {
-    return NativeEvents.addListener(
-      VideoPresentationEventNames.played,
-      (data) => {
-        handler(data);
-      }
+  onVideoPresentationStopped(handler: () => void): UnsubscribeFunction {
+    return this._nativeEvents.addListener(
+      VideoPresentationEventNames.stopped,
+      handler
     );
   }
-
-  /**
-   * Adds a listener for video presentation seek event
-   * @param handler {(data: VideoPresentationEventType) => void} Handling function
-   * @returns {() => void} Function that removes handler
-   */
-  public onVideoPresentationSought(
-    handler: (data: VideoPresentationEventType) => void
-  ): UnsubscribeFunction {
-    return NativeEvents.addListener(
-      VideoPresentationEventNames.sought,
-      (data) => {
-        handler(data);
-      }
-    );
-  }
-
-  /**
-   * Adds a listener for video presentation start event
-   * @param handler {(data: VideoPresentationEventType) => void} Handling function
-   * @returns {() => void} Function that removes handler
-   */
-  public onVideoPresentationStarted(
-    handler: (data: VideoPresentationEventType) => void
-  ): UnsubscribeFunction {
-    return NativeEvents.addListener(
-      VideoPresentationEventNames.started,
-      (data) => {
-        handler(data);
-      }
-    );
-  }
-
-  // /**
-  //  * Adds a listener for video presentation play event
-  //  * @param handler {() => void} Handling function
-  //  * @returns {() => void} Function that removes handler
-  //  */
-  // public onVideoPresentationStopped(
-  //   handler: (data: VideoPresentationPlayedEventType) => void
-  // ): UnsubscribeFunction {
-  //   return NativeEvents.addListener(VideoPresentationEventNames.stopped, () =>
-  //     handler()
-  //   );
-  // }
 }
 
 export default new VideoPresentationService();

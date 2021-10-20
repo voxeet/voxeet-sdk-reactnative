@@ -8,3 +8,9 @@ export interface VideoPresentation {
   /** The URL of the presented video file. */
   url: string;
 }
+
+export enum VideoPresentationState {
+  PAUSED = 'paused',
+  PLAYING = 'playing',
+  STOPPED = 'stopped',
+}

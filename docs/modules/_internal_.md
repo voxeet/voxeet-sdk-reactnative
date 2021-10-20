@@ -15,6 +15,11 @@
 - [RTCPMode](../enums/_internal_.RTCPMode.md)
 - [RTCStatsType](../enums/_internal_.RTCStatsType.md)
 
+### Enumeration members
+
+- [paused](_internal_.md#paused)
+- [started](_internal_.md#started)
+
 ### Classes
 
 - [CommandService](../classes/_internal_.CommandService.md)
@@ -23,6 +28,7 @@
 - [NotificationService](../classes/_internal_.NotificationService.md)
 - [RecordingService](../classes/_internal_.RecordingService.md)
 - [SessionService](../classes/_internal_.SessionService.md)
+- [VideoPresentationService](../classes/_internal_.VideoPresentationService.md)
 
 ### Interfaces
 
@@ -78,6 +84,7 @@
 - [String](../interfaces/_internal_.String.md)
 - [StringConstructor](../interfaces/_internal_.StringConstructor.md)
 - [User](../interfaces/_internal_.User.md)
+- [VideoPresentationEventType](../interfaces/_internal_.VideoPresentationEventType.md)
 
 ### Type aliases
 
@@ -94,6 +101,22 @@
 - [Promise](_internal_.md#promise)
 - [RegExp](_internal_.md#regexp)
 - [String](_internal_.md#string)
+
+## Enumeration members
+
+### paused
+
+• **paused**: `Object` = `"paused"`
+
+Emitted when a video presentation is paused.
+
+___
+
+### started
+
+• **started**: `Object` = `"started"`
+
+Emitted when a video presentation is started.
 
 ## Type aliases
 
