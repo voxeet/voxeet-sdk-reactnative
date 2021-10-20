@@ -13,25 +13,18 @@ class ParticipantPermissionMapper(
     private val conferencePermissionMapper: ConferencePermissionMapper
 ) {
 
-  fun fromNative(permissionsNative: ReadableArray, findParticipant: (String) -> Participant) =
-      mutableListOf<ParticipantPermissions>().apply {
-        for (i in 0 until permissionsNative.size()) {
-          add(
-              fromNative(
-                  permissionNative = permissionsNative.getMap(i),
-                  findParticipant = findParticipant
-              )
-          )
-        }
-      }
+  fun fromRN(permissionsRN: ReadableArray, findParticipant: (String) -> Participant) =
+      (0 until permissionsRN.size())
+          .map(permissionsRN::getMap)
+          .map { fromRN(permissionRN = it, findParticipant = findParticipant) }
 
-  private fun fromNative(permissionNative: ReadableMap, findParticipant: (String) -> Participant): ParticipantPermissions {
-    val participant = permissionNative.getMap(PARTICIPANT)?.let {
+  private fun fromRN(permissionRN: ReadableMap, findParticipant: (String) -> Participant): ParticipantPermissions {
+    val participant = permissionRN.getMap(PARTICIPANT)?.let {
       participantMapper.toParticipantId(it)
           ?.let(findParticipant::invoke)
           ?: throw IllegalArgumentException("Conference should contain participantId")
     }
-    val conferencePermissions = permissionNative.getArray(CONFERENCE_PERMISSIONS)?.let {
+    val conferencePermissions = permissionRN.getArray(CONFERENCE_PERMISSIONS)?.let {
       conferencePermissionMapper.decode(it)
     }
 

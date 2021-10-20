@@ -362,14 +362,14 @@ class RNConferenceServiceModule(
    * For example, if a participant started sharing a screen and received the updated permissions that
    * do not allow him to share a screen, the SDK stops the screen sharing session and the participant
    *
-   * @param participantPermissionsNative the updated participant's permissions
+   * @param participantPermissionsRN the updated participant's permissions
    * @param promise returns null
    */
   @ReactMethod
-  fun updatePermissions(participantPermissionsNative: ReadableArray, promise: ReactPromise) {
+  fun updatePermissions(participantPermissionsRN: ReadableArray, promise: ReactPromise) {
     Promises.promise({
-      participantPermissionMapper.fromNative(
-          permissionsNative = participantPermissionsNative,
+      participantPermissionMapper.fromRN(
+          permissionsRN = participantPermissionsRN,
           findParticipant = { participantId ->
             conferenceService.findParticipantById(participantId)
                 ?: throw Exception(("Couldn't find the participant"))
