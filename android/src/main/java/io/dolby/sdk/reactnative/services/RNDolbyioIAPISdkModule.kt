@@ -19,7 +19,7 @@ import java.util.concurrent.locks.ReentrantLock
  * [RNDolbyioIAPISdkModule] is a bridge wrapper for [VoxeetSDK] that is the main object
  * which provides methods interacting with the Voxeet service. The SDK is asynchronous and uses promise at its core.
  *
- * The application initializes the Voxeet SDK through the [.initializeToken] method.
+ * The application initializes the Voxeet SDK through the [initializeToken] method.
  *
  * @constructor
  * Creates a bridge wrapper for [VoxeetSDK].
@@ -39,7 +39,7 @@ class RNDolbyioIAPISdkModule(
 
   /**
    * Initializes the Voxeet SDK. For security purposes, prefer using the
-   * [.initializeToken] method.
+   * [initializeToken] method.
    *
    * @param consumerKey    consumer key
    * @param consumerSecret consumer secret
@@ -87,7 +87,7 @@ class RNDolbyioIAPISdkModule(
    * Emits an access token to a callback.
    *
    *
-   * Should be called along with [.initializeToken] method.
+   * Should be called along with [initializeToken] method.
    *
    *
    * @param accessToken access token
@@ -115,7 +115,7 @@ class RNDolbyioIAPISdkModule(
    * Emits an error to a callback.
    *
    *
-   * Should be called along with [.initializeToken] method.
+   * Should be called along with [initializeToken] method.
    *
    *
    * @param reason  reason of the refresh token failure
