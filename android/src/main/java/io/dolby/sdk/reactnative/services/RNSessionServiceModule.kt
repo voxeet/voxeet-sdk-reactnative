@@ -5,11 +5,15 @@ import com.voxeet.promise.solve.ThenVoid
 import com.voxeet.sdk.models.Participant
 import com.voxeet.sdk.services.SessionService
 import io.dolby.sdk.reactnative.mapper.ParticipantMapper
+import io.dolby.sdk.reactnative.utils.Promises
+import io.dolby.sdk.reactnative.utils.Promises.forward
+import io.dolby.sdk.reactnative.utils.Promises.rejectIfNull
+import io.dolby.sdk.reactnative.utils.Promises.thenValue
 
 /**
  * The [RNSessionServiceModule] allows an application to register participants' information in the Voxeet service.
  * The application needs to open a session before it can interact with the service further.
- * The application may open [.open] and close [.close] sessions multiple times.
+ * The application may open [open] and close [close] sessions multiple times.
  *
  * @constructor
  * Creates a bridge wrapper for [SessionService].
@@ -34,9 +38,10 @@ class RNSessionServiceModule(
    */
   @ReactMethod
   fun open(participantInfoRN: ReadableMap, promise: Promise) {
-    sessionService.open(participantMapper.infoFromRN(participantInfoRN))
-      .then(ThenVoid { value: Boolean? -> promise.resolve(value) })
-      .error { throwable: Throwable? -> promise.reject(throwable) }
+    Promises
+      .promise(participantMapper.infoFromRN(participantInfoRN), { "Couldn't get participant info" })
+      .thenValue(sessionService::open)
+      .forward(promise)
   }
 
   /**
@@ -48,8 +53,8 @@ class RNSessionServiceModule(
   @ReactMethod
   fun close(promise: Promise) {
     sessionService.close()
-      .then(ThenVoid { value: Boolean? -> promise.resolve(value) })
-      .error { throwable: Throwable? -> promise.reject(throwable) }
+      .rejectIfNull { "Couldn't close session" }
+      .forward(promise)
   }
 
   /**
@@ -60,11 +65,9 @@ class RNSessionServiceModule(
    */
   @ReactMethod
   fun getParticipant(promise: Promise) {
-    val participant = sessionService.participant
-    if (participant != null) {
-      promise.resolve(participantMapper.toRN(participant))
-    } else {
-      promise.reject(Exception("No current user's session"))
-    }
+    Promises
+      .promise(sessionService.participant, { "No current user's session" })
+      .thenValue(participantMapper::toRN)
+      .forward(promise)
   }
 }

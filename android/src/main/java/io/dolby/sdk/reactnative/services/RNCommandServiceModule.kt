@@ -4,12 +4,14 @@ import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
-import com.voxeet.promise.solve.ThenVoid
 import com.voxeet.sdk.services.CommandService
 import com.voxeet.sdk.services.ConferenceService
+import io.dolby.sdk.reactnative.utils.Promises
+import io.dolby.sdk.reactnative.utils.Promises.forward
+import io.dolby.sdk.reactnative.utils.Promises.thenValue
 
 /**
- * The [RNCommandServiceModule] allows the application to send [.send] text messages to all other participants of
+ * The [RNCommandServiceModule] allows the application to send [send] text messages to all other participants of
  * a specific conference.
  *
  * @constructor
@@ -36,13 +38,8 @@ class RNCommandServiceModule(
    */
   @ReactMethod
   fun send(message: String, promise: Promise) {
-    val conferenceId = conferenceService.conferenceId
-    if (conferenceId == null) {
-      promise.reject(Exception("Couldn't find the conference"))
-      return
-    }
-    commandService.send(conferenceId, message)
-      .then(ThenVoid { value: Boolean? -> promise.resolve(value) })
-      .error { throwable: Throwable? -> promise.reject(throwable) }
+    Promises.promise(conferenceService.conferenceId) { "Couldn't find the conference" }
+      .thenValue { conferenceId -> commandService.send(conferenceId, message) }
+      .forward(promise)
   }
 }
