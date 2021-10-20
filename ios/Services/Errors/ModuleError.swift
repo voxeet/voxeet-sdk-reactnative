@@ -3,6 +3,7 @@ import Foundation
 internal enum ModuleError: Error {
 
 	case noCurrentParticipant
+	case notRecording
 }
 
 internal extension ModuleError {
@@ -11,6 +12,8 @@ internal extension ModuleError {
 		switch self {
 		case .noCurrentParticipant:
 			return "No current session user."
+		case .notRecording:
+			return "The SDK does not record a conference."
 		}
 	}
 }
