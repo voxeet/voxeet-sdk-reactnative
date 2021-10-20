@@ -52,8 +52,8 @@ class RNSessionServiceModule(
    */
   @ReactMethod
   fun close(promise: Promise) {
-    sessionService.close()
-      .rejectIfNull { "Couldn't close session" }
+    sessionService
+      .close()
       .forward(promise)
   }
 
