@@ -1,6 +1,8 @@
 package io.dolby.sdk.reactnative.services
 
-import com.facebook.react.bridge.*
+import com.facebook.react.bridge.ReactApplicationContext
+import com.facebook.react.bridge.ReactMethod
+import com.facebook.react.bridge.ReadableMap
 import com.voxeet.promise.Promise
 import com.voxeet.sdk.models.Conference
 import com.voxeet.sdk.models.Participant
@@ -9,7 +11,12 @@ import com.voxeet.sdk.services.ConferenceService
 import com.voxeet.sdk.services.builders.ConferenceCreateOptions
 import com.voxeet.sdk.services.builders.ConferenceJoinOptions
 import com.voxeet.sdk.services.conference.information.ConferenceStatus
-import io.dolby.sdk.reactnative.mapper.*
+import io.dolby.sdk.reactnative.eventemitters.RNEventEmitter
+import io.dolby.sdk.reactnative.mapper.ConferenceCreateOptionsMapper
+import io.dolby.sdk.reactnative.mapper.ConferenceJoinOptionsMapper
+import io.dolby.sdk.reactnative.mapper.ConferenceMapper
+import io.dolby.sdk.reactnative.mapper.ParticipantMapper
+import io.dolby.sdk.reactnative.mapper.ParticipantPermissionMapper
 import io.dolby.sdk.reactnative.utils.Promises
 import io.dolby.sdk.reactnative.utils.Promises.forward
 import io.dolby.sdk.reactnative.utils.Promises.rejectIfNull
@@ -67,16 +74,18 @@ import io.dolby.sdk.reactnative.utils.ReactPromise
  * @param conferenceJoinOptionsMapper   mapper for a [ConferenceJoinOptions] model
  * @param participantMapper             mapper for a [Participant] and [Participant]-related models
  * @param participantPermissionMapper   mapper for a [ParticipantPermissions] model
+ * @param eventEmitter                  an emitter for the conference module events
  */
 class RNConferenceServiceModule(
-    reactContext: ReactApplicationContext,
-    private val conferenceService: ConferenceService,
-    private val conferenceMapper: ConferenceMapper,
-    private val conferenceCreateOptionsMapper: ConferenceCreateOptionsMapper,
-    private val conferenceJoinOptionsMapper: ConferenceJoinOptionsMapper,
-    private val participantMapper: ParticipantMapper,
-    private val participantPermissionMapper: ParticipantPermissionMapper
-) : ReactContextBaseJavaModule(reactContext) {
+  private val reactContext: ReactApplicationContext,
+  private val conferenceService: ConferenceService,
+  private val conferenceMapper: ConferenceMapper,
+  private val conferenceCreateOptionsMapper: ConferenceCreateOptionsMapper,
+  private val conferenceJoinOptionsMapper: ConferenceJoinOptionsMapper,
+  private val participantMapper: ParticipantMapper,
+  private val participantPermissionMapper: ParticipantPermissionMapper,
+  private val eventEmitter: RNEventEmitter
+) : RNEventEmitterModule(reactContext, eventEmitter) {
 
   override fun getName() = "DolbyIoIAPIConferenceService"
 
@@ -419,4 +428,21 @@ class RNConferenceServiceModule(
         ?: throw IllegalArgumentException("Conference should contain conferenceId")
     return conferenceService.getConference(conferenceId)
   }
+
+  /**
+   * Every emitter module must implement this method in place, otherwise JS cannot receive event
+   */
+  @ReactMethod
+  override fun addListener(eventName: String) {
+    super.addListener(eventName)
+  }
+
+  /**
+   * Every emitter module must implement this method in place, otherwise JS cannot receive event
+   */
+  @ReactMethod
+  override fun removeListeners(count: Int) {
+    super.removeListeners(count)
+  }
+
 }

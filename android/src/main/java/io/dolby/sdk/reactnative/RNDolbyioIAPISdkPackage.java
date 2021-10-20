@@ -22,6 +22,7 @@ import io.dolby.sdk.reactnative.mapper.ParticipantMapper;
 import io.dolby.sdk.reactnative.mapper.ParticipantPermissionMapper;
 import io.dolby.sdk.reactnative.mapper.RecordingMapper;
 import io.dolby.sdk.reactnative.services.RNCommandServiceModule;
+import io.dolby.sdk.reactnative.eventemitters.RNConferenceEventEmitter;
 import io.dolby.sdk.reactnative.services.RNConferenceServiceModule;
 import io.dolby.sdk.reactnative.services.RNDolbyioIAPISdkModule;
 import io.dolby.sdk.reactnative.services.RNNotificationServiceModule;
@@ -57,7 +58,8 @@ public class RNDolbyioIAPISdkPackage implements ReactPackage {
                         new ConferenceCreateOptionsMapper(rnCollectionExtractor),
                         new ConferenceJoinOptionsMapper(rnCollectionExtractor),
                         participantMapper,
-                        participantPermissionMapper
+                        participantPermissionMapper,
+                        new RNConferenceEventEmitter(participantMapper)
                 ),
                 new RNCommandServiceModule(
                         VoxeetSDK.conference(),
