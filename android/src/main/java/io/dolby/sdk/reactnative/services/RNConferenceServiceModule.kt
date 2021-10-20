@@ -384,8 +384,7 @@ class RNConferenceServiceModule(
   fun updatePermissions(participantPermissionsRN: ReadableArray, promise: ReactPromise) {
     Promises.promise({
       participantPermissionMapper.fromRN(participantPermissionsRN)
-          .map {
-            val (participantId, conferencePermissions) = it
+          .map { (participantId, conferencePermissions) ->
             participantPermissionMapper.toParticipantPermissions(
                 participant = participantId?.let(conferenceService::findParticipantById),
                 conferencePermissions = conferencePermissions
