@@ -24,9 +24,7 @@ class RNSessionServiceModule(
   private val participantMapper: ParticipantMapper
 ) : ReactContextBaseJavaModule(reactContext) {
 
-  override fun getName(): String {
-    return "DolbyIoIAPISessionServiceModule"
-  }
+  override fun getName(): String = "DolbyIoIAPISessionServiceModule"
 
   /**
    * Opens a session using information from the ParticipantInfo model.

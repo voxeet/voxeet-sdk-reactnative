@@ -25,9 +25,7 @@ class RNCommandServiceModule(
   private val commandService: CommandService
 ) : ReactContextBaseJavaModule(reactContext) {
 
-  override fun getName(): String {
-    return "DolbyIoIAPICommandServiceModule"
-  }
+  override fun getName(): String = "DolbyIoIAPICommandServiceModule"
 
   /**
    * Sends the message to the conference. The message must be in the form of a string or a representation of strings (json or
