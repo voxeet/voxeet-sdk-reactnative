@@ -1,9 +1,8 @@
-package io.dolby.sdk.reactnative.android.activities;
+package io.dolby.sdk.reactnative.android.activities
 
-import com.facebook.react.ReactActivity;
-import com.voxeet.VoxeetSDK;
-
-import org.greenrobot.eventbus.EventBus;
+import com.facebook.react.ReactActivity
+import com.voxeet.VoxeetSDK
+import org.greenrobot.eventbus.EventBus
 
 /**
  * VoxeetSDKAppCompatActivity manages the call state for the in call notification
@@ -14,25 +13,20 @@ import org.greenrobot.eventbus.EventBus;
  * - deprecated
  * - state in the documentation that the MainActivity should override the new class from the SDK
  */
-public class DolbyioIAPISDKAppCompatActivity extends ReactActivity {
+open class DolbyioIAPISDKAppCompatActivity : ReactActivity() {
 
-    @Override
-    protected void onResume() {
-        super.onResume();
+  override fun onResume() {
+    super.onResume()
+    VoxeetSDK.instance().register(this)
+    VoxeetSDK.screenShare().consumeRightsToScreenShare()
+  }
 
-        VoxeetSDK.instance().register(this);
-        VoxeetSDK.screenShare().consumeRightsToScreenShare();
+  override fun onPause() {
+    // stop fetching stats if any pending
+    if (!VoxeetSDK.conference().isLive) {
+      VoxeetSDK.localStats().stopAutoFetch()
     }
-
-    @Override
-    protected void onPause() {
-        //stop fetching stats if any pending
-        if (!VoxeetSDK.conference().isLive()) {
-            VoxeetSDK.localStats().stopAutoFetch();
-        }
-
-        EventBus.getDefault().unregister(this);
-
-        super.onPause();
-    }
+    EventBus.getDefault().unregister(this)
+    super.onPause()
+  }
 }

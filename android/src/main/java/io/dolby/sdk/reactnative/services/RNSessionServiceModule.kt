@@ -1,93 +1,72 @@
+package io.dolby.sdk.reactnative.services
 
-package io.dolby.sdk.reactnative.services;
-
-import com.facebook.react.bridge.Promise;
-import com.facebook.react.bridge.ReactApplicationContext;
-import com.facebook.react.bridge.ReactContextBaseJavaModule;
-import com.facebook.react.bridge.ReactMethod;
-import com.facebook.react.bridge.ReadableMap;
-import com.voxeet.sdk.models.Participant;
-import com.voxeet.sdk.services.SessionService;
-
-import org.jetbrains.annotations.NotNull;
-
-import io.dolby.sdk.reactnative.mapper.ParticipantMapper;
+import com.facebook.react.bridge.*
+import com.voxeet.promise.solve.ThenVoid
+import com.voxeet.sdk.models.Participant
+import com.voxeet.sdk.services.SessionService
+import io.dolby.sdk.reactnative.mapper.ParticipantMapper
 
 /**
- * The RNSessionServiceModule allows an application to register participants' information in the Voxeet service.
+ * The [RNSessionServiceModule] allows an application to register participants' information in the Voxeet service.
  * The application needs to open a session before it can interact with the service further.
- * The application may open {@link #open(ReadableMap, Promise)} and close {@link #close(Promise)} sessions multiple times.
+ * The application may open [.open] and close [.close] sessions multiple times.
+ *
+ * @constructor
+ * Creates a bridge wrapper for [SessionService].
+ *
+ * @param sessionService    [SessionService] from Android SDK
+ * @param reactContext      react context
+ * @param participantMapper mapper for a [Participant] and [Participant]-related models
  */
-public class RNSessionServiceModule extends ReactContextBaseJavaModule {
+class RNSessionServiceModule(
+  reactContext: ReactApplicationContext,
+  private val sessionService: SessionService,
+  private val participantMapper: ParticipantMapper
+) : ReactContextBaseJavaModule(reactContext) {
 
-    @NotNull
-    private final SessionService sessionService;
-    @NotNull
-    private final ParticipantMapper participantMapper;
+  override fun getName(): String {
+    return "DolbyIoIAPISessionServiceModule"
+  }
 
-    /**
-     * Creates a bridge wrapper for {@link SessionService}.
-     *
-     * @param sessionService    {@link SessionService} from Android SDK
-     * @param reactContext      react context
-     * @param participantMapper mapper for a {@link Participant} and {@link Participant}-related models
-     */
-    public RNSessionServiceModule(
-            @NotNull SessionService sessionService,
-            @NotNull ReactApplicationContext reactContext,
-            @NotNull ParticipantMapper participantMapper
-    ) {
-        super(reactContext);
+  /**
+   * Opens a session using information from the ParticipantInfo model.
+   *
+   * @param participantInfoRN ParticipantInfo which should contain at least one participant name
+   * @param promise           returns true if session was opened successfully, false otherwise
+   */
+  @ReactMethod
+  fun open(participantInfoRN: ReadableMap, promise: Promise) {
+    sessionService.open(participantMapper.infoFromRN(participantInfoRN))
+      .then(ThenVoid { value: Boolean? -> promise.resolve(value) })
+      .error { throwable: Throwable? -> promise.reject(throwable) }
+  }
 
-        this.sessionService = sessionService;
-        this.participantMapper = participantMapper;
+  /**
+   * Logs out from the current session.
+   * Logging out cancels all logging processes and leaves the conference.
+   *
+   * @param promise returns true if logout succeeded, false otherwise
+   */
+  @ReactMethod
+  fun close(promise: Promise) {
+    sessionService.close()
+      .then(ThenVoid { value: Boolean? -> promise.resolve(value) })
+      .error { throwable: Throwable? -> promise.reject(throwable) }
+  }
+
+  /**
+   * Gets a corresponding currently logged in participants' representation. It is not an object
+   * related to any conference.
+   *
+   * @param promise returns a new instance aggregating the ID and participantInfo
+   */
+  @ReactMethod
+  fun getParticipant(promise: Promise) {
+    val participant = sessionService.participant
+    if (participant != null) {
+      promise.resolve(participantMapper.toRN(participant))
+    } else {
+      promise.reject(Exception("No current user's session"))
     }
-
-    @NotNull
-    @Override
-    public String getName() {
-        return "DolbyIoIAPISessionServiceModule";
-    }
-
-    /**
-     * Opens a session using information from the ParticipantInfo model.
-     *
-     * @param participantInfoRN ParticipantInfo which should contain at least one participant name
-     * @param promise           returns true if session was opened successfully, false otherwise
-     */
-    @ReactMethod
-    public void open(@NotNull ReadableMap participantInfoRN, @NotNull Promise promise) {
-        sessionService.open(participantMapper.infoFromRN(participantInfoRN))
-                .then(promise::resolve)
-                .error(promise::reject);
-    }
-
-    /**
-     * Logs out from the current session.
-     * Logging out cancels all logging processes and leaves the conference.
-     *
-     * @param promise returns true if logout succeeded, false otherwise
-     */
-    @ReactMethod
-    public void close(@NotNull Promise promise) {
-        sessionService.close()
-                .then(promise::resolve)
-                .error(promise::reject);
-    }
-
-    /**
-     * Gets a corresponding currently logged in participants' representation. It is not an object
-     * related to any conference.
-     *
-     * @param promise returns a new instance aggregating the ID and participantInfo
-     */
-    @ReactMethod
-    public void getParticipant(@NotNull Promise promise) {
-        Participant participant = sessionService.getParticipant();
-        if (participant != null) {
-            promise.resolve(participantMapper.toRN(participant));
-        } else {
-            promise.reject(new Exception("No current user's session"));
-        }
-    }
+  }
 }
