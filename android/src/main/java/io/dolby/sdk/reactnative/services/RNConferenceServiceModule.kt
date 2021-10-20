@@ -78,14 +78,14 @@ import io.dolby.sdk.reactnative.utils.ReactPromise
  * @param eventEmitter                  an emitter for the conference module events
  */
 class RNConferenceServiceModule(
-  private val reactContext: ReactApplicationContext,
-  private val conferenceService: ConferenceService,
-  private val conferenceMapper: ConferenceMapper,
-  private val conferenceCreateOptionsMapper: ConferenceCreateOptionsMapper,
-  private val conferenceJoinOptionsMapper: ConferenceJoinOptionsMapper,
-  private val participantMapper: ParticipantMapper,
-  private val participantPermissionMapper: ParticipantPermissionMapper,
-  private val eventEmitter: RNEventEmitter
+    private val reactContext: ReactApplicationContext,
+    private val conferenceService: ConferenceService,
+    private val conferenceMapper: ConferenceMapper,
+    private val conferenceCreateOptionsMapper: ConferenceCreateOptionsMapper,
+    private val conferenceJoinOptionsMapper: ConferenceJoinOptionsMapper,
+    private val participantMapper: ParticipantMapper,
+    private val participantPermissionMapper: ParticipantPermissionMapper,
+    private val eventEmitter: RNEventEmitter
 ) : RNEventEmitterModule(reactContext, eventEmitter) {
 
   override fun getName() = "DolbyIoIAPIConferenceService"
@@ -104,9 +104,9 @@ class RNConferenceServiceModule(
   @ReactMethod
   fun create(optionsRN: ReadableMap, promise: ReactPromise) {
     Promises.promise(conferenceCreateOptionsMapper.fromRN(optionsRN))
-      .thenPromise(conferenceService::create)
-      .thenValue(conferenceMapper::toRN)
-      .forward(promise)
+        .thenPromise(conferenceService::create)
+        .thenValue(conferenceMapper::toRN)
+        .forward(promise)
   }
 
   /**
@@ -119,13 +119,13 @@ class RNConferenceServiceModule(
   @ReactMethod
   fun fetch(conferenceId: String?, promise: ReactPromise) {
     val conferencePromise = conferenceId
-      ?.let(conferenceService::fetchConference)
-      ?: Promise.resolve(conferenceService.conference)
+        ?.let(conferenceService::fetchConference)
+        ?: Promise.resolve(conferenceService.conference)
 
     conferencePromise
-      .rejectIfNull { "Couldn't get the conference" }
-      .thenValue(conferenceMapper::toRN)
-      .forward(promise)
+        .rejectIfNull { "Couldn't get the conference" }
+        .thenValue(conferenceMapper::toRN)
+        .forward(promise)
 
   }
   // TODO Note: remember to manually grant permissions to CAMERA and MICROPHONE.
@@ -148,13 +148,13 @@ class RNConferenceServiceModule(
   fun join(conferenceRN: ReadableMap, optionsRN: ReadableMap?, promise: ReactPromise) {
     Promises.promise({
       toConferenceJoinOptions(
-        conferenceRN,
-        optionsRN
+          conferenceRN,
+          optionsRN
       )
     }) { "Couldn't get the conference join options" }
-      .thenPromise(conferenceService::join)
-      .thenValue(conferenceMapper::toRN)
-      .forward(promise)
+        .thenPromise(conferenceService::join)
+        .thenValue(conferenceMapper::toRN)
+        .forward(promise)
   }
 
   /**
@@ -168,8 +168,8 @@ class RNConferenceServiceModule(
   @ReactMethod
   fun kick(participantRN: ReadableMap, promise: ReactPromise) {
     Promises.promise({ toParticipant(participantRN) }) { "Couldn't get participant" }
-      .thenPromise(conferenceService::kick)
-      .forward(promise)
+        .thenPromise(conferenceService::kick)
+        .forward(promise)
   }
 
   /**
@@ -190,8 +190,8 @@ class RNConferenceServiceModule(
   @ReactMethod
   fun current(promise: ReactPromise) {
     Promises.promise(conferenceService.conference) { "Missing current conference" }
-      .thenValue(conferenceMapper::toRN)
-      .forward(promise)
+        .thenValue(conferenceMapper::toRN)
+        .forward(promise)
   }
 
   /**
@@ -208,8 +208,8 @@ class RNConferenceServiceModule(
   @ReactMethod
   fun getAudioLevel(participantRN: ReadableMap, promise: ReactPromise) {
     Promises.promise({ toParticipant(participantRN) }) { "Couldn't get participant" }
-      .thenValue(conferenceService::audioLevel)
-      .forward(promise)
+        .thenValue(conferenceService::audioLevel)
+        .forward(promise)
   }
 
   /**
@@ -220,7 +220,7 @@ class RNConferenceServiceModule(
   @ReactMethod
   fun getMaxVideoForwarding(promise: ReactPromise) {
     Promises.promise(conferenceService.maxVideoForwarding) { "Couldn't get max video forwarding" }
-      .forward(promise)
+        .forward(promise)
   }
 
   /**
@@ -233,8 +233,8 @@ class RNConferenceServiceModule(
   @ReactMethod
   fun getParticipant(participantId: String, promise: ReactPromise) {
     Promises.promise({ conferenceService.findParticipantById(participantId) }) { "Couldn't get the participant" }
-      .thenValue(participantMapper::toRN)
-      .forward(promise)
+        .thenValue(participantMapper::toRN)
+        .forward(promise)
   }
 
   /**
@@ -246,8 +246,8 @@ class RNConferenceServiceModule(
   @ReactMethod
   fun getParticipants(conferenceRN: ReadableMap, promise: ReactPromise) {
     Promises.promise({ toConference(conferenceRN) }) { "Couldn't get the conference" }
-      .thenValue { conference -> participantMapper.toRN(conference.participants) }
-      .forward(promise)
+        .thenValue { conference -> participantMapper.toRN(conference.participants) }
+        .forward(promise)
   }
 
   /**
@@ -259,8 +259,8 @@ class RNConferenceServiceModule(
   @ReactMethod
   fun getStatus(conferenceRN: ReadableMap, promise: ReactPromise) {
     Promises.promise({ toConference(conferenceRN) }) { "Couldn't get the conference" }
-      .thenValue { conference -> conferenceMapper.toRNConferenceStatus(conference.state) }
-      .forward(promise)
+        .thenValue { conference -> conferenceMapper.toRNConferenceStatus(conference.state) }
+        .forward(promise)
   }
 
   /**
@@ -286,8 +286,8 @@ class RNConferenceServiceModule(
   @ReactMethod
   fun isSpeaking(participantRN: ReadableMap, promise: ReactPromise) {
     Promises.promise({ toParticipant(participantRN) }) { "Couldn't get the participant" }
-      .thenValue(conferenceService::isSpeaking)
-      .forward(promise)
+        .thenValue(conferenceService::isSpeaking)
+        .forward(promise)
   }
 
   /**
@@ -299,8 +299,8 @@ class RNConferenceServiceModule(
   @ReactMethod
   fun getLocalStats(promise: ReactPromise) {
     Promises.promise(conferenceService.localStats()) { "Couldn't get local stats" }
-      .thenValue(conferenceMapper::toRNLocalStats)
-      .forward(promise)
+        .thenValue(conferenceMapper::toRNLocalStats)
+        .forward(promise)
   }
 
   /**
@@ -320,8 +320,8 @@ class RNConferenceServiceModule(
   @ReactMethod
   fun mute(participantRN: ReadableMap, isMuted: Boolean, promise: ReactPromise) {
     Promises.promise({ toParticipant(participantRN) }) { "Couldn't get participant" }
-      .thenValue { participant -> conferenceService.mute(participant, isMuted) }
-      .forward(promise, ignoreReturnType = true)
+        .thenValue { participant -> conferenceService.mute(participant, isMuted) }
+        .forward(promise, ignoreReturnType = true)
   }
 
   /**
@@ -348,8 +348,8 @@ class RNConferenceServiceModule(
   @ReactMethod
   fun setAudioProcessing(audioProcessingRN: ReadableMap, promise: ReactPromise) {
     Promises.promise(conferenceMapper.fromRN(audioProcessingRN))
-      .thenValue(conferenceService::setAudioProcessing)
-      .forward(promise, ignoreReturnType = true)
+        .thenValue(conferenceService::setAudioProcessing)
+        .forward(promise, ignoreReturnType = true)
   }
 
   /**
@@ -366,7 +366,7 @@ class RNConferenceServiceModule(
   @ReactMethod
   fun setMaxVideoForwarding(max: Int, promise: ReactPromise) {
     conferenceService.videoForwarding(max, emptyList())
-      .forward(promise, ignoreReturnType = true)
+        .forward(promise, ignoreReturnType = true)
   }
 
   /**
@@ -403,8 +403,8 @@ class RNConferenceServiceModule(
    * @return [ConferenceJoinOptions]
    */
   private fun toConferenceJoinOptions(
-    conferenceRN: ReadableMap,
-    optionsRN: ReadableMap?
+      conferenceRN: ReadableMap,
+      optionsRN: ReadableMap?
   ): ConferenceJoinOptions {
     val conference = toConference(conferenceRN)
     return conferenceJoinOptionsMapper.fromRN(conference, optionsRN)

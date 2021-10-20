@@ -20,12 +20,12 @@ class ParticipantPermissionMapper(
 
   private fun fromRN(permissionRN: ReadableMap, findParticipant: (String) -> Participant): ParticipantPermissions {
     val participant = permissionRN.getMap(PARTICIPANT)?.let {
-      participantMapper.toParticipantId(it)
+      participantMapper.participantIdFromRN(it)
           ?.let(findParticipant::invoke)
           ?: throw IllegalArgumentException("Conference should contain participantId")
     }
     val conferencePermissions = permissionRN.getArray(CONFERENCE_PERMISSIONS)?.let {
-      conferencePermissionMapper.decode(it)
+      conferencePermissionMapper.fromRN(it)
     }
 
     return ParticipantPermissions().apply {
