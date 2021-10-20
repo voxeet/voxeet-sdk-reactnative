@@ -2,6 +2,7 @@ package io.dolby.sdk.reactnative.services
 
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactMethod
+import com.facebook.react.bridge.ReadableArray
 import com.facebook.react.bridge.ReadableMap
 import com.voxeet.promise.Promise
 import com.voxeet.sdk.models.Conference
