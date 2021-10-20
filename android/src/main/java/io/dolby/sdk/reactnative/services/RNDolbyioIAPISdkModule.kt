@@ -73,7 +73,7 @@ class RNDolbyioIAPISdkModule(
   fun initializeToken(accessToken: String, promise: Promise) {
     VoxeetSDK.initialize(accessToken) { _: Boolean, callback: TokenCallback ->
       lockAwaitingToken.lockCatching()
-      if (!awaitingTokenCallbacks.contains(callback)) {
+      if (callback !in awaitingTokenCallbacks) {
         awaitingTokenCallbacks.add(callback)
       }
       lockAwaitingToken.unlockCatching()
