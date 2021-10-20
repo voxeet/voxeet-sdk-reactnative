@@ -1,12 +1,10 @@
-package io.dolby.sdk.reactnative.utils;
+package io.dolby.sdk.reactnative.utils
 
-import android.util.Log;
+import android.util.Log
 
-import androidx.annotation.NonNull;
+object IAPILog {
 
-public class IAPILog {
-
-    public static void log(@NonNull String tag, @NonNull String text) {
-        Log.d("IAPILog", ":: " + tag + " // " + text);
+    fun log(tag: String, text: String) {
+        Log.d("IAPILog", ":: $tag // $text")
     }
 }

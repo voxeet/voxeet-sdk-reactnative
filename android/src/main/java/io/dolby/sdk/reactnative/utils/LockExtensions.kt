@@ -1,27 +1,19 @@
-package io.dolby.sdk.reactnative.utils;
+package io.dolby.sdk.reactnative.utils
 
-import androidx.annotation.NonNull;
+import java.util.concurrent.locks.ReentrantLock
 
-import java.util.concurrent.locks.ReentrantLock;
+fun ReentrantLock.lockCatching() {
+  try {
+    lock()
+  } catch (e: Exception) {
+    // no-op
+  }
+}
 
-public class Lock {
-
-    public static void lock(@NonNull ReentrantLock lock) {
-        try {
-            lock.lock();
-        } catch (Exception e) {
-
-        }
-    }
-
-    public static void unlock(@NonNull ReentrantLock lock) {
-        try {
-            if (lock.isLocked())
-                lock.unlock();
-        } catch (Exception e) {
-
-        }
-    }
-
-
+fun ReentrantLock.unlockCatching() {
+  try {
+    if (isLocked) unlock()
+  } catch (e: Exception) {
+    // no-op
+  }
 }
