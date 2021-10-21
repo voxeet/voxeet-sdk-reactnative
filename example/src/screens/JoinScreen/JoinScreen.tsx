@@ -1,11 +1,3 @@
-import styles from './JoinScreen.style';
-import { DolbyIOContext } from '@components/DolbyIOProvider';
-import COLORS from '@constants/colors.constants';
-import CreateConferenceButton from '@screens/JoinScreen/CreateConferenceButton';
-import Button from '@ui/Button';
-import Input from '@ui/Input';
-import Space from '@ui/Space';
-import Text from '@ui/Text';
 // @ts-ignore
 import Chance from 'chance';
 import React, { FunctionComponent, useState, useContext } from 'react';
@@ -13,11 +5,20 @@ import LinearGradient from 'react-native-linear-gradient';
 import { MenuProvider } from 'react-native-popup-menu';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { DolbyIOContext } from '@components/DolbyIOProvider';
+import COLORS from '@constants/colors.constants';
+import Button from '@ui/Button';
+import Input from '@ui/Input';
+import Space from '@ui/Space';
+import Text from '@ui/Text';
+
+import styles from './JoinScreen.style';
+
 const chance = new Chance();
 
 const JoinScreen: FunctionComponent = () => {
   const [alias, setAlias] = useState(`${chance.country({ full: true })}`);
-  const { join, replay } = useContext(DolbyIOContext);
+  const { join, replay, createAndJoin } = useContext(DolbyIOContext);
 
   const joinConference = () => {
     join(alias);
@@ -58,7 +59,10 @@ const JoinScreen: FunctionComponent = () => {
               />
             </Space>
             <Space mt="m">
-              <CreateConferenceButton conferenceAlias={alias} />
+              <Button
+                text="Create a new conference"
+                onPress={() => createAndJoin(alias)}
+              />
             </Space>
             <Space mt="m">
               <Button
