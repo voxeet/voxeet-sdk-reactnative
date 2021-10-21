@@ -11,13 +11,13 @@ import org.greenrobot.eventbus.Subscribe
  * The command event emitter
  * @param conferenceService manage the conference life cycle and interact with the conference
  * @param participantMapper map participant to react JS data
- * @param context react application context for sending event
+ * @param reactContext react application context for sending event
  */
 class RNCommandEventEmitter(
+  reactContext: ReactApplicationContext,
   private val conferenceService: ConferenceService,
-  private val participantMapper: ParticipantMapper,
-  context: ReactApplicationContext
-) : RNEventEmitter(context) {
+  private val participantMapper: ParticipantMapper
+) : RNEventEmitter(reactContext) {
 
   /**
    * The supported events for JS

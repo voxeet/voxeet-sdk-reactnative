@@ -26,9 +26,9 @@ import io.dolby.sdk.reactnative.utils.Promises.thenValue
  */
 class RNCommandServiceModule(
   reactContext: ReactApplicationContext,
+  eventEmitter: RNCommandEventEmitter,
   private val conferenceService: ConferenceService,
-  private val commandService: CommandService,
-  eventEmitter: RNCommandEventEmitter
+  private val commandService: CommandService
 ) : RNEventEmitterModule(reactContext, eventEmitter) {
 
   override fun getName(): String = "DolbyIoIAPICommandServiceModule"

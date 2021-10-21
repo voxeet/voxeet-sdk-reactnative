@@ -35,7 +35,7 @@ class RNDolbyioIAPISdkPackage : ReactPackage {
     val commandEventEmitter = RNCommandEventEmitter(
       conferenceService = VoxeetSDK.conference(),
       participantMapper = participantMapper,
-      context = reactContext
+      reactContext = reactContext
     )
 
     return listOf(
