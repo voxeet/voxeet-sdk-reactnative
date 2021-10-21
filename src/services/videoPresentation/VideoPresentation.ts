@@ -10,6 +10,8 @@ const { DolbyIoIAPIVideoPresentationService } = NativeModules;
 
 class VideoPresentationService {
   /** @internal */
+  _nativeModule = DolbyIoIAPIVideoPresentationService;
+  /** @internal */
   _nativeEvents = new NativeEvents(DolbyIoIAPIVideoPresentationService);
 
   /**
@@ -18,7 +20,7 @@ class VideoPresentationService {
    * @returns void
    */
   public pause(timestamp: number): void {
-    return DolbyIoIAPIVideoPresentationService.pause(timestamp);
+    return this._nativeModule.pause(timestamp);
   }
 
   /**
@@ -26,15 +28,15 @@ class VideoPresentationService {
    * @returns void
    */
   public play(): void {
-    return DolbyIoIAPIVideoPresentationService.play();
+    return this._nativeModule.play();
   }
 
   public current(): VideoPresentation | null {
-    return DolbyIoIAPIVideoPresentationService.current();
+    return this._nativeModule.current();
   }
 
   public state(): VideoPresentationState {
-    return DolbyIoIAPIVideoPresentationService.state();
+    return this._nativeModule.state();
   }
 
   /**
@@ -43,7 +45,7 @@ class VideoPresentationService {
    * @returns void
    */
   public seek(timestamp: number): void {
-    return DolbyIoIAPIVideoPresentationService.seek(timestamp);
+    return this._nativeModule.seek(timestamp);
   }
 
   /**
@@ -52,7 +54,7 @@ class VideoPresentationService {
    * @returns void
    */
   public start(url: string): void {
-    return DolbyIoIAPIVideoPresentationService.start(url);
+    return this._nativeModule.start(url);
   }
 
   /**
@@ -60,7 +62,7 @@ class VideoPresentationService {
    * @returns void
    */
   public stop(): void {
-    return DolbyIoIAPIVideoPresentationService.stop();
+    return this._nativeModule.stop();
   }
 
   /**

@@ -10,7 +10,10 @@ export interface VideoPresentation {
 }
 
 export enum VideoPresentationState {
+  /** The video presentation is paused. */
   PAUSED = 'paused',
+  /** The video presentation is played. */
   PLAYING = 'playing',
+  /** The video presentation is stopped. */
   STOPPED = 'stopped',
 }
