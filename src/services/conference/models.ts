@@ -19,6 +19,8 @@ export interface ConferenceCreateParameters {
   rtcpMode?: RTCPMode;
   /** The preferred video codec that is used during conferences, either H264 or VP8. By default, the value is set to H264. */
   videoCodec?: Codec;
+  /** Turns the live recording on and off. */
+  liveRecording?: boolean;
   /** Enable Dolby Voice */
   dolbyVoice?: boolean;
 }
@@ -77,6 +79,7 @@ export interface ConferenceJoinOptions {
   conferenceAccessToken?: string;
   constraints?: ConferenceConstraints;
   maxVideoForwarding?: number;
+  mixing?: ConferenceMixingOptions;
   preferRecvMono?: boolean;
   preferSendMono?: boolean;
   simulcast?: boolean;
@@ -87,6 +90,11 @@ export interface ConferenceReplayOptions {
   conferenceAccessToken?: string;
   /** Allows the application users to start replaying the recorded conference at a specific timestamp. The offset is the number of milliseconds between the beginning of the recording and the required starting point. */
   offset: number;
+}
+
+export interface ConferenceMixingOptions {
+  /** A boolean value that notifies the server whether the participant is a Mixer (true) or not (false). */
+  enabled: boolean;
 }
 
 export interface Participant {

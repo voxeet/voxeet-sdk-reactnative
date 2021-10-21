@@ -17,7 +17,7 @@ export interface IDolbyIOProvider {
   isRecordingConference: Boolean;
   initialize: () => void;
   openSession: (name: string) => void;
-  createAndJoin: (alias: string) => void;
+  createAndJoin: (alias: string, liveRecording: boolean) => void;
   join: (alias: string) => void;
   replay: () => void;
   leave: (leaveRoom: boolean) => void;
@@ -107,9 +107,10 @@ const DolbyIOProvider: React.FC = ({ children }) => {
       Alert.alert('Session not opened', e.toString());
     }
   };
-  const createAndJoin = async (alias: string) => {
+  const createAndJoin = async (alias: string, liveRecording: boolean) => {
     try {
       const conferenceParams = {
+        liveRecording: liveRecording,
         rtcpMode: RTCPMode.AVERAGE,
         ttl: 0,
         videoCodec: Codec.H264,
