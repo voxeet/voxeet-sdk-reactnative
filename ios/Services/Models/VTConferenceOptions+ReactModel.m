@@ -8,7 +8,10 @@ static NSString * const keyPinCode = @"pinCode";
 
 @implementation VTConferenceOptions (ReactModel)
 
-+ (instancetype _Nonnull)createWithDictionary:(NSDictionary * _Nonnull)dictionary {
++ (instancetype _Nullable)createWithDictionary:(NSDictionary * _Nullable)dictionary {
+    if(dictionary == nil) {
+        return nil;
+    }
     VTConferenceOptions *conferenceOptions = [VTConferenceOptions new];
     [conferenceOptions updateWithOptions:dictionary];
     return conferenceOptions;

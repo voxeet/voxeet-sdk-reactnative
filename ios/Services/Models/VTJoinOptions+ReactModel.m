@@ -8,8 +8,11 @@ static NSString * const keyConferenceAccessToken = @"conferenceAccessToken";
 
 @implementation VTJoinOptions (ReactModel)
 
-+ (instancetype _Nonnull)createWithDictionary:(NSDictionary * _Nonnull)dictionary
++ (instancetype _Nullable)createWithDictionary:(NSDictionary * _Nullable)dictionary
 {
+    if(dictionary == nil) {
+        return nil;
+    }
     VTJoinOptions *joinOptions = [VTJoinOptions new];
     [joinOptions updateWithOptions:dictionary];
     return joinOptions;
