@@ -26,3 +26,21 @@ internal extension Dictionary where Key == String, Value == Any {
 		self["send"] as? [String:Any]
 	}
 }
+
+/// Extension of Dictionary class to simplify mapping id to the react model.
+internal extension Dictionary {
+
+	func mapKeysToRawValue() -> Dictionary<Key.RawValue, Value> where Key: RawRepresentable {
+		return self.reduce(into: [:]) { result, x in
+			result[x.key.rawValue] = x.value
+		}
+	}
+}
+
+/// Extension of Dictionary class to simplify getting id from the react model.
+internal extension Dictionary where Key == String {
+
+	func value<T: RawRepresentable, V>(for key: T) -> V? where T.RawValue == String {
+		return self[key.rawValue] as? V
+	}
+}
