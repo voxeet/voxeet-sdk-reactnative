@@ -150,7 +150,7 @@ class RNConferenceEventEmitter(
   fun on(event: StreamRemovedEvent) {
     val data = Arguments.createMap().apply {
       putMap(EVENT_PARTICIPANT_KEY, participantMapper.toRN(event.participant))
-      event.mediaStream?.let { // fixme nullable
+      event.mediaStream?.let { // fixme nullable - waiting for the final decision
         putMap(EVENT_MEDIA_STREAM_KEY, participantMapper.toRNMediaStream(it))
       }
     }
