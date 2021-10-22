@@ -42,7 +42,7 @@ class RNCommandEventEmitter(
    * The event names and payload keys, make sure they are unique in the application scope
    */
   companion object {
-    private const val EVENT_MESSAGE_RECEIVED = "received"
+    private const val EVENT_MESSAGE_RECEIVED = "MessageReceived"
     private const val KEY_PARTICIPANT = "participant"
     private const val KEY_MESSAGE = "message"
   }
