@@ -130,7 +130,6 @@ class RNConferenceServiceModule(
       .rejectIfNull { "Couldn't get the conference" }
       .thenValue(conferenceMapper::toRN)
       .forward(promise)
-
   }
   // TODO Note: remember to manually grant permissions to CAMERA and MICROPHONE.
   //  That mechanism will be added in DEXA-140.
