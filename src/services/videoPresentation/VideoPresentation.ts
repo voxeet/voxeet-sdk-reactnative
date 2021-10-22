@@ -8,11 +8,11 @@ import type { VideoPresentation, VideoPresentationState } from './models';
 
 const { DolbyIoIAPIVideoPresentationService } = NativeModules;
 
-class VideoPresentationService {
+export class VideoPresentationService {
   /** @internal */
   _nativeModule = DolbyIoIAPIVideoPresentationService;
   /** @internal */
-  _nativeEvents = new NativeEvents(DolbyIoIAPIVideoPresentationService);
+  _nativeEvents = new NativeEvents(DolbyIoIAPIVideoPresentationService || {});
 
   /**
    * Pauses the video presentation.
