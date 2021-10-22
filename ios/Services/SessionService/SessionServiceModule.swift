@@ -54,7 +54,7 @@ public class SessionServiceModule: NSObject {
 		reject: @escaping RCTPromiseRejectBlock
 	) {
 		if let participant = VoxeetSDK.shared.session.participant {
-			resolve(participant.reactDescription())
+			resolve(participant.toReactModel())
 		} else {
 			ModuleError.noCurrentParticipant.send(with: reject)
 		}

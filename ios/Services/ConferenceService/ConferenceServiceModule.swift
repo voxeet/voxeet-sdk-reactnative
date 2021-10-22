@@ -20,7 +20,7 @@ public class ConferenceServiceModule: NSObject {
 		reject: @escaping RCTPromiseRejectBlock
 	) {
 		VoxeetSDK.shared.conference.create(options: VTConferenceOptions.create(with: options)) { conference in
-			resolve(conference.reactDescription())
+			resolve(conference.toReactModel())
 		} fail: { error in
 			error.send(with: reject)
 		}
@@ -38,7 +38,7 @@ public class ConferenceServiceModule: NSObject {
 		reject: @escaping RCTPromiseRejectBlock
 	) {
 		VoxeetSDK.shared.conference.fetch(conferenceID: conferenceId) { conference in
-			resolve(conference.reactDescription())
+			resolve(conference.toReactModel())
 		}
 	}
 	
@@ -63,7 +63,7 @@ public class ConferenceServiceModule: NSObject {
 			VoxeetSDK.shared.conference.join(
 				conference: conference,
 				options: VTJoinOptions.create(with: options)) { conference in
-					resolve(conference.reactDescription())
+					resolve(conference.toReactModel())
 				} fail: { error in
 					error.send(with: reject)
 				}
@@ -81,7 +81,7 @@ public class ConferenceServiceModule: NSObject {
 		resolve: @escaping RCTPromiseResolveBlock,
 		reject: @escaping RCTPromiseRejectBlock
 	) {
-		guard let participantObject = current?.findParticipant(participant) else {
+		guard let participantObject = current?.findParticipant(with: participant.identifier) else {
 			ModuleError.noParticipant(participant.description).send(with: reject)
 			return
 		}
@@ -160,7 +160,7 @@ public class ConferenceServiceModule: NSObject {
 		let permissions: [VTParticipantPermissions] = participantPermissions.compactMap {
 			guard let participant = $0.participant,
 				  let permissions = $0.permissions,
-				  let conferenceParticipant = current?.findParticipant(participant) else {
+				  let conferenceParticipant = current?.findParticipant(with: participant.identifier) else {
 					  return nil
 				  }
 			let conferencePermissions = permissions.compactMap { VTConferencePermission(rawValue: $0.intValue) }
@@ -187,7 +187,9 @@ public class ConferenceServiceModule: NSObject {
 		resolve: @escaping RCTPromiseResolveBlock,
 		reject: @escaping RCTPromiseRejectBlock
 	) {
-		VoxeetSDK.shared.conference.startAudio(participant: current?.findParticipant(participant)) { error in
+		VoxeetSDK.shared.conference.startAudio(
+			participant: current?.findParticipant(with: participant.identifier)
+		) { error in
 			guard let error = error else {
 				resolve(NSNull())
 				return
@@ -207,7 +209,9 @@ public class ConferenceServiceModule: NSObject {
 		resolve: @escaping RCTPromiseResolveBlock,
 		reject: @escaping RCTPromiseRejectBlock
 	) {
-		VoxeetSDK.shared.conference.startVideo(participant: current?.findParticipant(participant)) { error in
+		VoxeetSDK.shared.conference.startVideo(
+			participant: current?.findParticipant(with: participant.identifier)
+		) { error in
 			guard let error = error else {
 				resolve(NSNull())
 				return
@@ -227,7 +231,9 @@ public class ConferenceServiceModule: NSObject {
 		resolve: @escaping RCTPromiseResolveBlock,
 		reject: @escaping RCTPromiseRejectBlock
 	) {
-		VoxeetSDK.shared.conference.stopAudio(participant: current?.findParticipant(participant)) { error in
+		VoxeetSDK.shared.conference.stopAudio(
+			participant: current?.findParticipant(with: participant.identifier)
+		) { error in
 			guard let error = error else {
 				resolve(NSNull())
 				return
@@ -247,7 +253,9 @@ public class ConferenceServiceModule: NSObject {
 		resolve: @escaping RCTPromiseResolveBlock,
 		reject: @escaping RCTPromiseRejectBlock
 	) {
-		VoxeetSDK.shared.conference.stopVideo(participant: current?.findParticipant(participant)) { error in
+		VoxeetSDK.shared.conference.stopVideo(
+			participant: current?.findParticipant(with: participant.identifier)
+		) { error in
 			guard let error = error else {
 				resolve(NSNull())
 				return
@@ -271,7 +279,7 @@ public class ConferenceServiceModule: NSObject {
 			ModuleError.noCurrentConference.send(with: reject)
 			return
 		}
-		resolve(conference.reactDescription())
+		resolve(conference.toReactModel())
 	}
 	
 	/// Gets the participant's audio level. The audio level value ranges from 0.0 to 1.0.
@@ -285,7 +293,7 @@ public class ConferenceServiceModule: NSObject {
 		resolve: @escaping RCTPromiseResolveBlock,
 		reject: @escaping RCTPromiseRejectBlock
 	) {
-		guard let participantObject = current?.findParticipant(participant) else {
+		guard let participantObject = current?.findParticipant(with: participant.identifier) else {
 			ModuleError.noParticipant(participant.description).send(with: reject)
 			return
 		}
@@ -315,11 +323,11 @@ public class ConferenceServiceModule: NSObject {
 		resolve: @escaping RCTPromiseResolveBlock,
 		reject: @escaping RCTPromiseRejectBlock
 	) {
-		guard let participantObject = current?.findParticipant(withId: participantId) else {
+		guard let participantObject = current?.findParticipant(with: participantId) else {
 			ModuleError.noParticipantId(participantId).send(with: reject)
 			return
 		}
-		resolve(participantObject.reactDescription())
+		resolve(participantObject.toReactModel())
 	}
 	
 	/// Provides the list of participants from the conference.
@@ -338,7 +346,7 @@ public class ConferenceServiceModule: NSObject {
 			return
 		}
 		VoxeetSDK.shared.conference.fetch(conferenceID: conferenceId) { conference in
-			resolve(conference.participants.map { $0.reactDescription() })
+			resolve(conference.participants.map { $0.toReactModel() })
 		}
 	}
 	
@@ -359,7 +367,7 @@ public class ConferenceServiceModule: NSObject {
 		}
 		
 		VoxeetSDK.shared.conference.fetch(conferenceID: conferenceId) { conference in
-			resolve(conference.status.reactDesctiption)
+			resolve(conference.status.toReactModelValue)
 		}
 	}
 	
@@ -386,7 +394,7 @@ public class ConferenceServiceModule: NSObject {
 		resolve: @escaping RCTPromiseResolveBlock,
 		reject: @escaping RCTPromiseRejectBlock
 	) {
-		guard let participantObject = current?.findParticipant(participant) else {
+		guard let participantObject = current?.findParticipant(with: participant.identifier) else {
 			ModuleError.noParticipant(participant.description).send(with: reject)
 			return
 		}
@@ -445,7 +453,7 @@ public class ConferenceServiceModule: NSObject {
 	) {
 		VoxeetSDK.shared.conference.videoForwarding(
 			max: maxVideoForwarding,
-			participants: participants.compactMap { current?.findParticipant($0) }) { error in
+			participants: participants.compactMap { current?.findParticipant(with: $0.identifier) }) { error in
 				guard let error = error else {
 					resolve(NSNull())
 					return
@@ -486,7 +494,7 @@ public class ConferenceServiceModule: NSObject {
 		resolve: @escaping RCTPromiseResolveBlock,
 		reject: @escaping RCTPromiseRejectBlock
 	) {
-		guard let participantObject = current?.findParticipant(participant) else {
+		guard let participantObject = current?.findParticipant(with: participant.identifier) else {
 			ModuleError.noParticipant(participant.description).send(with: reject)
 			return
 		}

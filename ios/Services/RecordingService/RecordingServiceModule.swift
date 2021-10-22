@@ -5,7 +5,7 @@ import VoxeetSDK
 public class RecordingServiceModule: NSObject {
 
 	@Atomic
-	private var currentRecording: RNRecording?
+	private var currentRecording: RecordingModel?
 
 	/// Returns information about the current recording.
 	/// - Parameters:
@@ -21,7 +21,7 @@ public class RecordingServiceModule: NSObject {
 			return
 		}
 
-		resolve(currentRecording.reactDescription())
+		resolve(currentRecording.toReactModel())
 	}
 
 	/// Starts recording a conference.
@@ -73,7 +73,7 @@ extension RecordingServiceModule: VTRecordingDelegate {
 	) {
 		switch status {
 		case .recording:
-			currentRecording = RNRecording(
+			currentRecording = RecordingModel(
 				participantId: participant?.id,
 				startTimestamp: startTimestamp
 			)

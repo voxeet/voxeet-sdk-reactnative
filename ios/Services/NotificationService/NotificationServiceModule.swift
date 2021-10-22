@@ -24,7 +24,7 @@ public class NotificationServiceModule: NSObject {
 		VoxeetSDK.shared.conference.fetch(conferenceID: conferenceId) { conference in
 			VoxeetSDK.shared.notification.invite(
 				conference: conference,
-				participantInfos: VTParticipantInfo.generate(with: participants)) { error in
+				participantInfos: participants.map { VTParticipantInfo.create(with: $0) }) { error in
 					guard let error = error else {
 						resolve(NSNull())
 						return
