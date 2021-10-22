@@ -13,9 +13,14 @@ internal struct RecordingModel {
 // MARK: - ReactModelMappable
 extension RecordingModel: ReactModelMappable {
 	func toReactModel() -> ReactModelType {
-		[
-			"participantId": participantId ?? NSNull(),
-			"startTimestamp": startTimestamp ?? NSNull()
-		]
+		return [
+			Keys.participantId: participantId ?? NSNull(),
+			Keys.startTimestamp: startTimestamp ?? NSNull()
+		].mapKeysToRawValue()
 	}
+}
+
+// MARK: - ReactModel Keys
+private enum Keys: String {
+	case participantId, startTimestamp
 }

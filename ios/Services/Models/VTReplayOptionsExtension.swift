@@ -22,8 +22,7 @@ extension VTReplayOptions: ReactModelMappable {
 		return [
 			Keys.conferenceAccessToken: conferenceAccessToken ?? NSNull(),
 			Keys.offset: offset
-		]
-		.mapKeysToRawValue()
+		].mapKeysToRawValue()
 	}
 }
 
