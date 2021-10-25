@@ -150,7 +150,8 @@ class RNConferenceEventEmitter(
   fun on(event: StreamRemovedEvent) {
     val data = Arguments.createMap().apply {
       putMap(EVENT_PARTICIPANT_KEY, participantMapper.toRN(event.participant))
-      event.mediaStream?.let { // fixme nullable - waiting for the final decision
+      // TODO mediaStream should be not null. Android SDK will update the annotation and then we'll remove the nullability check here
+      event.mediaStream?.let {
         putMap(EVENT_MEDIA_STREAM_KEY, participantMapper.toRNMediaStream(it))
       }
     }
