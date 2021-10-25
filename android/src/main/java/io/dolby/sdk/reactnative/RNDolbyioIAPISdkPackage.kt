@@ -57,6 +57,7 @@ class RNDolbyioIAPISdkPackage : ReactPackage {
       ),
       RNConferenceServiceModule(
         reactContext = reactContext,
+        screenShareService = VoxeetSDK.screenShare(),
         conferenceService = VoxeetSDK.conference(),
         conferenceMapper = conferenceMapper,
         conferenceCreateOptionsMapper = ConferenceCreateOptionsMapper(),
