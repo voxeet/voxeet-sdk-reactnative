@@ -10,9 +10,14 @@ export const startVideoPresentation = (url: string) => {
   }
 };
 
-export const pauseVideoPresentation = (timestamp: number) => {
+export const pauseVideoPresentation = () => {
   try {
-    DolbyIoIAPI.videoPresentation.pause(timestamp);
+    const videoPresentation = DolbyIoIAPI.videoPresentation.current();
+    if (!videoPresentation?.timestamp) {
+      Alert.alert('you must start video presentation first');
+      return;
+    }
+    DolbyIoIAPI.videoPresentation.pause(videoPresentation.timestamp);
   } catch (e: any) {
     Alert.alert('pause error', e.message);
   }
@@ -38,9 +43,14 @@ export const currentVideoPresentation = () => {
   }
 };
 
-export const seekVideoPresentation = (timestamp: number) => {
+export const seekVideoPresentation = () => {
   try {
-    DolbyIoIAPI.videoPresentation.seek(timestamp);
+    const videoPresentation = DolbyIoIAPI.videoPresentation.current();
+    if (!videoPresentation?.timestamp) {
+      Alert.alert('you must start video presentation first');
+      return;
+    }
+    DolbyIoIAPI.videoPresentation.seek(videoPresentation?.timestamp);
   } catch (e: any) {
     Alert.alert('seek error', e.message);
   }
@@ -59,6 +69,6 @@ export const stateOfVideoPresentation = () => {
     const state = DolbyIoIAPI.videoPresentation.state();
     Alert.alert('Video presentation state: ', state);
   } catch (e: any) {
-    Alert.alert('current error', e.message);
+    Alert.alert('state of video presentation error', e.message);
   }
 };

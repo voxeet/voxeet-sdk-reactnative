@@ -345,7 +345,11 @@ const ConferenceScreenBottomSheet = () => {
               size="small"
               color="dark"
               text="Start video presentation"
-              onPress={() => startVideoPresentation('url')}
+              onPress={() =>
+                startVideoPresentation(
+                  'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+                )
+              }
             />
           </Space>
           <Space mb="s" style={styles.actionButtons}>
@@ -353,7 +357,7 @@ const ConferenceScreenBottomSheet = () => {
               size="small"
               color="dark"
               text="Pause video presentation"
-              onPress={() => pauseVideoPresentation(12412421421)}
+              onPress={pauseVideoPresentation}
             />
           </Space>
           <Space mb="s" style={styles.actionButtons}>
@@ -377,15 +381,7 @@ const ConferenceScreenBottomSheet = () => {
               size="small"
               color="dark"
               text="Seek video presentation"
-              onPress={() => seekVideoPresentation(12412421421)}
-            />
-          </Space>
-          <Space mb="s" style={styles.actionButtons}>
-            <Button
-              size="small"
-              color="dark"
-              text="Pauses video presentation"
-              onPress={() => pauseVideoPresentation(12412421421)}
+              onPress={seekVideoPresentation}
             />
           </Space>
           <Space mb="s" style={styles.actionButtons}>
