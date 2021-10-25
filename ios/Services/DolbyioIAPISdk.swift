@@ -1,12 +1,21 @@
 import Foundation
 import VoxeetSDK
 
+// MARK: - Supported Events
+private enum EventKeys: String, CaseIterable {
+	case refreshToken = "refreshToken"
+}
+
 @objc(RNDolbyioIAPISdk)
-public class DolbyIoIAPIModule: ReactEmmiter {
+public class DolbyIoIAPIModule: ReactEmitter {
+
 	private var refreshToken: ((String?) -> Void)?
-	override var supportedReactEvents: [ReactEvent]! {[
-		.refreshToken
-	]}
+
+	// MARK: - Events Setup
+	@objc(supportedEvents)
+	override public func supportedEvents() -> [String] {
+		return EventKeys.allCases.mapToStrings()
+	}
 
 	/// Initializes the Voxeet SDK using the customer key and secret.
 	/// - Parameters:
@@ -41,7 +50,7 @@ public class DolbyIoIAPIModule: ReactEmmiter {
 		setupSDK()
 		VoxeetSDK.shared.initialize(accessToken: accessToken) { [weak self] closure, _ in
 			self?.refreshToken = closure
-			self?.sendEvent(withName: .refreshToken, body: nil)
+			self?.send(event: EventKeys.refreshToken, body: NSNull())
 		}
 		resolve(NSNull())
 	}
@@ -79,9 +88,5 @@ public class DolbyIoIAPIModule: ReactEmmiter {
 	private func setupSDK() {
 		VoxeetSDK.shared.notification.push.type = .callKit
 		VoxeetSDK.shared.telemetry.platform = .reactNative
-	}
-
-	public override func supportedEvents() -> [String]! {
-		super.supportedEvents()
 	}
 }
