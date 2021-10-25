@@ -2,8 +2,11 @@ import Foundation
 import VoxeetSDK
 
 @objc(RNDolbyioIAPISdk)
-public class DolbyIoIAPIModule: NSObject {
+public class DolbyIoIAPIModule: ReactEmmiter {
 	private var refreshToken: ((String?) -> Void)?
+	override var supportedReactEvents: [ReactEvent]! {[
+		.refreshToken
+	]}
 
 	/// Initializes the Voxeet SDK using the customer key and secret.
 	/// - Parameters:
@@ -38,6 +41,7 @@ public class DolbyIoIAPIModule: NSObject {
 		setupSDK()
 		VoxeetSDK.shared.initialize(accessToken: accessToken) { [weak self] closure, _ in
 			self?.refreshToken = closure
+			self?.sendEvent(withName: .refreshToken, body: nil)
 		}
 		resolve(NSNull())
 	}
@@ -75,5 +79,9 @@ public class DolbyIoIAPIModule: NSObject {
 	private func setupSDK() {
 		VoxeetSDK.shared.notification.push.type = .callKit
 		VoxeetSDK.shared.telemetry.platform = .reactNative
+	}
+
+	public override func supportedEvents() -> [String]! {
+		super.supportedEvents()
 	}
 }
