@@ -3,6 +3,7 @@ import VoxeetSDK
 
 // MARK: - Supported Events
 private enum EventKeys: String, CaseIterable {
+	/// Emitted when the application user received an invitation.
 	case invitationReceived = "EVENT_NOTIFICATION_INVITATION_RECEIVED"
 }
 
