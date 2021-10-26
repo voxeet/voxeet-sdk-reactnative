@@ -7,6 +7,7 @@ import com.facebook.react.uimanager.ViewManager
 import com.voxeet.VoxeetSDK
 import io.dolby.sdk.reactnative.eventemitters.RNCommandEventEmitter
 import io.dolby.sdk.reactnative.eventemitters.RNConferenceEventEmitter
+import io.dolby.sdk.reactnative.eventemitters.RNNotificationEventEmitter
 import io.dolby.sdk.reactnative.eventemitters.RNSdkEventEmitter
 import io.dolby.sdk.reactnative.mapper.ConferenceCreateOptionsMapper
 import io.dolby.sdk.reactnative.mapper.ConferenceJoinOptionsMapper
@@ -36,6 +37,9 @@ class RNDolbyioIAPISdkPackage : ReactPackage {
       participantMapper = participantMapper,
       conferencePermissionMapper = conferencePermissionMapper
     )
+    val sdkEventEmitter = RNSdkEventEmitter(
+      reactContext = reactContext
+    )
     val conferenceEventEmitter = RNConferenceEventEmitter(
       reactContext = reactContext,
       participantMapper = participantMapper,
@@ -47,10 +51,16 @@ class RNDolbyioIAPISdkPackage : ReactPackage {
       participantMapper = participantMapper,
       reactContext = reactContext
     )
-    val sdkEventEmitter = RNSdkEventEmitter(reactContext)
-
+    val notificationEventEmitter = RNNotificationEventEmitter(
+      reactContext = reactContext,
+      conferenceService = VoxeetSDK.conference(),
+      participantMapper = participantMapper
+    )
     return listOf(
-      RNDolbyioIAPISdkModule(reactContext, sdkEventEmitter),
+      RNDolbyioIAPISdkModule(
+        reactContext = reactContext,
+        eventEmitter = sdkEventEmitter
+      ),
       RNSessionServiceModule(
         reactContext = reactContext,
         sessionService = VoxeetSDK.session(),
@@ -58,6 +68,7 @@ class RNDolbyioIAPISdkPackage : ReactPackage {
       ),
       RNConferenceServiceModule(
         reactContext = reactContext,
+        screenShareService = VoxeetSDK.screenShare(),
         conferenceService = VoxeetSDK.conference(),
         conferenceMapper = conferenceMapper,
         conferenceCreateOptionsMapper = ConferenceCreateOptionsMapper(),
@@ -79,11 +90,12 @@ class RNDolbyioIAPISdkPackage : ReactPackage {
         recordingMapper = RecordingMapper()
       ),
       RNNotificationServiceModule(
+        reactContext = reactContext,
+        eventEmitter = notificationEventEmitter,
         conferenceService = VoxeetSDK.conference(),
         notificationService = VoxeetSDK.notification(),
         conferenceMapper = conferenceMapper,
-        invitationMapper = InvitationMapper(conferencePermissionMapper, participantMapper),
-        reactContext = reactContext
+        invitationMapper = InvitationMapper(conferencePermissionMapper, participantMapper)
       ),
       RNVideoPresentationServiceModule(
         reactContext = reactContext,
