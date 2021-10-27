@@ -18,6 +18,7 @@ import io.dolby.sdk.reactnative.mapper.ParticipantMapper
 import io.dolby.sdk.reactnative.mapper.ParticipantPermissionMapper
 import io.dolby.sdk.reactnative.mapper.RecordingMapper
 import io.dolby.sdk.reactnative.mapper.SystemPermissionsMapper
+import io.dolby.sdk.reactnative.mapper.VideoPresentationMapper
 import io.dolby.sdk.reactnative.services.RNCommandServiceModule
 import io.dolby.sdk.reactnative.services.RNConferenceServiceModule
 import io.dolby.sdk.reactnative.services.RNDolbyioIAPISdkModule
@@ -32,11 +33,16 @@ class RNDolbyioIAPISdkPackage : ReactPackage {
   override fun createNativeModules(reactContext: ReactApplicationContext): List<NativeModule> {
     val participantMapper = ParticipantMapper()
     val conferencePermissionMapper = ConferencePermissionMapper()
-    val conferenceMapper = ConferenceMapper(participantMapper, conferencePermissionMapper)
+    val conferenceMapper = ConferenceMapper(
+      participantMapper = participantMapper,
+      permissionMapper = conferencePermissionMapper
+    )
     val participantPermissionMapper = ParticipantPermissionMapper(
       participantMapper = participantMapper,
       conferencePermissionMapper = conferencePermissionMapper
     )
+    val videoParticipantMapper = VideoPresentationMapper(participantMapper = participantMapper)
+
     val sdkEventEmitter = RNSdkEventEmitter(
       reactContext = reactContext
     )
@@ -99,7 +105,8 @@ class RNDolbyioIAPISdkPackage : ReactPackage {
       ),
       RNVideoPresentationServiceModule(
         reactContext = reactContext,
-        videoPresentationService = VoxeetSDK.videoPresentation()
+        videoPresentationService = VoxeetSDK.videoPresentation(),
+        videoPresentationMapper = videoParticipantMapper
       ),
       RNSystemPermissionsModule(
         reactContext = reactContext,
