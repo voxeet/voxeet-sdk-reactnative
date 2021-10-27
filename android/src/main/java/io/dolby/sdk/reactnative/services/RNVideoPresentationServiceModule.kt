@@ -50,7 +50,7 @@ class RNVideoPresentationServiceModule(
   private val videoPresentationService: VideoPresentationService,
 ) : ReactContextBaseJavaModule(reactContext) {
 
-  override fun getName(): String = "DolbyIoIAPIVideoPresentationServiceModule"
+  override fun getName(): String = "DolbyIoIAPIVideoPresentationService"
 
   /**
    * Starts sharing a video file with other conference participants.
