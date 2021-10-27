@@ -38,11 +38,11 @@
 		</dict>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>Add Camera Usage Description</string>
+	<string>This application will use camera to capture videos</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Add Microphone Usage Description</string>
+	<string>This application will use microphone to capture audios</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Avenir LT Std 45 Book.otf</string>
