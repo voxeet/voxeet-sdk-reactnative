@@ -45,7 +45,7 @@ class RNVideoPresentationEventEmitter(
   }
 
   /**
-   * Emitted when the presenter pauses the shared video. This object can be accessed through the Websocket usage.
+   * Emitted when the presenter pauses the shared video.
    */
   @Subscribe(threadMode = MAIN)
   fun on(event: VideoPresentationPaused) {
