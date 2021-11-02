@@ -15,7 +15,7 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode.MAIN
 
 /**
- * The conference event emitter
+ * The video presentation event emitter
  * @param reactContext      react application context for sending event
  * @param conferenceService [ConferenceService] from Android SDK
  * @param videoPresentationService [VideoPresentationService] from Android SDK
