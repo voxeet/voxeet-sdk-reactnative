@@ -5,7 +5,8 @@ class SampleHandler: RPBroadcastSampleHandler {
   private var screenShareService: VoxeetScreenShareKit?
 
   override func broadcastStarted(withSetupInfo setupInfo: [String : NSObject]?) {
-    screenShareService = VoxeetScreenShareKit(appGroup: "group.io.dolby.reactnative.example")
+    guard let appGroup = Bundle.appGroup else { return }
+    screenShareService = VoxeetScreenShareKit(appGroup: appGroup)
     screenShareService?.delegate = self
     screenShareService?.broadcastStarted(withSetupInfo: setupInfo)
   }
@@ -32,5 +33,12 @@ extension SampleHandler: VoxeetScreenShareKitDelegate {
 
   func finishBroadcastWithError(error: Error) {
     self.finishBroadcastWithError(error)
+  }
+}
+
+private extension Bundle {
+  /// Returns the App Group name from main Info.plist file
+  static var appGroup: String? {
+    return Bundle.main.object(forInfoDictionaryKey: "DolbyioSdkAppGroupKey") as? String
   }
 }
