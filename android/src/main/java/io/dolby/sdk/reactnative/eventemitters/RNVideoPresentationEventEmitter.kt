@@ -29,7 +29,7 @@ class RNVideoPresentationEventEmitter(
 ) : RNEventEmitter(reactContext) {
 
   /**
-   * Emitted when the presenter starts sharing a video. This object can be accessed through the Websocket usage.
+   * Emitted when the presenter starts sharing a video.
    */
   @Subscribe(threadMode = MAIN)
   fun on(event: VideoPresentationStarted) {
