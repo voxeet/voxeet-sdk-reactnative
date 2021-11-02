@@ -71,6 +71,8 @@
 		5B4AABE62731439F00C3640A /* ReplayKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReplayKit.framework; path = System/Library/Frameworks/ReplayKit.framework; sourceTree = SDKROOT; };
 		5B4AABE92731439F00C3640A /* SampleHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleHandler.swift; sourceTree = "<group>"; };
 		5B4AABEB2731439F00C3640A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5B4AABF827314E0F00C3640A /* DolbyioSdkExample.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = DolbyioSdkExample.entitlements; path = DolbyioSdkExample/DolbyioSdkExample.entitlements; sourceTree = "<group>"; };
+		5B4AABF927314E2700C3640A /* DolbyioSdkExampleScreenShare.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DolbyioSdkExampleScreenShare.entitlements; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = DolbyioSdkExample/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A7736704CA0FDEDF0E9AFEFE /* Pods-DolbyioSdkExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DolbyioSdkExample.release.xcconfig"; path = "Target Support Files/Pods-DolbyioSdkExample/Pods-DolbyioSdkExample.release.xcconfig"; sourceTree = "<group>"; };
 		B2437041E99C42998FD651A8 /* Avenir LT Std 95 Black.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Avenir LT Std 95 Black.otf"; path = "../src/assets/fonts/Avenir LT Std 95 Black.otf"; sourceTree = "<group>"; };
@@ -127,6 +129,7 @@
 		13B07FAE1A68108700A75B9A /* DolbyioSdkExample */ = {
 			isa = PBXGroup;
 			children = (
+				5B4AABF827314E0F00C3640A /* DolbyioSdkExample.entitlements */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -152,6 +155,7 @@
 		5B4AABE82731439F00C3640A /* DolbyioSdkExampleScreenShare */ = {
 			isa = PBXGroup;
 			children = (
+				5B4AABF927314E2700C3640A /* DolbyioSdkExampleScreenShare.entitlements */,
 				5B4AABE92731439F00C3640A /* SampleHandler.swift */,
 				5B4AABEB2731439F00C3640A /* Info.plist */,
 			);
@@ -548,6 +552,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = DolbyioSdkExample/DolbyioSdkExample.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = W75N7T34M4;
 				ENABLE_BITCODE = NO;
@@ -578,6 +583,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = DolbyioSdkExample/DolbyioSdkExample.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = W75N7T34M4;
 				INFOPLIST_FILE = DolbyioSdkExample/Info.plist;
@@ -608,6 +614,7 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = DolbyioSdkExampleScreenShare/DolbyioSdkExampleScreenShare.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
@@ -647,6 +654,7 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = DolbyioSdkExampleScreenShare/DolbyioSdkExampleScreenShare.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;

@@ -1,37 +1,36 @@
 import ReplayKit
+import VoxeetScreenShareKit
 
 class SampleHandler: RPBroadcastSampleHandler {
+  private var screenShareService: VoxeetScreenShareKit?
 
-    override func broadcastStarted(withSetupInfo setupInfo: [String : NSObject]?) {
-        // User has requested to start the broadcast. Setup info from the UI extension can be supplied but optional. 
-    }
-    
-    override func broadcastPaused() {
-        // User has requested to pause the broadcast. Samples will stop being delivered.
-    }
-    
-    override func broadcastResumed() {
-        // User has requested to resume the broadcast. Samples delivery will resume.
-    }
-    
-    override func broadcastFinished() {
-        // User has requested to finish the broadcast.
-    }
-    
-    override func processSampleBuffer(_ sampleBuffer: CMSampleBuffer, with sampleBufferType: RPSampleBufferType) {
-        switch sampleBufferType {
-        case RPSampleBufferType.video:
-            // Handle video sample buffer
-            break
-        case RPSampleBufferType.audioApp:
-            // Handle audio sample buffer for app audio
-            break
-        case RPSampleBufferType.audioMic:
-            // Handle audio sample buffer for mic audio
-            break
-        @unknown default:
-            // Handle other sample buffer types
-            fatalError("Unknown type of sample buffer")
-        }
-    }
+  override func broadcastStarted(withSetupInfo setupInfo: [String : NSObject]?) {
+    screenShareService = VoxeetScreenShareKit(appGroup: "group.io.dolby.reactnative.example")
+    screenShareService?.delegate = self
+    screenShareService?.broadcastStarted(withSetupInfo: setupInfo)
+  }
+
+  override func broadcastPaused() {
+    screenShareService?.broadcastPaused()
+  }
+
+  override func broadcastResumed() {
+    screenShareService?.broadcastResumed()
+  }
+
+  override func broadcastFinished() {
+    screenShareService?.broadcastFinished()
+  }
+
+  override func processSampleBuffer(_ sampleBuffer: CMSampleBuffer, with sampleBufferType: RPSampleBufferType) {
+    screenShareService?.processSampleBuffer(sampleBuffer, with: sampleBufferType)
+  }
+}
+
+// MARK: - VoxeetScreenShareKitDelegate
+extension SampleHandler: VoxeetScreenShareKitDelegate {
+
+  func finishBroadcastWithError(error: Error) {
+    self.finishBroadcastWithError(error)
+  }
 }
