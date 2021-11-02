@@ -79,7 +79,7 @@ class RNVideoPresentationEventEmitter(
   }
 
   /**
-   * Emitted when the presenter changes the timestamp of the displayed video. This object can be accessed through the Websocket usage.
+   * Emitted when the presenter changes the timestamp of the displayed video.
    */
   @Subscribe(threadMode = MAIN)
   fun on(event: VideoPresentationSeek) {
