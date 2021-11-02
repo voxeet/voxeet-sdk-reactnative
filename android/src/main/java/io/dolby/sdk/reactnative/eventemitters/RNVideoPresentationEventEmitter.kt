@@ -62,7 +62,7 @@ class RNVideoPresentationEventEmitter(
   }
 
   /**
-   * Emitted when the presenter resumes the video presentation. This object can be accessed through the Websocket usage.
+   * Emitted when the presenter resumes the video presentation. 
    */
   @Subscribe(threadMode = MAIN)
   fun on(event: VideoPresentationPlay) {
