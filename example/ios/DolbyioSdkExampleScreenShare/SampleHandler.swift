@@ -32,7 +32,7 @@ class SampleHandler: RPBroadcastSampleHandler {
 extension SampleHandler: VoxeetScreenShareKitDelegate {
 
   func finishBroadcastWithError(error: Error) {
-    self.finishBroadcastWithError(error)
+    super.finishBroadcastWithError(error)
   }
 }
 
