@@ -8,14 +8,15 @@ extension MediaStream: ReactModelMappable {
 			Keys.id: streamId ?? NSNull(),
 			Keys.type: type.toReactModelValue() ?? NSNull(),
 			Keys.audioTracks: audioTracks.compactMap { $0.trackId },
-			Keys.videoTracks: videoTracks.compactMap { $0.trackId }
+			Keys.videoTracks: videoTracks.compactMap { $0.trackId },
+			Keys.label: streamId ?? NSNull()
 		].mapKeysToRawValue()
 	}
 }
 
 // MARK: - ReactModel Keys
 private enum Keys: String {
-	case id, type, audioTracks, videoTracks
+	case id, type, audioTracks, videoTracks, label
 }
 
 
