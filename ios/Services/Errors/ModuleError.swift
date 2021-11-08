@@ -12,6 +12,7 @@ internal enum ModuleError: Error {
 	case noCurrentFilePresentation
 	case invalidFile(String)
 	case invalidOptions(String)
+	case unsupportedNoiseLevel(String)
 	case noConference(String)
 	case noParticipant(String)
 	case noParticipantId(String)
@@ -41,6 +42,8 @@ internal extension ModuleError {
 			return "invalid file: \(file)"
 		case let .invalidOptions(options):
 			return "invalid options: \(options)"
+		case let .unsupportedNoiseLevel(noiseLevel):
+			return "unsupported noise level: \(noiseLevel)"
 		case let .noConference(id):
 			return "Couldn't find the conference with id:\(id)."
 		case let .noParticipant(participant):
