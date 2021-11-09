@@ -12,7 +12,7 @@ extension VTVideoPresentationState: ReactModelValueMappable {
 		case .playing:
 			return "playing"
 		case .paused:
-			return "stopped"
+			return "paused"
 		@unknown default:
 			return nil
 		}
