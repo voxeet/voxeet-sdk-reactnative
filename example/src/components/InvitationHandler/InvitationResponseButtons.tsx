@@ -1,7 +1,6 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import RNToast from 'react-native-toast-message';
 
-import { DolbyIOContext } from '@components/DolbyIOProvider';
 import Button from '@ui/Button';
 import Space from '@ui/Space';
 
@@ -14,15 +13,14 @@ type InvitationEventResponseProps = {
 const InvitationResponseButtons = ({
   conferenceId,
 }: InvitationEventResponseProps) => {
-  const { join } = useContext(DolbyIOContext);
-
   const decline = async () => {
     const conference = await DolbyIoIAPI.conference.fetch(conferenceId);
     await DolbyIoIAPI.notification.decline(conference);
     RNToast.hide();
   };
   const accept = async () => {
-    await join(conferenceId);
+    const conference = await DolbyIoIAPI.conference.fetch(conferenceId);
+    await DolbyIoIAPI.conference.join(conference);
     RNToast.hide();
   };
   return (
