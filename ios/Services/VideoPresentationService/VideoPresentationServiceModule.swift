@@ -142,8 +142,8 @@ public class VideoPresentationServiceModule: ReactEmitter {
 	/// - Parameters:
 	///   - resolve: returns VideoPresentation object on success
 	///   - reject: returns error on failure
-	@objc(getCurrent:rejecter:)
-	public func getCurrent(
+	@objc(current:rejecter:)
+	public func current(
 		resolve: @escaping RCTPromiseResolveBlock,
 		reject: @escaping RCTPromiseRejectBlock
 	) {
@@ -158,8 +158,8 @@ public class VideoPresentationServiceModule: ReactEmitter {
 	/// - Parameters:
 	///   - resolve: returns VideoPresentationState object on success
 	///   - reject: returns error on failure
-	@objc(getState:rejecter:)
-	public func getState(
+	@objc(state:rejecter:)
+	public func state(
 		resolve: @escaping RCTPromiseResolveBlock,
 		reject: @escaping RCTPromiseRejectBlock
 	) {

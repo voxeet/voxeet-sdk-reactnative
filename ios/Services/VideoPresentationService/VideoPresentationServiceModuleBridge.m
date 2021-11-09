@@ -22,10 +22,10 @@ RCT_EXTERN_METHOD(seek:(NSNumber * _Nonnull)timestamp
 									resolver:(RCTPromiseResolveBlock _Nonnull)resolve
 									rejecter:(RCTPromiseRejectBlock _Nonnull)reject);
 
-RCT_EXTERN_METHOD(getCurrent:(RCTPromiseResolveBlock _Nonnull)resolve
+RCT_EXTERN_METHOD(current:(RCTPromiseResolveBlock _Nonnull)resolve
 									rejecter:(RCTPromiseRejectBlock _Nonnull)reject);
 
-RCT_EXTERN_METHOD(getState:(RCTPromiseResolveBlock _Nonnull)resolve
+RCT_EXTERN_METHOD(state:(RCTPromiseResolveBlock _Nonnull)resolve
 									rejecter:(RCTPromiseRejectBlock _Nonnull)reject);
 
 @end
