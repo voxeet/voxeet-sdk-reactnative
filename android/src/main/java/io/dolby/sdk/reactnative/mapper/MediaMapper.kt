@@ -8,17 +8,17 @@ import com.voxeet.android.media.MediaEngine
 class MediaMapper {
 
   fun fromRN(comfortNoiseLevelRN: String) = when (comfortNoiseLevelRN) {
-    "default" -> MediaEngine.ComfortNoiseLevel.DEFAULT
-    "medium" -> MediaEngine.ComfortNoiseLevel.MEDIUM
-    "low" -> MediaEngine.ComfortNoiseLevel.LOW
-    "off" -> MediaEngine.ComfortNoiseLevel.OFF
+    "DEFAULT" -> MediaEngine.ComfortNoiseLevel.DEFAULT
+    "MEDIUM" -> MediaEngine.ComfortNoiseLevel.MEDIUM
+    "LOW" -> MediaEngine.ComfortNoiseLevel.LOW
+    "OFF" -> MediaEngine.ComfortNoiseLevel.OFF
     else -> null
   }
 
   fun toRN(comfortNoiseLevel: MediaEngine.ComfortNoiseLevel) = when (comfortNoiseLevel) {
-    MediaEngine.ComfortNoiseLevel.DEFAULT -> "default"
-    MediaEngine.ComfortNoiseLevel.MEDIUM -> "medium"
-    MediaEngine.ComfortNoiseLevel.LOW -> "low"
-    MediaEngine.ComfortNoiseLevel.OFF -> "off"
+    MediaEngine.ComfortNoiseLevel.DEFAULT -> "DEFAULT"
+    MediaEngine.ComfortNoiseLevel.MEDIUM -> "MEDIUM"
+    MediaEngine.ComfortNoiseLevel.LOW -> "LOW"
+    MediaEngine.ComfortNoiseLevel.OFF -> "OFF"
   }
 }
