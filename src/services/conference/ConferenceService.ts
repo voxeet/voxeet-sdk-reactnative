@@ -43,7 +43,9 @@ export class ConferenceService {
    * @returns {Promise<Conference>} Promise with a Conference object
    */
 
-  public async create(options: ConferenceCreateOptions = {}): Promise<any> {
+  public async create(
+    options: ConferenceCreateOptions = {}
+  ): Promise<Conference> {
     return transformToConference(await this._nativeModule.create(options));
   }
 

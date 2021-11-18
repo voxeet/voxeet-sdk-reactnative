@@ -167,6 +167,7 @@ const DolbyIOProvider: React.FC = ({ children }) => {
         conferenceOptions
       );
 
+      console.log('CREATED CONF', JSON.stringify(createdConference, null, 2));
       const joinOptions = {
         constraints: {
           audio: true,
@@ -219,7 +220,9 @@ const DolbyIOProvider: React.FC = ({ children }) => {
 
   const joinWithAlias = async (alias: string) => {
     try {
-      const fetchedConference = await DolbyIoIAPI.conference.fetch(alias);
+      const conference = await DolbyIoIAPI.conference.create({
+        alias,
+      });
 
       const joinOptions = {
         constraints: {
@@ -229,7 +232,7 @@ const DolbyIOProvider: React.FC = ({ children }) => {
         simulcast: false,
       };
       const joinedConference = await DolbyIoIAPI.conference.join(
-        fetchedConference,
+        conference,
         joinOptions
       );
       setConference(joinedConference);

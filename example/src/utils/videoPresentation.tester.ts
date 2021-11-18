@@ -12,12 +12,7 @@ export const startVideoPresentation = async (url: string) => {
 
 export const pauseVideoPresentation = async () => {
   try {
-    const videoPresentation = await DolbyIoIAPI.videoPresentation.current();
-    if (!videoPresentation?.timestamp) {
-      Alert.alert('you must start video presentation first');
-      return;
-    }
-    await DolbyIoIAPI.videoPresentation.pause(videoPresentation.timestamp);
+    await DolbyIoIAPI.videoPresentation.pause(1);
   } catch (e: any) {
     Alert.alert('pause error', e.message);
   }
