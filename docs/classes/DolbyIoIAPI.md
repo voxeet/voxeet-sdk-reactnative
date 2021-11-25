@@ -1,5 +1,3 @@
-[@dolbyio/react-native-iapi-sdk](../README.md) / [Exports](../modules.md) / DolbyIoIAPI
-
 # Class: DolbyIoIAPI
 
 ## Table of contents
@@ -42,61 +40,61 @@ ___
 
 ### command
 
-• **command**: [`CommandService`](_internal_.CommandService.md)
+• **command**: [`CommandService`](internal.CommandService.md)
 
 ___
 
 ### conference
 
-• **conference**: [`ConferenceService`](_internal_.ConferenceService.md)
+• **conference**: [`ConferenceService`](internal.ConferenceService.md)
 
 ___
 
 ### filePresentation
 
-• **filePresentation**: [`FilePresentationService`](_internal_.FilePresentationService.md)
+• **filePresentation**: [`FilePresentationService`](internal.FilePresentationService.md)
 
 ___
 
 ### mediaDevice
 
-• **mediaDevice**: [`MediaDeviceService`](_internal_.MediaDeviceService.md)
+• **mediaDevice**: [`MediaDeviceService`](internal.MediaDeviceService.md)
 
 ___
 
 ### notification
 
-• **notification**: [`NotificationService`](_internal_.NotificationService.md)
+• **notification**: [`NotificationService`](internal.NotificationService.md)
 
 ___
 
 ### recording
 
-• **recording**: [`RecordingService`](_internal_.RecordingService.md)
+• **recording**: [`RecordingService`](internal.RecordingService.md)
 
 ___
 
 ### refreshAccessTokenInBackground
 
-• `Private` `Optional` **refreshAccessTokenInBackground**: ``null`` \| [`RefreshAccessTokenInBackgroundType`](../modules/_internal_.md#refreshaccesstokeninbackgroundtype) = `null`
+• `Private` `Optional` **refreshAccessTokenInBackground**: ``null`` \| [`RefreshAccessTokenInBackgroundType`](../modules/internal.md#refreshaccesstokeninbackgroundtype) = `null`
 
 ___
 
 ### session
 
-• **session**: [`SessionService`](_internal_.SessionService.md)
+• **session**: [`SessionService`](internal.SessionService.md)
 
 ___
 
 ### videoPresentation
 
-• **videoPresentation**: [`VideoPresentationService`](_internal_.VideoPresentationService.md)
+• **videoPresentation**: [`VideoPresentationService`](internal.VideoPresentationService.md)
 
 ## Methods
 
 ### initialize
 
-▸ **initialize**(`consumerKey`, `consumerSecret`): [`Promise`](../modules/_internal_.md#promise)<``null``\>
+▸ **initialize**(`consumerKey`, `consumerSecret`): `Promise`<``null``\>
 
 Initializes the SDK using the customer key and secret.
 
@@ -109,13 +107,13 @@ Initializes the SDK using the customer key and secret.
 
 #### Returns
 
-[`Promise`](../modules/_internal_.md#promise)<``null``\>
+`Promise`<``null``\>
 
 ___
 
 ### initializeToken
 
-▸ **initializeToken**(`accessToken`, `refreshAccessToken`): [`Promise`](../modules/_internal_.md#promise)<``null``\>
+▸ **initializeToken**(`accessToken`, `refreshAccessToken`): `Promise`<``null``\>
 
 Initialize the SDK with an access token that is provided by the customer backend communicating with Dolby.io servers. The token allows securing the customer key and secret.
 The following diagram presents the authentication flow:
@@ -147,8 +145,8 @@ Where (1) and (2) are two REST API endpoints available on Dolby.io servers and d
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `accessToken` | ``null`` \| `string` | The access token provided by the customer's backend.. |
-| `refreshAccessToken` | [`RefreshAccessTokenType`](../modules/_internal_.md#refreshaccesstokentype) | A callback that returns a promise when the access token needs to be refreshed. The callback parameter takes the isExpired boolean parameter to check if the previous token has expired. |
+| `refreshAccessToken` | [`RefreshAccessTokenType`](../modules/internal.md#refreshaccesstokentype) | A callback that returns a promise when the access token needs to be refreshed. The callback parameter takes the isExpired boolean parameter to check if the previous token has expired. |
 
 #### Returns
 
-[`Promise`](../modules/_internal_.md#promise)<``null``\>
+`Promise`<``null``\>
