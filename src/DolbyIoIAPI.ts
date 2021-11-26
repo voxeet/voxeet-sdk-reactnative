@@ -19,7 +19,9 @@ import NativeEvents from './utils/NativeEvents';
 const { DolbyIoIAPIModule } = NativeModules;
 
 export class DolbyIoIAPI {
+  /** @internal */
   private _nativeEvents = new NativeEvents(DolbyIoIAPIModule);
+  /** @internal */
   private refreshAccessTokenInBackground?: RefreshAccessTokenInBackgroundType | null =
     null;
 

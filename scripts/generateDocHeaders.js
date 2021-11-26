@@ -4,7 +4,6 @@ const path = require('path');
 /**
  * This will match and capture raw documentation filenames (ignoring any prefixes)
  * e.g it will match `internal.ConferenceService.md` and capture `ConferenceService`
- * @type {RegExp}
  */
 const REGEXP_MATCH_DOC_FILENAME = /.+\/internal\.(\w+)\.md/;
 
@@ -12,19 +11,17 @@ const REGEXP_MATCH_DOC_FILENAME = /.+\/internal\.(\w+)\.md/;
  * This will match and capture all documentation links that need to be changed
  * e.g it will match `[internal](../modules/internal.md)` and capture
  * `../modules/internal.md`
- * @type {RegExp}
  */
-const REGEXP_MATCH_DOC_LINKS_G = /\[.+?]\((.+?\.md)(?:#.+?)?\)/g;
-const REGEXP_MATCH_DOC_LINKS = /\[.+?]\((.+?\.md)(?:#.+?)?\)/;
+const REGEXP_MATCH_DOC_LINKS = /\[.+?]\((.+?\.md)(?:#.+?)?\)/g;
 
 /**
  * This will match and capture module name after /docs/ e.g it will match
  * `interfaces` from `../docs/interface/Conference.md`
- * @type {RegExp}
  */
 const REGEXP_MATCH_DOC_MODULE = /docs\/(\w+)\//;
 
 const SLUG_PREFIX = 'rn-client-sdk-';
+const LINK_SLUG_PREFIX = 'doc:rn-client-sdk-';
 
 // TODO: updatedAt and createdAt is equal in header, should not be
 
@@ -36,39 +33,32 @@ const filePathList = [];
   filePathList.forEach((filePath, index) => {
     let moduleName = getFilePathModuleName(filePath);
     let headerTemplate = '';
+    let transformedFileContents = '';
 
     if (isFilepathCorrect(filePath) && moduleName) {
       const slug = createHeaderSlug(filePath);
-      console.log(slug);
       headerTemplate = buildHeaderTemplate(moduleName, slug, index);
-      if (index == 5) {
-        // console.log(headerTemplate);
-        fs.readFile(filePath, (e, data) => {
-          const docAsString = data.toString();
-          const docWithHeader = headerTemplate + docAsString;
-          const r = new RegExp('\\[.+]\\((.+.md)(?:#.+)?\\)', 'g');
-          // const test = r.exec(docWithHeader);
-          // const a = docWithHeader.matchAll(REGEXP_MATCH_DOC_LINKS);
-          const g = docWithHeader.replaceAll(
-            REGEXP_MATCH_DOC_LINKS_G,
-            replaceLinkReplacerFn
-          );
-          // console.log(g);
-          // console.log(g);
-          // [...a].forEach((match) => {
-          //   console.log('wtf', match[1]);
-          // });
-          // console.log(docWithHeader);
-        });
+      const newFileName = path.dirname(filePath) + `/${slug}.md`;
+
+      const data = fs.readFileSync(filePath);
+      if (!data) {
+        throw new Error(`[${filePath}]: reading file error`);
       }
+      const docAsString = data.toString();
+      const docWithHeader = headerTemplate + docAsString;
+      transformedFileContents = docWithHeader.replaceAll(
+        REGEXP_MATCH_DOC_LINKS,
+        changeLinkFormatReplacerFn
+      );
+      try {
+        fs.writeFileSync(filePath, transformedFileContents);
+        fs.renameSync(filePath, newFileName);
+      } catch {
+        throw new Error(`[${filePath}]: writing or renaming error`);
+      }
+      console.log('Conversion successful!');
     }
   });
-
-  // fs.readFile('test.md', (e, data) => {
-  //   const rawMd = data.toString();
-  //   const ee = template + rawMd;
-  //   console.log(ee);
-  // });
 })();
 
 function buildHeaderTemplate(originalFilename, slug, order) {
@@ -99,6 +89,9 @@ metadata:
 `;
 }
 
+/**
+ * This functions appends all doc file paths to global filePathList variable
+ */
 function buildFilesPathArray(dir) {
   fs.readdirSync(dir).forEach((fileOrDir) => {
     const fullPath = path.join(dir, fileOrDir);
@@ -109,16 +102,31 @@ function buildFilesPathArray(dir) {
     }
   });
 }
+
+/**
+ * This function ensures that whatever file we're reading and changing, has `internal`
+ * in it's path (then it means it's DolbyIoSDK module)
+ */
 function isFilepathCorrect(filepath) {
   return !!new RegExp(REGEXP_MATCH_DOC_FILENAME).test(filepath);
 }
 
+/**
+ * This function creates header slug (format slug prefix + module + filename in lowercase)
+ * e.g slug for a file `../docs/interfaces/ConferenceMixingOptions.md` should look like
+ * `rn-client-sdk-interfaces-conferencemixingoptions`
+ * NOTE: at this point we assume filepath is correct (isFilepathCorrect function should return true)
+ */
 function createHeaderSlug(filePath) {
   const sdkModule = filePath.match(REGEXP_MATCH_DOC_MODULE)[1];
   const rawFilename = filePath.match(REGEXP_MATCH_DOC_FILENAME)[1];
   return SLUG_PREFIX + sdkModule + `-${rawFilename.toLowerCase()}`;
 }
 
+/**
+ * This function gets module name from filepath, e.g from `../docs/interfaces/Conference.md`
+ * it should return `interfaces`
+ */
 function getFilePathModuleName(filePath) {
   const moduleName = filePath.match(REGEXP_MATCH_DOC_MODULE);
   if (moduleName) {
@@ -127,26 +135,19 @@ function getFilePathModuleName(filePath) {
   return '';
 }
 
-function replaceLinkReplacerFn(substring) {
+function changeLinkFormatReplacerFn(substring) {
   let replaceString;
-  console.log(substring);
   const isRootInternalModule = new RegExp('internal.md').test(substring);
+  if (isRootInternalModule) {
+    replaceString = LINK_SLUG_PREFIX + 'modules-internal';
+    return substring.replace(/(?<=\[.+]\().+\.md(?=(#.+)?\))/, replaceString);
+  }
   const module = substring.match(/\(\.\.\/(.+)\//);
   const service = substring.match(/internal\.(.+)\.md(#.+)?\)/);
-  if (isRootInternalModule) {
-    const hash = substring.match(/internal.md(#.+)\)/);
-    const h =
-      'doc:' + SLUG_PREFIX + 'modules-internal' + `${hash ? hash[1] : ''}`;
-    return substring.replace(/(?<=\[.+]\().+\.md(?=\))/, h);
-  }
-  // console.log(substring, service);
-  const serviceSuffix = service[2] || '';
   replaceString = service
-    ? 'doc:' +
-      SLUG_PREFIX +
+    ? LINK_SLUG_PREFIX +
       (module ? `${module[1]}-` : '') +
-      `${service[1].toLowerCase()}` +
-      serviceSuffix
+      `${service[1].toLowerCase()}`
     : 'error';
-  return substring.replace(/(?<=\[.+]\().+\.md(?=\))/, replaceString);
+  return substring.replace(/(?<=\[.+]\().+\.md(?=.+\))?/, replaceString);
 }

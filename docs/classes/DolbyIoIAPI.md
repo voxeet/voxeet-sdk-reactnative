@@ -8,14 +8,12 @@
 
 ### Properties
 
-- [_nativeEvents](DolbyIoIAPI.md#_nativeevents)
 - [command](DolbyIoIAPI.md#command)
 - [conference](DolbyIoIAPI.md#conference)
 - [filePresentation](DolbyIoIAPI.md#filepresentation)
 - [mediaDevice](DolbyIoIAPI.md#mediadevice)
 - [notification](DolbyIoIAPI.md#notification)
 - [recording](DolbyIoIAPI.md#recording)
-- [refreshAccessTokenInBackground](DolbyIoIAPI.md#refreshaccesstokeninbackground)
 - [session](DolbyIoIAPI.md#session)
 - [videoPresentation](DolbyIoIAPI.md#videopresentation)
 
@@ -31,12 +29,6 @@
 • **new DolbyIoIAPI**()
 
 ## Properties
-
-### \_nativeEvents
-
-• `Private` **\_nativeEvents**: `default`
-
-___
 
 ### command
 
@@ -71,12 +63,6 @@ ___
 ### recording
 
 • **recording**: [`RecordingService`](internal.RecordingService.md)
-
-___
-
-### refreshAccessTokenInBackground
-
-• `Private` `Optional` **refreshAccessTokenInBackground**: ``null`` \| [`RefreshAccessTokenInBackgroundType`](../modules/internal.md#refreshaccesstokeninbackgroundtype) = `null`
 
 ___
 
