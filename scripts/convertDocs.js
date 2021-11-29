@@ -25,43 +25,30 @@ const LINK_SLUG_PREFIX = 'doc:rn-client-sdk-';
 
 // TODO: updatedAt and createdAt is equal in header, should not be
 
-const filePathList = [];
+const FILE_PATHS = [];
+const DOCS_DIR = '../docs';
 
+/**
+ * This function will convert current auto-generated docs to format that is aligned with
+ * internal Dolby requirements for distributing documentation on Dolby.io website.
+ * It takes DOCS_DIR variable and uses it as an entrypoint for traversing documentation files.
+ * After that, it will iterate over each file, create a new slug, insert a header and then write
+ * that as a new file to ./scripts/docs directory
+ *
+ * How to use:
+ * Run `node convertDocs.js` in scripts directory. A docs directory should be created with all converted files.
+ */
 (async function () {
-  const docsDir = '../docs';
-  buildFilesPathArray(docsDir);
-  filePathList.forEach((filePath, index) => {
-    let moduleName = getFilePathModuleName(filePath);
-    let headerTemplate = '';
-    let transformedFileContents = '';
+  buildFilesPathArray(DOCS_DIR);
 
-    if (isFilepathCorrect(filePath) && moduleName) {
-      const slug = createHeaderSlug(filePath);
-      headerTemplate = buildHeaderTemplate(moduleName, slug, index);
-      const newFileName = path.dirname(filePath) + `/${slug}.md`;
+  if (!FILE_PATHS.length) throw new Error(`No file paths found to work on!`);
 
-      const data = fs.readFileSync(filePath);
-      if (!data) {
-        throw new Error(`[${filePath}]: reading file error`);
-      }
-      const docAsString = data.toString();
-      const docWithHeader = headerTemplate + docAsString;
-      transformedFileContents = docWithHeader.replaceAll(
-        REGEXP_MATCH_DOC_LINKS,
-        changeLinkFormatReplacerFn
-      );
-      try {
-        fs.writeFileSync(filePath, transformedFileContents);
-        fs.renameSync(filePath, newFileName);
-      } catch {
-        throw new Error(`[${filePath}]: writing or renaming error`);
-      }
-      console.log('Conversion successful!');
-    }
-  });
+  FILE_PATHS.forEach(convertDoc);
+
+  console.log('Conversion successful!');
 })();
 
-function buildHeaderTemplate(originalFilename, slug, order) {
+function createDocHeader(originalFilename, slug, order) {
   return `
 ---
 apiVersion: 1.0
@@ -89,8 +76,45 @@ metadata:
 `;
 }
 
+function convertDoc(filePath, index) {
+  let moduleName = getFilePathModuleName(filePath);
+
+  if (isInternalDocFile(filePath) && moduleName) {
+    const slug = createHeaderSlug(filePath);
+    const header = createDocHeader(moduleName, slug, index);
+    // we use substring to create new path e.g we're going from
+    // ../docs/interface/.. to ./docs/interface/..
+    const newFilePath = path.dirname(filePath).substring(1);
+    const newFileName = newFilePath + `/${slug}.md`;
+
+    const fileBuffer = fs.readFileSync(filePath);
+    if (!fileBuffer) {
+      throw new Error(`[${filePath}]: reading file error`);
+    }
+    const docAsString = fileBuffer.toString();
+    const docWithHeader = header + docAsString;
+    const convertedDocAsString = docWithHeader.replaceAll(
+      REGEXP_MATCH_DOC_LINKS,
+      changeLinkFormatReplacerFn
+    );
+    try {
+      if (!fs.existsSync(newFilePath)) {
+        fs.mkdirSync(newFilePath, {
+          recursive: true,
+        });
+      }
+      fs.writeFileSync(newFileName, convertedDocAsString);
+    } catch (e) {
+      console.error(`[${filePath.substring(1)}]: writing or renaming error`);
+      console.error(e);
+    }
+  } else {
+    console.error('Filepath not correct', filePath);
+  }
+}
+
 /**
- * This functions appends all doc file paths to global filePathList variable
+ * This function traverses pointed dir and adds all paths to global FILE_PATHS variable
  */
 function buildFilesPathArray(dir) {
   fs.readdirSync(dir).forEach((fileOrDir) => {
@@ -98,7 +122,7 @@ function buildFilesPathArray(dir) {
     if (fs.lstatSync(fullPath).isDirectory()) {
       buildFilesPathArray(fullPath);
     } else {
-      filePathList.push(fullPath);
+      FILE_PATHS.push(fullPath);
     }
   });
 }
@@ -107,15 +131,15 @@ function buildFilesPathArray(dir) {
  * This function ensures that whatever file we're reading and changing, has `internal`
  * in it's path (then it means it's DolbyIoSDK module)
  */
-function isFilepathCorrect(filepath) {
+function isInternalDocFile(filepath) {
   return !!new RegExp(REGEXP_MATCH_DOC_FILENAME).test(filepath);
 }
 
 /**
  * This function creates header slug (format slug prefix + module + filename in lowercase)
- * e.g slug for a file `../docs/interfaces/ConferenceMixingOptions.md` should look like
+ * e.g slug for a file `../docs/interfaces/internal.ConferenceMixingOptions.md` should look like
  * `rn-client-sdk-interfaces-conferencemixingoptions`
- * NOTE: at this point we assume filepath is correct (isFilepathCorrect function should return true)
+ * NOTE: at this point we assume filepath is correct (isInternalDocFile function should return true)
  */
 function createHeaderSlug(filePath) {
   const sdkModule = filePath.match(REGEXP_MATCH_DOC_MODULE)[1];
@@ -144,10 +168,13 @@ function changeLinkFormatReplacerFn(substring) {
   }
   const module = substring.match(/\(\.\.\/(.+)\//);
   const service = substring.match(/internal\.(.+)\.md(#.+)?\)/);
-  replaceString = service
-    ? LINK_SLUG_PREFIX +
-      (module ? `${module[1]}-` : '') +
-      `${service[1].toLowerCase()}`
-    : 'error';
+  if (!service) {
+    console.error('service not found in changeLinkFormatReplaceFn', substring);
+    return substring;
+  }
+  replaceString =
+    LINK_SLUG_PREFIX +
+    (module ? `${module[1]}-` : '') +
+    `${service[1].toLowerCase()}`;
   return substring.replace(/(?<=\[.+]\().+\.md(?=.+\))?/, replaceString);
 }
