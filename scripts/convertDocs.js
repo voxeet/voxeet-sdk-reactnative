@@ -48,12 +48,12 @@ const DOCS_DIR = '../docs';
   console.log('Conversion successful!');
 })();
 
-function createDocHeader(originalFilename, slug, order) {
+function createDocHeader(rawModuleName, slug, order) {
   return `
 ---
 apiVersion: 1.0
 categoryName: ReactNative SDK
-title: ${originalFilename}
+title: ${rawModuleName}
 slug: ${slug}
 excerpt: None
 category: 60b289fa3ada0c007f41d5a9
@@ -62,8 +62,8 @@ hidden: False
 createdAt: ${new Date().toISOString()}
 updatedAt: ${new Date().toISOString()}
 metadata:
-  title: ${originalFilename}
-  description: Explore our JavaScript Documentation to build beautiful web video conferencing integration for your Website.
+  title: ${rawModuleName}
+  description: Explore our React Native SDK documentation to create a video conference application.
   image:
     [
       "https://files.readme.io/eaba311-dolbyio-seo-image.jpg",
@@ -80,8 +80,12 @@ function convertDoc(filePath, index) {
   let moduleName = getFilePathModuleName(filePath);
 
   if (isInternalDocFile(filePath) && moduleName) {
+    const rawModuleName = filePath.match(REGEXP_MATCH_DOC_FILENAME);
+    if (!rawModuleName) {
+      throw new Error(`[${filePath}]: reading raw filename error`);
+    }
     const slug = createHeaderSlug(filePath);
-    const header = createDocHeader(moduleName, slug, index);
+    const header = createDocHeader(rawModuleName[1], slug, index);
     // we use substring to create new path e.g we're going from
     // ../docs/interface/.. to ./docs/interface/..
     const newFilePath = path.dirname(filePath).substring(1);
