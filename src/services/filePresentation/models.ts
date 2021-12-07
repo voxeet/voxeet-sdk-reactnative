@@ -1,6 +1,6 @@
 import type { Participant } from '../conference/models';
 
-// The File interface contains details of a file that a presenter wants to share during a conference.
+/** The File interface gathers information about a file that a presenter wants to share during a conference. */
 export interface File {
   /** The URL of a file. */
   url: string;

@@ -13,6 +13,7 @@ const { DolbyIoIAPIFilePresentationService } = NativeModules;
 
 /**
  * The FilePresentationService allows presenting files during a conference. The Dolby.io Communications APIs service converts provided files into multiple images that are accessible through the image method.
+ *
  */
 export class FilePresentationService {
   /** @internal */

@@ -15,13 +15,13 @@ export enum FilePresentationServiceEventNames {
   FilePresentationUpdated = 'EVENT_FILEPRESENTATION_UPDATED',
 }
 
-/** The FileConvertedEventType interface contains information about the converted file. */
+/** The FileConvertedEventType interface gathers information about the converted file. */
 export interface FileConvertedEventType {
   /** The object containing properties specific to the event. */
   fileConverted: FileConvertedType;
 }
 
-/** The FilePresentationChangedEventType interface contains information about the presented file. */
+/** The FilePresentationChangedEventType interface gathers information about the presented file. */
 export interface FilePresentationChangedEventType {
   /** The object containing properties specific to the event. */
   filePresentation: FilePresentation;

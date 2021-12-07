@@ -5,6 +5,7 @@ export enum CommandServiceEventNames {
   MessageReceived = 'EVENT_COMMAND_MESSAGE_RECEIVED',
 }
 
+/** The MessageReceivedEventType interface gathers information about the received message. */
 export interface MessageReceivedEventType {
   /** The received message. */
   message: object;

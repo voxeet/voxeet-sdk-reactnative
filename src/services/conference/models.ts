@@ -201,7 +201,7 @@ export enum RTCPMode {
 
 /** The Codec enum gathers the possible video codecs. */
 export enum Codec {
-  // The VP8 video codec.
+  /** The VP8 video codec. */
   VP8 = 'VP8',
   /** The default H264 video codec. */
   H264 = 'H264',
