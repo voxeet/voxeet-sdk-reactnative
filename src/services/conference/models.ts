@@ -199,13 +199,6 @@ export enum RTCPMode {
   BEST = 'best',
 }
 
-export enum Mode {
-  // TODO - doc
-  STANDARD = 'standard',
-  // TODO - doc
-  PUSH = 'push',
-}
-
 /** The Codec enum gathers the possible video codecs. */
 export enum Codec {
   // The VP8 video codec.
