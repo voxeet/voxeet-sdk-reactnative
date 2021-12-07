@@ -206,7 +206,7 @@ export class ConferenceService {
 
   /**
    * Notifies the server to either start sending the local participant's video stream to the conference or start sending a remote participant's video stream to the local participant. The startVideo method does not control the remote participant's video stream; if a remote participant does not transmit any video stream, the local participant cannot change it using the startVideo method.
-   * @param participant The participant who will receive the video stream, either remote or local. 
+   * @param participant The participant who will receive the video stream, either remote or local.
    */
   public async startVideo(participant: Participant): Promise<void> {
     return this._nativeModule.startVideo(participant);
@@ -354,7 +354,6 @@ export class ConferenceService {
 
   /**
    * 	Starts a screen sharing session.
-   * 
    * 	The ScreenShare with iOS document (https://docs.dolby.io/communications-apis/docs/screenshare-with-ios) describes how to set up screen-share outside the application.
    * Instead of setting the following properties:
    * - VoxeetSDK.shared.appGroup = "YOUR_APP_GROUP"
