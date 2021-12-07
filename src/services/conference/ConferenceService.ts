@@ -29,8 +29,7 @@ import { transformToConference, transformToParticipant } from './transformers';
 const { DolbyIoIAPIConferenceService } = NativeModules;
 
 /**
- * The ConferenceService allows the application to manage the conference
- * life-cycle and interact with the conference.
+ * The ConferenceService allows an application to manage the conference life-cycle and interact with a conference.
  */
 export class ConferenceService {
   /** @internal */

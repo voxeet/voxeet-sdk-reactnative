@@ -303,6 +303,7 @@ export type MediaStream = {
 
 export type UnsubscribeFunction = () => void;
 
+/** @internal */
 export enum RTCStatsType {
   /** Statistics for a codec that is currently being used by RTP streams being sent or received by this RTCPeerConnection object. It is accessed by the RTCCodecStats. */
   'codec',
