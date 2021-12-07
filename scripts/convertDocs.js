@@ -28,8 +28,6 @@ const REGEXP_MATCH_INTERNAL_LINKS = /\[internal].+/g;
 const SLUG_PREFIX = 'rn-client-sdk-';
 const LINK_SLUG_PREFIX = 'doc:rn-client-sdk-';
 
-// TODO: updatedAt and createdAt is equal in header, should not be
-
 const FILE_PATHS = [];
 const DOCS_DIR = '../docs';
 
