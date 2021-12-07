@@ -1,6 +1,7 @@
 import { NativeModules } from 'react-native';
 
 import NativeEvents from '../../utils/NativeEvents';
+import type { UnsubscribeFunction } from '../conference/models';
 import type { MessageReceivedEventType } from './events';
 import { CommandServiceEventNames } from './events';
 
@@ -30,7 +31,7 @@ export class CommandService {
    */
   public onMessageReceived(
     handler: (data: MessageReceivedEventType) => void
-  ): () => void {
+  ): UnsubscribeFunction {
     return this._nativeEvents.addListener(
       CommandServiceEventNames.MessageReceived,
       handler
