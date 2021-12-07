@@ -1,4 +1,5 @@
 import type { Participant } from '../conference/models';
+
 /** The NotificationServiceEventNames enum gathers the NotificationService events.  */
 export enum NotificationServiceEventNames {
   /** Emitted when an application user receives an invitation.  */
