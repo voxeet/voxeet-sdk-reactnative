@@ -274,7 +274,9 @@ export enum AudioProcessing {
 export type AudioLevel = number;
 export type MaxVideoForwarding = number;
 
+/** The AudioTrack type gathers audio tracks available in a stream. */
 export type AudioTrack = any;
+/** The VideoTrack type gathers video tracks available in a stream. */
 export type VideoTrack = any;
 
 /** The MediaStreamType enum gathers the possible types of media streams. */
@@ -301,6 +303,7 @@ export type MediaStream = {
   label: String;
 };
 
+/** The UnsubscribeFunction unsubscribes from event listeners. */
 export type UnsubscribeFunction = () => void;
 
 /** @internal */
