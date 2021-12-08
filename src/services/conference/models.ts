@@ -58,9 +58,9 @@ export enum ConferenceStatus {
   JOINING = 'JOINING',
   /** The local participant successfully joined a conference. */
   JOINED = 'JOINED',
-  /** @deprecated */
+  /** @deprecated @internal  */
   FIRST_PARTICIPANT = 'FIRST_PARTICIPANT',
-  /** @deprecated */
+  /** @deprecated @internal*/
   NO_MORE_PARTICIPANT = 'NO_MORE_PARTICIPANT',
   /** The local participant is leaving a conference. */
   LEAVING = 'LEAVING',

@@ -72,6 +72,7 @@ export class VideoPresentationService {
   /**
    * Adds a listener for the video presentation started, sought, paused, and played events.
    * @param handler An event callback function.
+   * @returns A function that unsubscribes from event listeners.
    */
   public onVideoPresentationChange(
     handler: (

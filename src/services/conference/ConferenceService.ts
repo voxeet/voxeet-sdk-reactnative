@@ -29,7 +29,7 @@ import { transformToConference, transformToParticipant } from './transformers';
 const { DolbyIoIAPIConferenceService } = NativeModules;
 
 /**
- * The ConferenceService allows an application to manage the conference life-cycle and interact with a conference.
+ * The ConferenceService allows an application to manage the conference life-cycle and interact with a conference. The service allows creating, joining, and leaving conferences and managing the audio, video, and screen-share streams.
  */
 export class ConferenceService {
   /** @internal */
@@ -268,6 +268,7 @@ export class ConferenceService {
   /**
    * Adds a listener for the conference status changed event.
    * @param handler An event callback function.
+   * @returns A function that unsubscribes from event listeners.
    */
   public onStatusChange(
     handler: (data: ConferenceStatusUpdatedEventType) => void
@@ -281,6 +282,7 @@ export class ConferenceService {
   /**
    * Adds a listener for the permissions changed event.
    * @param handler An event callback function.
+   * @returns A function that unsubscribes from event listeners.
    */
   public onPermissionsChange(
     handler: (data: PermissionsUpdatedEventType) => void
@@ -294,6 +296,7 @@ export class ConferenceService {
   /**
    * Adds a listener for the participants changed event.
    * @param handler An event callback function.
+   * @returns A function that unsubscribes from event listeners.
    */
   public onParticipantsChange(
     handler: (
@@ -321,6 +324,7 @@ export class ConferenceService {
   /**
    * Adds a listener for the streams changed event.
    * @param handler An event callback function.
+   * @returns A function that unsubscribes from event listeners.
    */
   public onStreamsChange(
     handler: (

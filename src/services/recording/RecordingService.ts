@@ -5,7 +5,7 @@ import type { Recording } from './models';
 const { DolbyIoIAPIRecordingServiceModule } = NativeModules;
 
 /**
- * The RecordingService is responsible for recording conferences.
+ * The RecordingService is responsible for recording conferences. For more information about the recording function, see the [Recording](doc:recording-javascript) and [Recording Mechanisms](doc:guides-recording-mechanisms) documents.
  */
 export class RecordingService {
   /** @internal */
