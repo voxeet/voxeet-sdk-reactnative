@@ -29,7 +29,7 @@ import { transformToConference, transformToParticipant } from './transformers';
 const { DolbyIoIAPIConferenceService } = NativeModules;
 
 /**
- * The ConferenceService allows an application to manage the conference life-cycle and interact with a conference.
+ * The ConferenceService allows an application to manage the conference life-cycle and interact with a conference. The service allows creating, joining, and leaving conferences and managing the audio, video, and screen-share streams.
  */
 export class ConferenceService {
   /** @internal */
@@ -80,7 +80,7 @@ export class ConferenceService {
   }
 
   /**
-   * Gets the participant's audio level. The possible values of the audio level are in range from 0.0 to 1.0 point.
+   * Gets the participant's audio level, in the range from 0.0 to 1.0.
    * @param participant The Participant object.
    */
   public async getAudioLevel(participant: Participant): Promise<AudioLevel> {
@@ -266,8 +266,9 @@ export class ConferenceService {
   }
 
   /**
-   * Adds a listener for the conference status changed event.
+   * Adds a listener to the conference status changed event.
    * @param handler An event callback function.
+   * @returns A function that unsubscribes from event listeners.
    */
   public onStatusChange(
     handler: (data: ConferenceStatusUpdatedEventType) => void
@@ -279,8 +280,9 @@ export class ConferenceService {
   }
 
   /**
-   * Adds a listener for the permissions changed event.
+   * Adds a listener to the permissions changed event.
    * @param handler An event callback function.
+   * @returns A function that unsubscribes from event listeners.
    */
   public onPermissionsChange(
     handler: (data: PermissionsUpdatedEventType) => void
@@ -292,8 +294,9 @@ export class ConferenceService {
   }
 
   /**
-   * Adds a listener for the participants changed event.
+   * Adds a listener to the participants changed event.
    * @param handler An event callback function.
+   * @returns A function that unsubscribes from event listeners.
    */
   public onParticipantsChange(
     handler: (
@@ -319,8 +322,9 @@ export class ConferenceService {
   }
 
   /**
-   * Adds a listener for the streams changed event.
+   * Adds a listener to the streams changed event.
    * @param handler An event callback function.
+   * @returns A function that unsubscribes from event listeners.
    */
   public onStreamsChange(
     handler: (

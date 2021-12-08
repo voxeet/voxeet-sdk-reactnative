@@ -8,7 +8,7 @@ import { CommandServiceEventNames } from './events';
 const { DolbyIoIAPICommandServiceModule } = NativeModules;
 
 /**
-The CommandService allows the application to [send](#send) text messages or notifications to all conference participants. The service also offer an [event listener](#onMessageReceived) to listen to received messages.
+The CommandService allows the application to send and receive text messages and notifications during a conference.
  */
 export class CommandService {
   /** @internal */
@@ -25,7 +25,7 @@ export class CommandService {
   }
 
   /**
-   * Adds a native listener for the received messages.
+   * Adds a listener to events informing about received messages.
    * @param handler An event callback function.
    * @returns A function that unsubscribes from event listeners.
    */

@@ -58,9 +58,9 @@ export enum ConferenceStatus {
   JOINING = 'JOINING',
   /** The local participant successfully joined a conference. */
   JOINED = 'JOINED',
-  /** @deprecated */
+  /** @deprecated @internal  */
   FIRST_PARTICIPANT = 'FIRST_PARTICIPANT',
-  /** @deprecated */
+  /** @deprecated @internal*/
   NO_MORE_PARTICIPANT = 'NO_MORE_PARTICIPANT',
   /** The local participant is leaving a conference. */
   LEAVING = 'LEAVING',
@@ -199,7 +199,7 @@ export enum RTCPMode {
   BEST = 'best',
 }
 
-/** The Codec enum gathers the possible video codecs. */
+/** The Codec enum gathers the available video codecs. */
 export enum Codec {
   /** The VP8 video codec. */
   VP8 = 'VP8',
@@ -215,7 +215,7 @@ export enum UserType {
   LISTENER = 'listener',
 }
 
-/** The ParticipantPermissions enum gathers the possible permissions of a conference participant. */
+/** The ParticipantPermissions interface gathers information about the invited participants and their conference permissions. */
 export interface ParticipantPermissions {
   /** The invited participant. */
   participant: Participant;
@@ -274,7 +274,9 @@ export enum AudioProcessing {
 export type AudioLevel = number;
 export type MaxVideoForwarding = number;
 
+/** The AudioTrack type gathers audio tracks available in a stream. */
 export type AudioTrack = any;
+/** The VideoTrack type gathers video tracks available in a stream. */
 export type VideoTrack = any;
 
 /** The MediaStreamType enum gathers the possible types of media streams. */
@@ -301,6 +303,7 @@ export type MediaStream = {
   label: String;
 };
 
+/** The UnsubscribeFunction unsubscribes from event listeners. */
 export type UnsubscribeFunction = () => void;
 
 /** @internal */

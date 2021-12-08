@@ -41,8 +41,9 @@ export class NotificationService {
   }
 
   /**
-   * Adds a listener for the invitation received event.
+   * Adds a listener to the invitation received event.
    * @param handler An event callback function.
+   * @returns A function that unsubscribes from event listeners.
    */
   public onInvitationReceived(
     handler: (data: InvitationReceivedEventType) => void
