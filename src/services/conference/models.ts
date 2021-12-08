@@ -199,7 +199,7 @@ export enum RTCPMode {
   BEST = 'best',
 }
 
-/** The Codec enum gathers the possible video codecs. */
+/** The Codec enum gathers the available video codecs. */
 export enum Codec {
   /** The VP8 video codec. */
   VP8 = 'VP8',
@@ -215,7 +215,7 @@ export enum UserType {
   LISTENER = 'listener',
 }
 
-/** The ParticipantPermissions enum gathers the possible permissions of a conference participant. */
+/** The ParticipantPermissions interface gathers information about the invited participants and their conference permissions. */
 export interface ParticipantPermissions {
   /** The invited participant. */
   participant: Participant;

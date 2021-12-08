@@ -86,7 +86,7 @@ export class FilePresentationService {
   }
 
   /**
-   * Adds a listener for the file converted event.
+   * Adds a listener to the file converted event.
    * @param handler An event callback function.
    * @returns A function that unsubscribes from event listeners.
    */
@@ -100,7 +100,7 @@ export class FilePresentationService {
   }
 
   /**
-   * Adds a listener for the file presentation changed event.
+   * Adds a listener to the file presentation changed event.
    * @param handler An event callback function.
    * @returns A function that unsubscribes from event listeners.
    */

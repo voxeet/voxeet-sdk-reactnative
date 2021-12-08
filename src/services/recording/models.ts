@@ -1,4 +1,4 @@
-/** The Recoring interface gathers information about a conference recording. */
+/** The Recording interface gathers information about a conference recording. */
 export interface Recording {
   /** The ID of the participant who started the recording. */
   participantId: string;

@@ -70,7 +70,7 @@ export class VideoPresentationService {
   }
 
   /**
-   * Adds a listener for the video presentation started, sought, paused, and played events.
+   * Adds a listener to the video presentation started, sought, paused, and played events.
    * @param handler An event callback function.
    * @returns A function that unsubscribes from event listeners.
    */
@@ -113,7 +113,7 @@ export class VideoPresentationService {
   }
 
   /**
-   * Adds a listener for the video presentation stopped event.
+   * Adds a listener to the video presentation stopped event.
    * @param handler Event callback function
    */
   onVideoPresentationStopped(handler: () => void): UnsubscribeFunction {

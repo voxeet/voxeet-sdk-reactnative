@@ -25,7 +25,7 @@ export class CommandService {
   }
 
   /**
-   * Adds a native listener for the received messages.
+   * Adds a listener to events informing about received messages.
    * @param handler An event callback function.
    * @returns A function that unsubscribes from event listeners.
    */

@@ -80,7 +80,7 @@ export class ConferenceService {
   }
 
   /**
-   * Gets the participant's audio level. The possible values of the audio level are in range from 0.0 to 1.0 point.
+   * Gets the participant's audio level, in the range from 0.0 to 1.0.
    * @param participant The Participant object.
    */
   public async getAudioLevel(participant: Participant): Promise<AudioLevel> {
@@ -266,7 +266,7 @@ export class ConferenceService {
   }
 
   /**
-   * Adds a listener for the conference status changed event.
+   * Adds a listener to the conference status changed event.
    * @param handler An event callback function.
    * @returns A function that unsubscribes from event listeners.
    */
@@ -280,7 +280,7 @@ export class ConferenceService {
   }
 
   /**
-   * Adds a listener for the permissions changed event.
+   * Adds a listener to the permissions changed event.
    * @param handler An event callback function.
    * @returns A function that unsubscribes from event listeners.
    */
@@ -294,7 +294,7 @@ export class ConferenceService {
   }
 
   /**
-   * Adds a listener for the participants changed event.
+   * Adds a listener to the participants changed event.
    * @param handler An event callback function.
    * @returns A function that unsubscribes from event listeners.
    */
@@ -322,7 +322,7 @@ export class ConferenceService {
   }
 
   /**
-   * Adds a listener for the streams changed event.
+   * Adds a listener to the streams changed event.
    * @param handler An event callback function.
    * @returns A function that unsubscribes from event listeners.
    */
