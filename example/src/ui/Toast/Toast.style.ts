@@ -1,12 +1,22 @@
 import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
+  initContainer: {
+    zIndex: 100,
+    left: 0,
+    right: 0,
+    borderWidth: 1,
+    borderColor: 'red',
+    height: 100,
+    position: 'absolute',
+    top: 0,
+  },
   container: {
     position: 'relative',
-    display: 'flex',
+    flex: 1,
     flexDirection: 'row',
     borderRadius: 5,
-    backgroundColor: 'white',
+    backgroundColor: 'gray',
     marginRight: 20,
     shadowColor: '#fff',
     shadowOffset: {
@@ -15,8 +25,7 @@ export default StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-
-    elevation: 5,
+    zIndex: 100,
   },
   titleContainer: {
     display: 'flex',
