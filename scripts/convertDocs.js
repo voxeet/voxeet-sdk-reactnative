@@ -60,8 +60,7 @@ const DOCS_DIR = '../docs';
 })();
 
 function createDocHeader(rawModuleName, slug, order) {
-  return `
----
+  return `---
 apiVersion: 1.0
 categoryName: ReactNative SDK
 title: ${rawModuleName}
