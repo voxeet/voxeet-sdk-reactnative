@@ -25,13 +25,37 @@ export class DolbyIoIAPI {
   private refreshAccessTokenInBackground?: RefreshAccessTokenInBackgroundType | null =
     null;
 
+  /**
+   * Retrieves the ConferenceService instance that allows interacting with conferences.
+   */
   conference = ConferenceService;
+  /**
+   * Retrieves the SessionService instance that allows using sessions.
+   */
   session = SessionService;
+  /**
+   * Retrieves the RecordingService instance that allows recording conferences.
+   */
   recording = RecordingService;
+  /**
+   * Retrieves the CommandService instance that allows sending messages to conferences.
+   */
   command = CommandService;
+  /**
+   * Retrieves the NotificationService instance that allows inviting participants to a conference.
+   */
   notification = NotificationService;
+  /**
+   * Retrieves the FilePresentationService instance that allows presenting files during conferences.
+   */
   filePresentation = FilePresentationService;
+  /**
+   * Retrieves the VideoPresentationService instance that allows presenting videos during conferences.
+   */
   videoPresentation = VideoPresentationService;
+  /**
+   * Retrieves the MediaDeviceService instance that allows interacting with devices through the system.
+   */
   mediaDevice = MediaDeviceService;
 
   /**

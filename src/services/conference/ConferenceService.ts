@@ -48,7 +48,7 @@ export class ConferenceService {
   }
 
   /**
-   * Provides a Conference object that allows joining a conference. If the parameter is not provided, he method returns the current Conference object.
+   * Provides a Conference object that allows joining a conference. If the parameter is not provided, the method returns the current Conference object.
    * @param conferenceId The conference ID.
    */
   public async fetch(conferenceId?: string): Promise<Conference> {
