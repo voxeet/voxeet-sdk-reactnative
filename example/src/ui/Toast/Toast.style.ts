@@ -1,13 +1,12 @@
 import { StyleSheet } from 'react-native';
 
+import COLORS from '@constants/colors.constants';
+
 export default StyleSheet.create({
   initContainer: {
     zIndex: 100,
     left: 0,
     right: 0,
-    borderWidth: 1,
-    borderColor: 'red',
-    height: 100,
     position: 'absolute',
     top: 0,
   },
@@ -16,9 +15,9 @@ export default StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     borderRadius: 5,
-    backgroundColor: 'gray',
+    backgroundColor: COLORS.WHITE,
     marginRight: 20,
-    shadowColor: '#fff',
+    shadowColor: COLORS.WHITE,
     shadowOffset: {
       width: 0,
       height: 2,
@@ -28,7 +27,7 @@ export default StyleSheet.create({
     zIndex: 100,
   },
   titleContainer: {
-    display: 'flex',
+    flex: 1,
     width: '85%',
   },
   childContainer: {
