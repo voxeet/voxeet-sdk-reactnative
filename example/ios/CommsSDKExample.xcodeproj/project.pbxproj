@@ -333,9 +333,9 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-CommsSDKExample/Pods-CommsSDKExample-frameworks.sh",
-				"${PODS_ROOT}/VoxeetSDK/VoxeetSDK.framework",
-				"${PODS_ROOT}/VoxeetSDK/WebRTC.framework",
-				"${PODS_ROOT}/VoxeetSDK/dvclient.framework",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/VoxeetSDK/VoxeetSDK.framework/VoxeetSDK",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/VoxeetSDK/WebRTC.framework/WebRTC",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/VoxeetSDK/dvclient.framework/dvclient",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
