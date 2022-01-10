@@ -16,7 +16,7 @@ const REGEXP_MATCH_DOC_LINKS = /\[.+?]\((.+?\.md)(?:#.+?)?\)/g;
 
 /**
  * This will match and capture module name after /docs/ e.g. it will match
- * `interfaces` from `../docs/interface/Conference.md`
+ * `../docs/interface/Conference.md` and capture `interface`
  */
 const REGEXP_MATCH_DOC_MODULE = /docs\/(\w+)\//;
 
@@ -61,7 +61,6 @@ const IGNORED_FILES = ['modules.md', '.nojekyll', 'README.md'];
     console.error('Unknown node version... Proceeding anyway.');
   }
   buildFilesPathArray(DOCS_DIR);
-  // console.log(FILE_PATHS);
 
   const FILTERED_FILE_PATHS = FILE_PATHS.filter(
     (p) => !IGNORED_FILES.includes(path.basename(p))
@@ -103,18 +102,25 @@ metadata:
 }
 
 function convertDoc(filePath, index) {
-  let moduleName = getFilePathModuleName(filePath);
+  let renamedFilepath = filePath;
 
-  if (isInternalDocFile(filePath) && moduleName) {
+  if (/classes/.test(renamedFilepath)) {
+    renamedFilepath = renamedFilepath.replace(/classes/, 'references');
+  } else if (/interfaces/.test(renamedFilepath)) {
+    renamedFilepath = renamedFilepath.replace(/interfaces/, 'models');
+  }
+  let moduleName = getFilePathModuleName(renamedFilepath);
+
+  if (isInternalDocFile(renamedFilepath) && moduleName) {
     const rawFileName = filePath.match(REGEXP_MATCH_DOC_FILENAME);
     if (!rawFileName) {
-      throw new Error(`[${filePath}]: reading raw filename error`);
+      throw new Error(`[${renamedFilepath}]: reading raw filename error`);
     }
-    const slug = createHeaderSlug(filePath);
+    const slug = createHeaderSlug(renamedFilepath);
     const header = createDocHeader(rawFileName[1], slug, index);
     // we use substring to create new path; here we're going from
     // ../docs/interface/.. to ./docs/interface/..
-    const newFilePath = path.dirname(filePath).substring(1);
+    const newFilePath = path.dirname(renamedFilepath).substring(1);
     const newFileName = newFilePath + `/${slug}.md`;
 
     const fileBuffer = fs.readFileSync(filePath);
@@ -135,7 +141,6 @@ function convertDoc(filePath, index) {
       .replaceAll(
         REGEXP_MATCH_BACKTICKS,
         (substring, captureGroupOne, captureGroupTwo) => {
-          console.log(substring, captureGroupTwo);
           return substring.replace(
             /(?<=\[)(`(\w+)`)(?=]\(.+\))/,
             captureGroupTwo
@@ -148,6 +153,7 @@ function convertDoc(filePath, index) {
           recursive: true,
         });
       }
+
       fs.writeFileSync(newFileName, convertedDocAsString);
     } catch (e) {
       console.error(`[${filePath.substring(1)}]: writing or renaming error`);
@@ -211,7 +217,10 @@ function changeLinkFormatReplacerFn(substring, moduleName) {
     replaceString = LINK_SLUG_PREFIX + 'modules-internal';
     return substring.replace(/(?<=\[.+]\().+\.md(?=(#.+)?\))/, replaceString);
   }
-  const module = substring.match(/\(\.\.\/(.+)\//);
+  const module = substring
+    .replace(/interfaces/, 'models')
+    .replace(/classes/, 'references')
+    .match(/\(\.\.\/(.+)\//);
   const service = substring.match(/internal\.(.+)\.md(#.+)?\)/);
   if (!service) {
     if (substring.match(REGEXP_MATCH_DOC_FILENAME)[0] === 'CommsAPI.md') {
@@ -225,5 +234,6 @@ function changeLinkFormatReplacerFn(substring, moduleName) {
     LINK_SLUG_PREFIX +
     (module ? `${module[1]}-` : `${moduleName}-`) +
     `${service[1].toLowerCase()}`;
+
   return substring.replace(/(?<=\[.+]\().+\.md(?=.+\))?/, replaceString);
 }
