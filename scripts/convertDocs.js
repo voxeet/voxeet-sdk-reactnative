@@ -20,11 +20,10 @@ const REGEXP_MATCH_DOC_LINKS = /\[.+?]\((.+?\.md)(?:#.+?)?\)/g;
  */
 const REGEXP_MATCH_DOC_MODULE = /docs\/(\w+)\//;
 
-const REGEXP_MATCH_CONSTRUCTOR_HEADER = /###? Constructors?/gi;
-const REGEXP_MATCH_CONSTRUCTOR_LINK = /- \[constructor].+/g;
-const REGEXP_MATCH_CONSTRUCTOR_INIT = /• \*\*new.+/g;
 const REGEXP_MATCH_INTERNAL_LINKS = /\[internal].+/g;
 const REGEXP_MATCH_CLASS_TITLES = /# Class: \w+/g;
+const REGEXP_MATCH_TABLE_OF_CONTENTS =
+  /(## Table of contents[\S\s*]*)(?=## Methods|## Properties)/g;
 
 /**
  * This will match and capture all full link descriptions
@@ -133,11 +132,9 @@ function convertDoc(filePath, index) {
       .replaceAll(REGEXP_MATCH_DOC_LINKS, (substring) =>
         changeLinkFormatReplacerFn(substring, moduleName)
       )
-      .replaceAll(REGEXP_MATCH_CONSTRUCTOR_HEADER, '')
-      .replaceAll(REGEXP_MATCH_CONSTRUCTOR_LINK, '')
-      .replaceAll(REGEXP_MATCH_CONSTRUCTOR_INIT, '')
       .replaceAll(REGEXP_MATCH_INTERNAL_LINKS, '')
       .replaceAll(REGEXP_MATCH_CLASS_TITLES, '')
+      .replaceAll(REGEXP_MATCH_TABLE_OF_CONTENTS, '')
       .replaceAll(
         REGEXP_MATCH_BACKTICKS,
         (substring, captureGroupOne, captureGroupTwo) => {
