@@ -166,7 +166,11 @@ function convertDoc(filePath, index) {
       throw new Error(`[${renamedFilepath}]: reading raw filename error`);
     }
     const slug = createHeaderSlug(renamedFilepath);
-    const header = createDocHeader(rawFileName[1], slug, index);
+    const header = createDocHeader(
+      rawFileName[1] === 'internal' ? 'modules' : rawFileName[1],
+      slug,
+      index
+    );
 
     /** we use substring to create new path; here we're going from
     ../docs/interface/.. to ./docs/interface/.. -- we also rename our files to
@@ -257,7 +261,11 @@ function isInternalDocFile(filepath) {
 function createHeaderSlug(filePath) {
   const sdkModule = filePath.match(REGEXP_MATCH_DOC_MODULE)[1];
   const rawFilename = filePath.match(REGEXP_MATCH_DOC_FILENAME)[1];
-  return SLUG_PREFIX + sdkModule + `-${rawFilename.toLowerCase()}`;
+  return (
+    SLUG_PREFIX +
+    sdkModule +
+    (sdkModule === 'modules' ? '' : `-${rawFilename.toLowerCase()}`)
+  );
 }
 
 /**
@@ -276,7 +284,7 @@ function changeLinkFormatReplacerFn(substring, moduleName) {
   let replaceString;
   const isRootInternalModule = new RegExp('internal.md').test(substring);
   if (isRootInternalModule) {
-    replaceString = LINK_SLUG_PREFIX + 'modules-internal';
+    replaceString = LINK_SLUG_PREFIX + 'modules';
     return substring.replace(/(?<=\[.+]\().+\.md(?=(#.+)?\))/, replaceString);
   }
   const module = substring
